@@ -1,28 +1,39 @@
 <template>
   <div class="settings-page">
-    <h1 class="page-title">设置中心</h1>
+    <h1 class="page-title">{{ t('settings.pageTitle') }}</h1>
     <div class="settings-layout">
       <aside class="settings-nav">
         <div class="nav-group">
-          <div class="nav-group-label">基础</div>
-          <button v-for="t in baseTabs" :key="t.id" :class="['nav-item', { active: tab === t.id }]" @click="tab = t.id">
-            <component :is="t.icon" :size="14" />
-            {{ t.label }}
+          <div class="nav-group-label">{{ t('settings.nav.basic') }}</div>
+          <button v-for="bt in baseTabs" :key="bt.id" :class="['nav-item', { active: tab === bt.id }]" @click="tab = bt.id">
+            <component :is="bt.icon" :size="14" />
+            {{ bt.label }}
           </button>
         </div>
         <div class="nav-advanced">
           <label class="advanced-toggle">
-            <span>Agent 高级配置</span>
+            <span>{{ t('settings.advancedToggle.label') }}</span>
             <input type="checkbox" v-model="showAdvanced" class="sr-only" />
             <span class="switch" :class="{ on: showAdvanced }"></span>
           </label>
-          <p class="advanced-note">仅展开 Agent 配置与 Skills。工作台功能和分镜字段保持默认可见。</p>
+          <p class="advanced-note">{{ t('settings.advancedToggle.note') }}</p>
         </div>
         <div v-if="showAdvanced" class="nav-group">
-          <div class="nav-group-label">高级</div>
-          <button v-for="t in advancedTabs" :key="t.id" :class="['nav-item', { active: tab === t.id }]" @click="tab = t.id">
-            <component :is="t.icon" :size="14" />
-            {{ t.label }}
+          <div class="nav-group-label">{{ t('settings.nav.advanced') }}</div>
+          <button v-for="at in advancedTabs" :key="at.id" :class="['nav-item', { active: tab === at.id }]" @click="tab = at.id">
+            <component :is="at.icon" :size="14" />
+            {{ at.label }}
+          </button>
+        </div>
+        <div class="nav-group lang-switch">
+          <div class="nav-group-label">{{ t('settings.language.label') }}</div>
+          <button
+            v-for="opt in languageOptions"
+            :key="opt.code"
+            :class="['nav-item', { active: locale === opt.code }]"
+            @click="locale = opt.code"
+          >
+            {{ opt.label }}
           </button>
         </div>
       </aside>
@@ -32,27 +43,27 @@
         <!-- ===== AI 服务配置 ===== -->
         <div v-if="tab === 'ai'" class="settings-scroll">
           <div class="settings-head">
-            <h2 class="settings-title">AI 服务配置</h2>
-            <p class="settings-desc">先用推荐模板快速落配置，再按服务类型微调。工作台创建集时会锁定所选图片和视频能力。</p>
+            <h2 class="settings-title">{{ t('settings.ai.title') }}</h2>
+            <p class="settings-desc">{{ t('settings.ai.desc') }}</p>
           </div>
           <section class="card quick-card">
             <div class="quick-card-head">
-              <div class="setup-title">火宝快捷配置</div>
-              <span class="tag tag-accent">推荐</span>
+              <div class="setup-title">{{ t('settings.ai.quick.title') }}</div>
+              <span class="tag tag-accent">{{ t('common.recommended') }}</span>
             </div>
             <p class="setup-desc">
-              输入 Huobao API Key，一次写入文本、图片、视频推荐配置。
+              {{ t('settings.ai.quick.desc') }}
               <a class="huobao-site-link" href="https://api.chatfire.site" target="_blank" rel="noopener noreferrer">
-                前往 api.chatfire.site 获取 Key
+                {{ t('settings.ai.quick.linkText') }}
                 <ExternalLink :size="12" :stroke-width="1.8" />
               </a>
             </p>
             <div class="huobao-quick-row">
-              <input v-model="huobaoApiKey" class="input" type="password" placeholder="Huobao API Key" />
+              <input v-model="huobaoApiKey" class="input" type="password" :placeholder="t('settings.ai.quick.keyPlaceholder')" />
               <button class="btn btn-primary" :disabled="huobaoSaving" @click="applyHuobaoQuickConfig">
                 <Loader2 v-if="huobaoSaving" :size="13" class="animate-spin" />
                 <Sparkles v-else :size="13" />
-                写入火宝配置
+                {{ t('settings.ai.quick.applyBtn') }}
               </button>
             </div>
             <div class="huobao-quick-models">
@@ -61,7 +72,7 @@
                 <span class="hqm-provider">{{ q.provider }}</span>
                 <span class="hqm-models mono">
                   <span v-for="(m, i) in q.model" :key="m" :class="['hqm-model', { 'is-default': i === 0 }]">
-                    {{ m }}<em v-if="i === 0">默认</em>
+                    {{ m }}<em v-if="i === 0">{{ t('common.default') }}</em>
                   </span>
                 </span>
               </div>
@@ -70,8 +81,8 @@
           <section class="card setup-panel">
             <div class="setup-panel-head compact">
               <div>
-                <div class="setup-title">手动模板</div>
-                <div class="setup-desc">选择服务类型后，直接用模板填充推荐的 `provider / base URL / model`。</div>
+                <div class="setup-title">{{ t('settings.ai.manual.title') }}</div>
+                <div class="setup-desc">{{ t('settings.ai.manual.desc') }}</div>
               </div>
             </div>
             <div class="template-row">
@@ -92,31 +103,31 @@
                   <span class="svc-group-title">{{ st.label }}</span>
                   <div class="svc-group-sub">{{ serviceMeta[st.type].desc }}</div>
                 </div>
-                <span v-if="countActive(st.type)" class="tag tag-accent">{{ countActive(st.type) }} 已启用</span>
-                <button class="btn btn-ghost btn-sm ml-auto" @click="startAddCfg(st.type)"><Plus :size="13" /> 添加</button>
+                <span v-if="countActive(st.type)" class="tag tag-accent">{{ t('settings.ai.enabledCount', { count: countActive(st.type) }) }}</span>
+                <button class="btn btn-ghost btn-sm ml-auto" @click="startAddCfg(st.type)"><Plus :size="13" /> {{ t('common.add') }}</button>
               </div>
               <div v-for="c in byType(st.type)" :key="c.id" class="config-row">
                 <div class="provider-badge" :data-provider="c.provider">{{ c.provider.slice(0, 1).toUpperCase() }}</div>
                 <div class="config-main">
                   <div class="config-line">
                     <span class="config-name">{{ c.name || `${c.provider}-${c.service_type}` }}</span>
-                    <span :class="['tag', c.api_key ? 'tag-success' : 'tag-error']">{{ c.api_key ? '已配置' : '无密钥' }}</span>
-                    <span v-if="!c.is_active" class="tag">已停用</span>
+                    <span :class="['tag', c.api_key ? 'tag-success' : 'tag-error']">{{ c.api_key ? t('settings.ai.hasKey') : t('settings.ai.noKey') }}</span>
+                    <span v-if="!c.is_active" class="tag">{{ t('common.disabled') }}</span>
                   </div>
                   <div class="config-models">
                     <button
                       v-for="m in c.model" :key="m" type="button"
                       :class="['cfg-model-chip mono', { 'is-default': isDefaultModel(st.type, c, m) }]"
-                      :title="isDefaultModel(st.type, c, m) ? '当前默认模型' : '设为该类型默认模型'"
+                      :title="isDefaultModel(st.type, c, m) ? t('settings.ai.currentDefaultModel') : t('settings.ai.setDefaultModel')"
                       @click="setDefaultModel(st.type, c, m)"
                     >
                       <Star v-if="isDefaultModel(st.type, c, m)" :size="9" class="cfg-model-star" />
                       {{ m }}
                     </button>
                   </div>
-                  <div class="config-sub mono truncate">{{ c.base_url || '未设置 Base URL' }}</div>
+                  <div class="config-sub mono truncate">{{ c.base_url || t('settings.ai.noBaseUrl') }}</div>
                 </div>
-                <button v-if="st.type === 'text'" class="btn btn-ghost btn-sm" @click="testExistingCfg(c)">测试</button>
+                <button v-if="st.type === 'text'" class="btn btn-ghost btn-sm" @click="testExistingCfg(c)">{{ t('common.test') }}</button>
                 <label class="config-switch">
                   <input type="checkbox" class="sr-only" :checked="c.is_active" @change="toggleCfg(c)">
                   <span class="switch" :class="{ on: c.is_active }"></span>
@@ -124,7 +135,7 @@
                 <button class="btn btn-ghost btn-icon btn-sm" @click="startEditCfg(c)"><Pencil :size="13" /></button>
                 <button class="btn btn-danger btn-icon btn-sm" @click="delCfg(c.id)"><Trash2 :size="13" /></button>
               </div>
-              <p v-if="!byType(st.type).length" class="config-empty">暂无配置</p>
+              <p v-if="!byType(st.type).length" class="config-empty">{{ t('settings.ai.noConfig') }}</p>
             </section>
           </div>
         </div>
@@ -132,16 +143,16 @@
         <!-- ===== 风格预设 ===== -->
         <div v-else-if="tab === 'styles'" class="settings-scroll">
           <div class="settings-head">
-            <h2 class="settings-title">风格预设</h2>
-            <p class="settings-desc">创建项目时选择的视觉风格，其英文提示词片段会自动注入角色图与场景图生成。停用的风格不出现在创建选项中。</p>
+            <h2 class="settings-title">{{ t('settings.styles.title') }}</h2>
+            <p class="settings-desc">{{ t('settings.styles.desc') }}</p>
           </div>
           <section class="card svc-group">
             <div class="svc-group-head">
               <div class="svc-group-heading">
-                <span class="svc-group-title">全部风格</span>
-                <div class="svc-group-sub">{{ stylePresets.filter(p => p.is_active).length }} 个启用 · {{ stylePresets.length }} 个总计</div>
+                <span class="svc-group-title">{{ t('settings.styles.all') }}</span>
+                <div class="svc-group-sub">{{ t('settings.styles.countSummary', { active: stylePresets.filter(p => p.is_active).length, total: stylePresets.length }) }}</div>
               </div>
-              <button class="btn btn-ghost btn-sm ml-auto" @click="startAddStyle"><Plus :size="13" /> 添加</button>
+              <button class="btn btn-ghost btn-sm ml-auto" @click="startAddStyle"><Plus :size="13" /> {{ t('common.add') }}</button>
             </div>
             <div v-for="p in stylePresets" :key="p.id" class="config-row">
               <div class="provider-badge style-badge"><Palette :size="15" /></div>
@@ -149,7 +160,7 @@
                 <div class="config-line">
                   <span class="config-name">{{ p.name }}</span>
                   <span class="tag mono">{{ p.value }}</span>
-                  <span v-if="!p.is_active" class="tag">已停用</span>
+                  <span v-if="!p.is_active" class="tag">{{ t('common.disabled') }}</span>
                 </div>
                 <div class="config-sub mono truncate">{{ p.prompt }}</div>
                 <div v-if="p.description" class="config-sub truncate">{{ p.description }}</div>
@@ -161,15 +172,15 @@
               <button class="btn btn-ghost btn-icon btn-sm" @click="startEditStyle(p)"><Pencil :size="13" /></button>
               <button class="btn btn-danger btn-icon btn-sm" @click="styleToDelete = p"><Trash2 :size="13" /></button>
             </div>
-            <p v-if="!stylePresets.length" class="config-empty">暂无风格预设</p>
+            <p v-if="!stylePresets.length" class="config-empty">{{ t('settings.styles.empty') }}</p>
           </section>
         </div>
 
         <!-- ===== Agent 配置 ===== -->
         <div v-else-if="tab === 'agents'" class="settings-scroll">
           <div class="settings-head">
-            <h2 class="settings-title">Agent 配置</h2>
-            <p class="settings-desc">高级区只保留 Agent 运行配置。这里可以调整模型、提示词和参数，保存后立即生效。</p>
+            <h2 class="settings-title">{{ t('settings.agents.title') }}</h2>
+            <p class="settings-desc">{{ t('settings.agents.desc') }}</p>
           </div>
           <div class="agent-list">
             <div v-for="a in agentDefs" :key="a.type" class="card agent-card">
@@ -179,27 +190,27 @@
                   <div class="agent-card-title">{{ a.label }}</div>
                   <div class="agent-card-type dim">{{ a.type }}</div>
                 </div>
-                <span v-if="getAgentCfg(a.type) && !getAgentCfg(a.type).is_default" class="tag tag-success">自定义</span>
-                <span v-else class="tag">默认</span>
+                <span v-if="getAgentCfg(a.type) && !getAgentCfg(a.type).is_default" class="tag tag-success">{{ t('settings.agents.custom') }}</span>
+                <span v-else class="tag">{{ t('settings.agents.default') }}</span>
                 <ChevronDown :size="14" :style="{ transform: editingAgent === a.type ? 'rotate(180deg)' : '', transition: '0.2s' }" />
               </div>
               <div v-if="editingAgent === a.type" class="agent-card-body">
                 <label class="field">
-                  <span class="field-label">模型 <span class="dim">(留空使用 AI 服务默认)</span></span>
-                  <BaseSelect v-model="agentForm.model" :options="textModelSelectOptions" placeholder="— 使用 AI 服务默认 —" searchable />
+                  <span class="field-label">{{ t('settings.agents.modelLabel') }} <span class="dim">{{ t('settings.agents.modelHint') }}</span></span>
+                  <BaseSelect v-model="agentForm.model" :options="textModelSelectOptions" :placeholder="t('settings.agents.modelPlaceholder')" searchable />
                 </label>
                 <label class="field">
-                  <span class="field-label">System Prompt <span class="dim">(保存为 workspace/prompts/{{ a.type }}.md)</span></span>
-                  <textarea v-model="agentForm.system_prompt" class="textarea" rows="12" placeholder="Agent 系统提示词..." />
+                  <span class="field-label">System Prompt <span class="dim">{{ t('settings.agents.promptHint', { type: a.type }) }}</span></span>
+                  <textarea v-model="agentForm.system_prompt" class="textarea" rows="12" :placeholder="t('settings.agents.promptPlaceholder')" />
                 </label>
                 <div class="agent-card-foot">
-                  <button class="btn btn-ghost btn-sm" @click="resetAgentPrompt(a.type)">恢复默认</button>
+                  <button class="btn btn-ghost btn-sm" @click="resetAgentPrompt(a.type)">{{ t('settings.agents.resetBtn') }}</button>
                   <span v-if="agentSaved === a.type" class="tag tag-success" style="margin-left:8px">
-                    <Check :size="10" /> 已保存
+                    <Check :size="10" /> {{ t('settings.agents.saved') }}
                   </span>
                   <button class="btn btn-primary btn-sm ml-auto" :disabled="agentSaving" @click="saveAgentCfg(a.type)">
                     <Loader2 v-if="agentSaving" :size="12" class="animate-spin" />
-                    保存
+                    {{ t('settings.agents.save') }}
                   </button>
                 </div>
               </div>
@@ -211,7 +222,7 @@
         <div v-else-if="tab === 'skills'" class="skills-layout">
           <!-- Agent 左侧列表 -->
           <aside class="skills-agent-list">
-            <div class="skills-agent-title">Agent 列表</div>
+            <div class="skills-agent-title">{{ t('settings.skills.agentListTitle') }}</div>
             <button
               v-for="a in agentDefs"
               :key="a.type"
@@ -230,11 +241,11 @@
               <span class="agent-type-badge skills-head-badge">{{ selectedAgentIcon }}</span>
               <div class="skills-head-copy">
                 <h2 class="settings-title">{{ selectedAgentLabel }}</h2>
-                <div class="dim" style="font-size:12px;margin-top:2px">{{ selectedAgentType }} — Skills</div>
-                <p class="settings-desc">Skills 仅作为 Agent 的高级提示词层使用，不影响工作台常规功能入口。</p>
+                <div class="dim" style="font-size:12px;margin-top:2px">{{ selectedAgentType }} — {{ t('settings.skills.skillsSuffix') }}</div>
+                <p class="settings-desc">{{ t('settings.skills.desc') }}</p>
               </div>
               <button class="btn btn-primary btn-sm ml-auto" @click="startAddSkill">
-                <Plus :size="13" /> 新增 Skill
+                <Plus :size="13" /> {{ t('settings.skills.addBtn') }}
               </button>
             </div>
 
@@ -243,8 +254,8 @@
               <div class="skills-empty-icon">
                 <FileText :size="24" />
               </div>
-              <div class="skills-empty-title">暂无 Skill</div>
-              <div class="skills-empty-desc">点击右上角「新增 Skill」创建第一个提示词文件</div>
+              <div class="skills-empty-title">{{ t('settings.skills.empty.title') }}</div>
+              <div class="skills-empty-desc">{{ t('settings.skills.empty.desc') }}</div>
             </div>
 
             <!-- Skill 列表 -->
@@ -267,16 +278,16 @@
                     class="textarea mono"
                     rows="20"
                     style="font-size:12px;line-height:1.6"
-                    placeholder="编写 SKILL.md 内容..."
+                    :placeholder="t('settings.skills.contentPlaceholder')"
                   />
                   <div class="skill-card-foot">
                     <span class="dim" style="font-size:11px">skills/{{ s.id }}/SKILL.md</span>
                     <span v-if="skillSaved === s.id" class="tag tag-success" style="margin-left:8px">
-                      <Check :size="10" /> 已保存
+                      <Check :size="10" /> {{ t('settings.skills.saved') }}
                     </span>
                     <button class="btn btn-primary btn-sm ml-auto" :disabled="skillSaving" @click="saveSkill(s.id)">
                       <Loader2 v-if="skillSaving" :size="12" class="animate-spin" />
-                      保存
+                      {{ t('settings.skills.save') }}
                     </button>
                   </div>
                 </div>
@@ -292,8 +303,8 @@
       <form class="dialog config-dialog" @submit.prevent="saveCfg">
         <div class="dialog-head">
           <div>
-            <div class="dialog-title">{{ cfgEditId ? '编辑服务配置' : `添加${serviceMeta[cfgForm.service_type].label}服务` }}</div>
-            <div class="dialog-sub">推荐先选择模板，系统会自动填入更合理的 `Base URL` 与默认模型。</div>
+            <div class="dialog-title">{{ cfgEditId ? t('settings.dialogs.editConfigTitle') : t('settings.dialogs.addConfigTitle', { type: serviceMeta[cfgForm.service_type].label }) }}</div>
+            <div class="dialog-sub">{{ t('settings.dialogs.configSub') }}</div>
           </div>
           <span class="tag tag-accent ml-auto">{{ serviceMeta[cfgForm.service_type].label }}</span>
         </div>
@@ -310,28 +321,28 @@
             </button>
           </div>
           <label class="field">
-            <span class="field-label">配置名称</span>
-            <input v-model="cfgForm.name" class="input" placeholder="如 火宝默认图像服务" />
+            <span class="field-label">{{ t('settings.ai.nameLabel') }}</span>
+            <input v-model="cfgForm.name" class="input" :placeholder="t('settings.ai.namePlaceholder')" />
           </label>
-          <label class="field"><span class="field-label">服务商</span>
-            <BaseSelect v-model="cfgForm.provider" :options="providerSelectOptions" placeholder="选择服务商" searchable />
+          <label class="field"><span class="field-label">{{ t('settings.ai.providerLabel') }}</span>
+            <BaseSelect v-model="cfgForm.provider" :options="providerSelectOptions" :placeholder="t('settings.ai.providerPlaceholder')" searchable />
           </label>
           <label class="field">
-            <span class="field-label">优先级</span>
+            <span class="field-label">{{ t('settings.ai.priorityLabel') }}</span>
             <input v-model.number="cfgForm.priority" class="input" type="number" min="0" max="999" />
-            <span class="field-hint">数值越高越优先。工作台默认会优先使用同类型里优先级最高的启用配置。</span>
+            <span class="field-hint">{{ t('settings.ai.priorityHint') }}</span>
           </label>
-          <label class="field"><span class="field-label">API Key</span><input v-model="cfgForm.api_key" class="input" type="password" placeholder="sk-..." /></label>
+          <label class="field"><span class="field-label">{{ t('settings.ai.apiKeyLabel') }}</span><input v-model="cfgForm.api_key" class="input" type="password" placeholder="sk-..." /></label>
           <label class="field">
-            <span class="field-label">Base URL</span>
+            <span class="field-label">{{ t('settings.ai.baseUrlLabel') }}</span>
             <input v-model="cfgForm.base_url" class="input" placeholder="https://..." />
-            <span v-if="cfgForm.provider === 'aliyun'" class="field-hint">请将 {WorkspaceId} 替换为百炼业务空间 ID，并确保 Base URL、API Key 与模型属于同一地域。</span>
+            <span v-if="cfgForm.provider === 'aliyun'" class="field-hint">{{ t('settings.ai.aliyunWorkspaceHint') }}</span>
           </label>
-          <label class="field"><span class="field-label">模型（逗号分隔）</span><input v-model="cfgForm.modelStr" class="input" placeholder="model-name" /></label>
+          <label class="field"><span class="field-label">{{ t('settings.ai.modelLabel') }}</span><input v-model="cfgForm.modelStr" class="input" :placeholder="t('settings.ai.modelPlaceholder')" /></label>
           <label v-if="cfgForm.service_type === 'text'" class="field">
-            <span class="field-label">Temperature <span class="dim">(留空跟随服务商默认)</span></span>
-            <input v-model="cfgForm.temperature" class="input" type="number" step="0.1" min="0" max="2" placeholder="如 0.6" />
-            <span class="field-hint">部分模型强制固定温度（如 kimi-k2 系只允许 0.6），报 invalid temperature 错误时在此填入对应值。</span>
+            <span class="field-label">{{ t('settings.ai.temperatureLabel') }} <span class="dim">{{ t('settings.ai.temperatureHintOptional') }}</span></span>
+            <input v-model="cfgForm.temperature" class="input" type="number" step="0.1" min="0" max="2" :placeholder="t('settings.ai.temperaturePlaceholder')" />
+            <span class="field-hint">{{ t('settings.ai.temperatureHint') }}</span>
           </label>
           <div v-if="cfgTestResult" class="test-result" :class="{ ok: cfgTestResult.reachable, bad: !cfgTestResult.reachable }">
             <div class="test-result-head">
@@ -345,10 +356,10 @@
         <div class="dialog-foot">
           <button type="button" class="btn btn-ghost test-draft-btn" :disabled="cfgTesting" @click="testDraftCfg">
             <Loader2 v-if="cfgTesting" :size="12" class="animate-spin" />
-            <span v-else>测试配置</span>
+            <span v-else>{{ t('settings.ai.testConfig') }}</span>
           </button>
-          <button type="button" class="btn" @click="cfgDialog = false">取消</button>
-          <button type="submit" class="btn btn-primary">保存</button>
+          <button type="button" class="btn" @click="cfgDialog = false">{{ t('common.cancel') }}</button>
+          <button type="submit" class="btn btn-primary">{{ t('common.save') }}</button>
         </div>
       </form>
     </div>
@@ -357,25 +368,25 @@
     <div v-if="addSkillDialog" class="overlay" @click.self="addSkillDialog = false">
       <form class="dialog skill-dialog" @submit.prevent="confirmAddSkill">
         <div class="dialog-head">
-          <div class="dialog-title">新增 Skill — {{ selectedAgentLabel }}</div>
+          <div class="dialog-title">{{ t('settings.skills.addDialog.title', { label: selectedAgentLabel }) }}</div>
         </div>
         <div class="dialog-body skill-dialog-body">
           <label class="field">
-            <span class="field-label">Skill 目录名 <span class="dim">(英文，唯一)</span></span>
-            <input v-model="newSkillForm.id" class="input" placeholder="如 custom-extraction" />
+            <span class="field-label">{{ t('settings.skills.addDialog.dirLabel') }} <span class="dim">{{ t('settings.skills.addDialog.dirHint') }}</span></span>
+            <input v-model="newSkillForm.id" class="input" :placeholder="t('settings.skills.addDialog.dirPlaceholder')" />
           </label>
           <label class="field">
-            <span class="field-label">名称</span>
-            <input v-model="newSkillForm.name" class="input" placeholder="如 自定义提取规则" />
+            <span class="field-label">{{ t('settings.skills.addDialog.nameLabel') }}</span>
+            <input v-model="newSkillForm.name" class="input" :placeholder="t('settings.skills.addDialog.namePlaceholder')" />
           </label>
           <label class="field">
-            <span class="field-label">描述</span>
-            <input v-model="newSkillForm.description" class="input" placeholder="简短描述此 Skill 的用途" />
+            <span class="field-label">{{ t('settings.skills.addDialog.descLabel') }}</span>
+            <input v-model="newSkillForm.description" class="input" :placeholder="t('settings.skills.addDialog.descPlaceholder')" />
           </label>
         </div>
         <div class="dialog-foot">
-          <button type="button" class="btn" @click="addSkillDialog = false">取消</button>
-          <button type="submit" class="btn btn-primary" :disabled="!newSkillForm.id">创建</button>
+          <button type="button" class="btn" @click="addSkillDialog = false">{{ t('common.cancel') }}</button>
+          <button type="submit" class="btn btn-primary" :disabled="!newSkillForm.id">{{ t('common.create') }}</button>
         </div>
       </form>
     </div>
@@ -385,52 +396,52 @@
       <form class="dialog config-dialog" @submit.prevent="saveStyle">
         <div class="dialog-head">
           <div>
-            <div class="dialog-title">{{ styleEditId ? '编辑风格预设' : '添加风格预设' }}</div>
-            <div class="dialog-sub">提示词片段为英文，会在生成角色图与场景图时自动拼入提示词。</div>
+            <div class="dialog-title">{{ styleEditId ? t('settings.styles.dialog.editTitle') : t('settings.styles.dialog.addTitle') }}</div>
+            <div class="dialog-sub">{{ t('settings.styles.dialog.sub') }}</div>
           </div>
-          <span class="tag tag-accent ml-auto"><Palette :size="12" /> 风格</span>
+          <span class="tag tag-accent ml-auto"><Palette :size="12" /> {{ t('settings.styles.dialog.tag') }}</span>
         </div>
         <div class="dialog-body config-dialog-body">
           <label class="field">
-            <span class="field-label">风格名称 <span class="required">*</span></span>
-            <input v-model="styleForm.name" class="input" placeholder="如 3D、动漫、写实电影" />
+            <span class="field-label">{{ t('settings.styles.dialog.nameLabel') }} <span class="required">*</span></span>
+            <input v-model="styleForm.name" class="input" :placeholder="t('settings.styles.dialog.namePlaceholder')" />
           </label>
           <label class="field">
-            <span class="field-label">风格 key <span class="required">*</span></span>
-            <input v-model="styleForm.value" class="input mono" placeholder="如 3d、anime（小写字母/数字/中划线）" :disabled="!!styleEditId" />
-            <span class="field-hint">存入项目的风格标识，创建后不可修改。</span>
+            <span class="field-label">{{ t('settings.styles.dialog.keyLabel') }} <span class="required">*</span></span>
+            <input v-model="styleForm.value" class="input mono" :placeholder="t('settings.styles.dialog.keyPlaceholder')" :disabled="!!styleEditId" />
+            <span class="field-hint">{{ t('settings.styles.dialog.keyHint') }}</span>
           </label>
           <label class="field">
-            <span class="field-label">提示词片段（英文） <span class="required">*</span></span>
-            <textarea v-model="styleForm.prompt" class="textarea" rows="3" placeholder="如 anime style, cel shading, vibrant colors, clean line art"></textarea>
+            <span class="field-label">{{ t('settings.styles.dialog.promptLabel') }} <span class="required">*</span></span>
+            <textarea v-model="styleForm.prompt" class="textarea" rows="3" :placeholder="t('settings.styles.dialog.promptPlaceholder')"></textarea>
           </label>
           <label class="field">
-            <span class="field-label">描述</span>
-            <input v-model="styleForm.description" class="input" placeholder="一句话说明该风格的适用场景" />
+            <span class="field-label">{{ t('settings.styles.dialog.descLabel') }}</span>
+            <input v-model="styleForm.description" class="input" :placeholder="t('settings.styles.dialog.descPlaceholder')" />
           </label>
           <label class="field">
-            <span class="field-label">排序</span>
+            <span class="field-label">{{ t('settings.styles.dialog.sortLabel') }}</span>
             <input v-model.number="styleForm.sort_order" class="input" type="number" min="0" max="999" />
           </label>
         </div>
         <div class="dialog-foot">
-          <button type="button" class="btn" @click="styleDialog = false">取消</button>
-          <button type="submit" class="btn btn-primary">保存</button>
+          <button type="button" class="btn" @click="styleDialog = false">{{ t('common.cancel') }}</button>
+          <button type="submit" class="btn btn-primary">{{ t('common.save') }}</button>
         </div>
       </form>
     </div>
     <ConfirmDialog
       :open="!!styleToDelete"
-      title="删除风格预设"
-      :message="`确定删除风格「${styleToDelete?.name}」？已使用此风格的项目不受影响，但删除的内置风格重启后可能恢复，建议改用「停用」。`"
+      :title="t('settings.styles.deleteDialog.title')"
+      :message="t('settings.styles.deleteDialog.message', { name: styleToDelete?.name })"
       :loading="deletingStyle"
       @confirm="confirmDelStyle"
       @cancel="styleToDelete = null"
     />
     <ConfirmDialog
       :open="!!skillToDelete"
-      title="删除 Skill"
-      :message="`确定删除 Skill「${skillToDelete}」？删除后对应 Agent 将回退到内置默认提示词。`"
+      :title="t('settings.skills.deleteDialog.title')"
+      :message="t('settings.skills.deleteDialog.message', { id: skillToDelete })"
       :loading="deletingSkill"
       @confirm="confirmDelSkill"
       @cancel="skillToDelete = null"
@@ -445,19 +456,25 @@ import { toast } from 'vue-sonner'
 import { aiConfigAPI, promptAPI, skillsAPI, stylePresetAPI } from '~/composables/useApi'
 import brandLogo from '~/assets/huobao-logo.png'
 
+const { t, locale } = useI18n()
+const languageOptions = computed(() => [
+  { code: 'zh-CN', label: t('settings.language.zh') },
+  { code: 'en', label: t('settings.language.en') },
+])
+
 const showBrandImage = ref(true)
 const tab = ref('ai')
 const showAdvanced = ref(false)
-const baseTabs = [
-  { id: 'ai', label: 'AI 服务', icon: Cpu },
-  { id: 'styles', label: '风格预设', icon: Palette },
-]
-const advancedTabs = [
-  { id: 'agents', label: 'Agent 配置', icon: Bot },
-  { id: 'skills', label: 'Skills', icon: FileText },
-]
+const baseTabs = computed(() => [
+  { id: 'ai', label: t('settings.tabs.ai'), icon: Cpu },
+  { id: 'styles', label: t('settings.tabs.styles'), icon: Palette },
+])
+const advancedTabs = computed(() => [
+  { id: 'agents', label: t('settings.tabs.agents'), icon: Bot },
+  { id: 'skills', label: t('settings.tabs.skills'), icon: FileText },
+])
 watch(showAdvanced, (v) => {
-  if (!v && advancedTabs.some(t => t.id === tab.value)) tab.value = 'ai'
+  if (!v && advancedTabs.value.some(at => at.id === tab.value)) tab.value = 'ai'
 })
 
 // ===== AI Service Configs =====
@@ -469,29 +486,33 @@ const cfgTestResult = ref(null)
 const huobaoApiKey = ref('')
 const huobaoSaving = ref(false)
 const cfgForm = reactive({ name: '', provider: '', api_key: '', base_url: '', modelStr: '', service_type: 'text', priority: 0, temperature: '' })
-const serviceTypes = [{ type: 'text', label: '文本' }, { type: 'image', label: '图片' }, { type: 'video', label: '视频' }]
+const serviceTypes = computed(() => [
+  { type: 'text', label: t('common.serviceType.text') },
+  { type: 'image', label: t('common.serviceType.image') },
+  { type: 'video', label: t('common.serviceType.video') },
+])
 const providers = ['gemini', 'openai', 'volcengine', 'minimax', 'aliyun']
 const providerSelectOptions = computed(() => providers.map(p => ({ label: p, value: p })))
-const serviceMeta = {
-  text: { label: '文本', desc: '剧本改写、角色场景提取、分镜拆解等 Agent 文本能力' },
-  image: { label: '图片', desc: '角色图、场景图与镜头图等静态图像生成' },
-  video: { label: '视频', desc: '镜头视频直出生成，默认 Seedance 2.0' },
-}
-const providerPresets = {
+const serviceMeta = computed(() => ({
+  text: { label: t('common.serviceType.text'), desc: t('settings.ai.serviceMeta.textDesc') },
+  image: { label: t('common.serviceType.image'), desc: t('settings.ai.serviceMeta.imageDesc') },
+  video: { label: t('common.serviceType.video'), desc: t('settings.ai.serviceMeta.videoDesc') },
+}))
+const providerPresets = computed(() => ({
   text: {
-    gemini: { label: 'Gemini 官方', baseUrl: 'https://generativelanguage.googleapis.com', models: ['gemini-3.1-pro-preview', 'gemini-3.5-flash', 'gemini-3-flash-preview'] },
-    openai: { label: 'OpenAI 官方', baseUrl: 'https://api.openai.com', models: ['deepseek-v4-pro', 'gpt-5.6-terra'] },
+    gemini: { label: t('settings.presetLabel.geminiOfficial'), baseUrl: 'https://generativelanguage.googleapis.com', models: ['gemini-3.1-pro-preview', 'gemini-3.5-flash', 'gemini-3-flash-preview'] },
+    openai: { label: t('settings.presetLabel.openaiOfficial'), baseUrl: 'https://api.openai.com', models: ['deepseek-v4-pro', 'gpt-5.6-terra'] },
   },
   image: {
-    gemini: { label: 'Gemini 官方', baseUrl: 'https://generativelanguage.googleapis.com', models: ['gemini-3-pro-image', 'gemini-3.1-flash-image'] },
-    openai: { label: 'OpenAI 官方', baseUrl: 'https://api.openai.com', models: ['gpt-image-2'] },
+    gemini: { label: t('settings.presetLabel.geminiOfficial'), baseUrl: 'https://generativelanguage.googleapis.com', models: ['gemini-3-pro-image', 'gemini-3.1-flash-image'] },
+    openai: { label: t('settings.presetLabel.openaiOfficial'), baseUrl: 'https://api.openai.com', models: ['gpt-image-2'] },
   },
   video: {
-    volcengine: { label: 'Seedance 2.0 官方', baseUrl: 'https://ark.cn-beijing.volces.com', models: ['doubao-seedance-2-0-mini-260615', 'doubao-seedance-2-0-fast-260128', 'doubao-seedance-2-0-260128'] },
-    minimax: { label: 'MiniMax H3 官方', baseUrl: 'https://api.minimaxi.com', models: ['MiniMax-H3'] },
-    aliyun: { label: '阿里云百炼 Wan 3.0', baseUrl: 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com', models: ['wan3.0-video-prime', 'wan3.0-video'] },
+    volcengine: { label: t('settings.presetLabel.seedanceOfficial'), baseUrl: 'https://ark.cn-beijing.volces.com', models: ['doubao-seedance-2-0-mini-260615', 'doubao-seedance-2-0-fast-260128', 'doubao-seedance-2-0-260128'] },
+    minimax: { label: t('settings.presetLabel.minimaxOfficial'), baseUrl: 'https://api.minimaxi.com', models: ['MiniMax-H3'] },
+    aliyun: { label: t('settings.presetLabel.aliyunOfficial'), baseUrl: 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com', models: ['wan3.0-video-prime', 'wan3.0-video'] },
   },
-}
+}))
 const huobaoQuickConfigs = [
   { service_type: 'text', provider: 'gemini', name: '火宝文本服务 · Gemini', base_url: 'https://api.chatfire.site', model: ['gemini-3.1-pro-preview', 'gemini-3.5-flash', 'gemini-3-flash-preview'], priority: 100 },
   { service_type: 'text', provider: 'openai', name: '火宝文本服务 · OpenAI', base_url: 'https://api.chatfire.site', model: ['deepseek-v4-pro', 'deepseek-v4-flash', 'gpt-5.6-terra'], priority: 101 },
@@ -502,20 +523,20 @@ const huobaoQuickConfigs = [
   { service_type: 'video', provider: 'minimax', name: '火宝视频服务 · MiniMax', base_url: 'https://api.chatfire.site/minimax', model: ['MiniMax-H3'], priority: 96 },
 ]
 
-function byType(t) { return cfgs.value.filter(c => c.service_type === t) }
-function countActive(t) { return byType(t).filter(c => c.is_active).length }
+function byType(svcType) { return cfgs.value.filter(c => c.service_type === svcType) }
+function countActive(svcType) { return byType(svcType).filter(c => c.is_active).length }
 function fmtModel(m) { return Array.isArray(m) ? m.join(', ') : m || '—' }
 function presetsByType(type) {
-  const group = providerPresets[type] || {}
+  const group = providerPresets.value[type] || {}
   return Object.entries(group).map(([provider, preset]) => ({ provider, ...preset }))
 }
 function applyProviderPreset(type, provider) {
-  const preset = providerPresets[type]?.[provider]
+  const preset = providerPresets.value[type]?.[provider]
   if (!preset) return
   cfgForm.provider = provider
   cfgForm.base_url = preset.baseUrl
   cfgForm.modelStr = preset.models.join(', ')
-  cfgForm.name = `${preset.label}-${serviceMeta[type].label}`
+  cfgForm.name = `${preset.label}-${serviceMeta.value[type].label}`
 }
 
 async function loadCfgs() { try { cfgs.value = await aiConfigAPI.list() } catch (e) { toast.error(e.message) } }
@@ -544,7 +565,7 @@ async function setDefaultModel(type, c, m) {
     if ((c.priority || 0) < maxPriority) payload.priority = maxPriority + 1
     if (!c.is_active) payload.is_active = true // 停用配置无法成为默认,选择即启用
     await aiConfigAPI.update(c.id, payload)
-    toast.success(`默认${serviceMeta[type].label}模型已切换为 ${m}`)
+    toast.success(t('settings.ai.toast.defaultModelSwitched', { type: serviceMeta.value[type].label, model: m }))
     await loadCfgs()
   } catch (e) {
     toast.error(e.message)
@@ -553,10 +574,10 @@ async function setDefaultModel(type, c, m) {
   }
 }
 async function toggleCfg(c) { await aiConfigAPI.update(c.id, { is_active: !c.is_active }); loadCfgs() }
-async function delCfg(id) { await aiConfigAPI.del(id); toast.success('已删除'); loadCfgs() }
+async function delCfg(id) { await aiConfigAPI.del(id); toast.success(t('settings.ai.toast.deleted')); loadCfgs() }
 async function applyHuobaoQuickConfig() {
   const apiKey = huobaoApiKey.value.trim()
-  if (!apiKey) { toast.warning('请填写 Huobao API Key'); return }
+  if (!apiKey) { toast.warning(t('settings.ai.toast.fillApiKey')); return }
   huobaoSaving.value = true
   try {
     for (const preset of huobaoQuickConfigs) {
@@ -565,7 +586,7 @@ async function applyHuobaoQuickConfig() {
       if (existing) await aiConfigAPI.update(existing.id, payload)
       else await aiConfigAPI.create(payload)
     }
-    toast.success('火宝快捷配置已写入')
+    toast.success(t('settings.ai.toast.quickApplied'))
     huobaoApiKey.value = ''
     await loadCfgs()
   } catch (e) {
@@ -601,8 +622,8 @@ async function testCfgPayload(payload) {
   cfgTesting.value = true
   try {
     cfgTestResult.value = await aiConfigAPI.test(payload)
-    if (cfgTestResult.value.reachable) toast.success('端点已响应')
-    else toast.warning('端点未通过测试')
+    if (cfgTestResult.value.reachable) toast.success(t('settings.ai.toast.endpointOk'))
+    else toast.warning(t('settings.ai.toast.endpointFailed'))
   } catch (e) {
     toast.error(e.message)
   } finally {
@@ -629,16 +650,16 @@ async function testExistingCfg(c) {
   })
 }
 async function saveCfg() {
-  if (!cfgForm.provider) { toast.warning('选择服务商'); return }
+  if (!cfgForm.provider) { toast.warning(t('settings.ai.toast.selectProvider')); return }
   const models = cfgForm.modelStr.split(',').map(s => s.trim()).filter(Boolean)
   const temperature = cfgForm.temperature === '' || cfgForm.temperature === null ? null : Number(cfgForm.temperature)
   if (temperature !== null && (!Number.isFinite(temperature) || temperature < 0 || temperature > 2)) {
-    toast.warning('Temperature 需为 0~2 的数字'); return
+    toast.warning(t('settings.ai.toast.temperatureRange')); return
   }
   try {
     if (cfgEditId.value) await aiConfigAPI.update(cfgEditId.value, { name: cfgForm.name, provider: cfgForm.provider, api_key: cfgForm.api_key, base_url: cfgForm.base_url, model: models, priority: cfgForm.priority, temperature })
     else await aiConfigAPI.create({ service_type: cfgForm.service_type, provider: cfgForm.provider, name: cfgForm.name || `${cfgForm.provider}-${cfgForm.service_type}`, api_key: cfgForm.api_key, base_url: cfgForm.base_url, model: models, priority: cfgForm.priority, temperature })
-    cfgDialog.value = false; toast.success('已保存'); loadCfgs()
+    cfgDialog.value = false; toast.success(t('settings.ai.toast.saved')); loadCfgs()
   } catch (e) { toast.error(e.message) }
 }
 
@@ -649,12 +670,12 @@ const agentSaving = ref(false)
 const agentSaved = ref(null)
 const agentForm = reactive({ model: '', system_prompt: '' })
 
-const agentDefs = [
-  { type: 'script_rewriter', label: '剧本改写', icon: '📝' },
-  { type: 'extractor', label: '角色场景提取', icon: '🔍' },
-  { type: 'storyboard_breaker', label: '分镜拆解', icon: '🎬' },
-  { type: 'prompt_generator', label: '提示词', icon: '🖼' },
-]
+const agentDefs = computed(() => [
+  { type: 'script_rewriter', label: t('settings.agents.defs.scriptRewriter'), icon: '📝' },
+  { type: 'extractor', label: t('settings.agents.defs.extractor'), icon: '🔍' },
+  { type: 'storyboard_breaker', label: t('settings.agents.defs.storyboardBreaker'), icon: '🎬' },
+  { type: 'prompt_generator', label: t('settings.agents.defs.promptGenerator'), icon: '🖼' },
+])
 
 function getAgentCfg(type) {
   return agentCfgs.value.find(a => a.agent_type === type)
@@ -700,7 +721,7 @@ async function resetAgentPrompt(type) {
     const cfg = await promptAPI.get(type)
     agentForm.model = cfg.model || ''
     agentForm.system_prompt = cfg.system_prompt || ''
-    toast.success('已恢复默认提示词（prompt 文件已删除）')
+    toast.success(t('settings.agents.toast.resetDone'))
   } catch (e) { toast.error(e.message) }
 }
 
@@ -709,13 +730,13 @@ async function saveAgentCfg(type) {
   agentSaved.value = null
   try {
     await promptAPI.update(type, {
-      name: agentDefs.find(a => a.type === type)?.label || type,
+      name: agentDefs.value.find(a => a.type === type)?.label || type,
       model: agentForm.model,
       system_prompt: agentForm.system_prompt,
     })
     await loadAgents()
     agentSaved.value = type
-    toast.success(`${agentDefs.find(a => a.type === type)?.label} 配置已保存`)
+    toast.success(t('settings.agents.toast.saved', { label: agentDefs.value.find(a => a.type === type)?.label }))
     setTimeout(() => { if (agentSaved.value === type) agentSaved.value = null }, 3000)
   } catch (e) {
     toast.error(e.message)
@@ -735,8 +756,8 @@ const addSkillDialog = ref(false)
 const newSkillForm = reactive({ id: '', name: '', description: '' })
 
 const selectedAgentType = computed(() => selectedAgent.value)
-const selectedAgentLabel = computed(() => agentDefs.find(a => a.type === selectedAgent.value)?.label || '')
-const selectedAgentIcon = computed(() => agentDefs.find(a => a.type === selectedAgent.value)?.icon || '')
+const selectedAgentLabel = computed(() => agentDefs.value.find(a => a.type === selectedAgent.value)?.label || '')
+const selectedAgentIcon = computed(() => agentDefs.value.find(a => a.type === selectedAgent.value)?.icon || '')
 
 // agent type 用下划线（script_rewriter），skill 目录按 Mastra 规范用连字符（script-rewriter）
 const skillDirOf = (type) => type.replace(/_/g, '-')
@@ -777,7 +798,7 @@ async function confirmAddSkill() {
     await skillsAPI.create({ id: skillId, name: newSkillForm.name, description: newSkillForm.description })
     addSkillDialog.value = false
     await loadAllSkills()
-    toast.success('Skill 创建成功')
+    toast.success(t('settings.skills.toast.created'))
   } catch (e) {
     toast.error(e.message)
   }
@@ -795,7 +816,7 @@ async function confirmDelSkill() {
     if (editingSkill.value === id) editingSkill.value = null
     await loadAllSkills()
     skillToDelete.value = null
-    toast.success('已删除')
+    toast.success(t('settings.skills.toast.deleted'))
   } catch (e) {
     toast.error(e.message)
   } finally {
@@ -820,7 +841,7 @@ async function saveSkill(id) {
     await skillsAPI.update(id, skillContent.value)
     await loadAllSkills()
     skillSaved.value = id
-    toast.success(`已保存`)
+    toast.success(t('settings.skills.saved'))
     setTimeout(() => { if (skillSaved.value === id) skillSaved.value = null }, 3000)
   } catch (e) {
     toast.error(e.message)
@@ -856,7 +877,7 @@ async function confirmDelStyle() {
     deletingStyle.value = true
     await stylePresetAPI.del(p.id)
     styleToDelete.value = null
-    toast.success('已删除')
+    toast.success(t('settings.styles.toast.deleted'))
     loadStylePresets()
   } catch (e) {
     toast.error(e.message)
@@ -888,7 +909,7 @@ function startEditStyle(p) {
 
 async function saveStyle() {
   if (!styleForm.name?.trim() || !styleForm.prompt?.trim() || (!styleEditId.value && !styleForm.value?.trim())) {
-    toast.warning('名称、key、提示词片段必填')
+    toast.warning(t('settings.styles.toast.requiredFields'))
     return
   }
   try {
@@ -903,7 +924,7 @@ async function saveStyle() {
       await stylePresetAPI.create({ ...styleForm })
     }
     styleDialog.value = false
-    toast.success('已保存')
+    toast.success(t('settings.styles.toast.saved'))
     loadStylePresets()
   } catch (e) { toast.error(e.message) }
 }
