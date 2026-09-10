@@ -1,65 +1,65 @@
 ---
 name: extractor
-description: 角色、场景和道具提取的规范与方法
+description: Quy chuẩn và phương pháp trích xuất nhân vật, bối cảnh và đạo cụ
 ---
 
-# 角色、场景与道具提取指南
+# Hướng dẫn trích xuất nhân vật, bối cảnh và đạo cụ
 
-## 角色提取规范
+## Quy chuẩn trích xuất nhân vật
 
-提取的角色字段（与 `save_dedup_characters` 工具参数一一对应）：
-- **name**（必填）：角色全名
-- **role**：角色定位，主角/配角/龙套
-- **appearance**：样貌描写（300-500字）——性别、年龄感、五官、体态、气质。**角色的性格特点不要单独输出，要转化为外在气质与神态融入样貌描写**（例如"性格冷峻"应写为"眼神冷峻、表情克制、少有笑意"）
-- **styling**：妆造——发型、服装、妆面、配饰等
-- **description**：背景故事和人物关系（可选补充）
+Các trường nhân vật cần trích xuất (tương ứng 1-1 với tham số công cụ `save_dedup_characters`):
+- **name** (bắt buộc): tên đầy đủ của nhân vật
+- **role**: vai trò — nhân vật chính/phụ/quần chúng
+- **appearance**: mô tả ngoại hình (300-500 chữ) — giới tính, cảm giác tuổi tác, ngũ quan, dáng vóc, khí chất. **Không xuất riêng đặc điểm tính cách, phải chuyển hóa thành khí chất và thần thái bên ngoài rồi lồng vào mô tả ngoại hình** (ví dụ "tính cách lạnh lùng" nên viết thành "ánh mắt lạnh, biểu cảm kiềm chế, ít khi cười")
+- **styling**: tạo hình — kiểu tóc, trang phục, trang điểm, phụ kiện...
+- **description**: bối cảnh câu chuyện và mối quan hệ nhân vật (bổ sung tùy chọn)
 
-## 场景提取规范
+## Quy chuẩn trích xuất bối cảnh
 
-提取的场景字段（与 `save_dedup_scenes` 工具参数一一对应）：
-- **location**（必填）：具体场所名称
-- **time**：时间段（如 白天/黄昏/深夜），同地点不同时段视为新场景
-- **prompt**：场景描述——空间、陈设、年代质感、关键视觉元素（纯背景，不含人物）
-- **lighting**：场景光影——光源、色调、明暗、氛围
+Các trường bối cảnh cần trích xuất (tương ứng 1-1 với tham số công cụ `save_dedup_scenes`):
+- **location** (bắt buộc): tên địa điểm cụ thể
+- **time**: khung giờ (như ban ngày/hoàng hôn/đêm khuya), cùng địa điểm khác khung giờ được coi là bối cảnh mới
+- **prompt**: mô tả bối cảnh — không gian, bài trí, cảm giác niên đại, yếu tố thị giác then chốt (chỉ bối cảnh nền, không có nhân vật)
+- **lighting**: ánh sáng bối cảnh — nguồn sáng, tông màu, độ sáng tối, không khí
 
-## 道具提取规范
+## Quy chuẩn trích xuất đạo cụ
 
-**核心原则：宁可少提，不要多提。** 道具是用来生成白底单品图、供视频特写引用的高成本资产，只有剧情关键道具才值得提取。一集通常 **0-3 个**关键道具，超过 3 个时按剧情重要性排序只保留前 3 个。
+**Nguyên tắc cốt lõi: thà trích ít còn hơn trích nhiều.** Đạo cụ dùng để tạo ảnh nền trắng đơn vật và làm ảnh tham chiếu cận cảnh cho video, là tài nguyên có chi phí cao, chỉ những đạo cụ trọng yếu với cốt truyện mới đáng trích xuất. Một tập thường chỉ có **0-3** đạo cụ trọng yếu, nếu vượt quá 3 thì xếp theo mức độ quan trọng với cốt truyện và chỉ giữ lại 3 cái đầu.
 
-必须**同时满足**以下两条，缺一不可：
-1. **直接推动剧情**：该物品的出现、交接、损坏或发现会引发情节转折（如凶器、信物、关键文件、定情礼物、关键证据）。
-2. **值得单独生成图片**：后续分镜会给它特写镜头或反复出现，需要固定外观。
+Phải **thỏa mãn đồng thời** hai điều kiện sau, thiếu một cũng không được:
+1. **Trực tiếp thúc đẩy cốt truyện**: sự xuất hiện, trao đổi, hư hỏng hoặc phát hiện ra vật này gây ra bước ngoặt tình tiết (như hung khí, tín vật, tài liệu quan trọng, quà định tình, bằng chứng quan trọng).
+2. **Đáng để tạo ảnh riêng**: các phân cảnh sau sẽ có cảnh cận (close-up) hoặc vật này xuất hiện lặp lại, cần ngoại hình cố định.
 
-**判定三问**（对每个候选道具自问自答，任一答"否"即放弃）：
-- ① 删掉它剧情是否依然成立？→ 成立则**不提取**（它只是道具式背景板）
-- ② 它只是角色随手使用的日常物品吗（手机、筷子、水杯、香烟、雨伞）？→ 是则**不提取**
-- ③ 它是场景陈设的一部分吗（桌椅、灯具、门窗、挂画、餐具）？→ 是则**不提取**（这些属于场景描述）
+**Ba câu hỏi kiểm định** (tự hỏi tự trả lời với mỗi đạo cụ ứng viên, chỉ cần một câu trả lời "không" thì bỏ qua):
+- ① Bỏ nó đi thì cốt truyện có còn hợp lý không? → Còn hợp lý thì **không trích xuất** (nó chỉ là vật trang trí nền)
+- ② Nó chỉ là vật dụng hàng ngày nhân vật tiện tay sử dụng phải không (điện thoại, đũa, ly nước, thuốc lá, ô)? → Đúng thì **không trích xuất**
+- ③ Nó là một phần bài trí của bối cảnh phải không (bàn ghế, đèn, cửa, tranh treo tường, bát đĩa)? → Đúng thì **không trích xuất** (những thứ này thuộc mô tả bối cảnh)
 
-**不算道具的典型**：随手使用但不影响剧情走向的普通物品；场景陈设与家具；只被提及一次且再无下文的物品；角色的常规穿戴（归入角色妆造）。
+**Những thứ điển hình không tính là đạo cụ**: vật dụng thông thường được sử dụng tiện tay nhưng không ảnh hưởng đến diễn biến cốt truyện; bài trí và đồ nội thất của bối cảnh; vật chỉ được nhắc đến một lần rồi không xuất hiện lại; trang phục thường ngày của nhân vật (xếp vào tạo hình nhân vật).
 
-如果没有符合条件的道具，**不要强行提取**，调用 `save_dedup_props` 时传空数组即可。
+Nếu không có đạo cụ nào đạt điều kiện, **không được cố tình trích xuất**, khi gọi `save_dedup_props` truyền mảng rỗng là được.
 
-提取的道具字段（与 `save_dedup_props` 工具参数一一对应）：
-- **name**（必填）：道具名
-- **type**：类型——日常/武器/交通/装饰/文件等
-- **description**：物品外貌——只描写物品本身的物理外观（材质、颜色、形状、大小、新旧程度、磨损痕迹等），不要写剧情用途，不要涉及与角色或其他事物的关联
+Các trường đạo cụ cần trích xuất (tương ứng 1-1 với tham số công cụ `save_dedup_props`):
+- **name** (bắt buộc): tên đạo cụ
+- **type**: loại — đồ dùng hàng ngày/vũ khí/phương tiện/trang trí/tài liệu...
+- **description**: ngoại hình vật thể — chỉ mô tả hình dáng vật lý của bản thân vật thể (chất liệu, màu sắc, hình dạng, kích thước, độ mới cũ, dấu vết hao mòn...), không viết công dụng trong cốt truyện, không đề cập đến liên hệ với nhân vật hay vật thể khác
 
-道具**不需要输出图片提示词**——道具的最终提示词由提示词生成 Agent 在生图前专门生成（白底单品规范）。
+Đạo cụ **không cần xuất prompt hình ảnh** — prompt cuối cùng của đạo cụ sẽ do Agent tạo prompt đảm nhiệm riêng trước khi tạo ảnh (theo quy chuẩn ảnh nền trắng đơn vật).
 
-## 使用步骤
+## Các bước thực hiện
 
-1. 调用 `read_script_for_extraction` 读取当前集剧本
-2. 调用 `read_existing_characters` 查看项目已有角色和当前集已关联角色
-3. 调用 `read_existing_scenes` 查看项目已有场景和当前集已关联场景
-4. 调用 `read_existing_props` 查看项目已有道具和当前集已关联道具
-5. 只提取当前集真实涉及的角色、场景和道具
-6. 调用 `save_dedup_characters` 保存角色并自动关联到当前集
-7. 调用 `save_dedup_scenes` 保存场景并自动关联到当前集
-8. 调用 `save_dedup_props` 保存道具并自动关联到当前集
+1. Gọi `read_script_for_extraction` để đọc kịch bản của tập hiện tại
+2. Gọi `read_existing_characters` để xem nhân vật đã có trong dự án và nhân vật đã liên kết với tập hiện tại
+3. Gọi `read_existing_scenes` để xem bối cảnh đã có trong dự án và bối cảnh đã liên kết với tập hiện tại
+4. Gọi `read_existing_props` để xem đạo cụ đã có trong dự án và đạo cụ đã liên kết với tập hiện tại
+5. Chỉ trích xuất nhân vật, bối cảnh và đạo cụ thực sự liên quan đến tập hiện tại
+6. Gọi `save_dedup_characters` để lưu nhân vật và tự động liên kết với tập hiện tại
+7. Gọi `save_dedup_scenes` để lưu bối cảnh và tự động liên kết với tập hiện tại
+8. Gọi `save_dedup_props` để lưu đạo cụ và tự động liên kết với tập hiện tại
 
-## 当前集规则
+## Quy tắc cho tập hiện tại
 
-- 目标是补齐"当前集"需要的角色、场景和道具，不是重扫整个项目
-- 若已在项目中存在但当前集未关联，仍应复用并关联到当前集
-- 去重规则：角色/道具按名称精确匹配，场景按【地点+时间段】精确匹配，命中的优先复用，不要重复创建
-- 近名去重：名称带括号定位或别名时按括号前主体比较（如「林小雨（主角）」与「林小雨」视为同一角色/道具，复用已有）；read_existing_characters / read_existing_props 返回的 normalized_name 即归一化后的名字，场景的 normalized_location 同理，据此判断即可
+- Mục tiêu là bổ sung đầy đủ nhân vật, bối cảnh và đạo cụ cần cho "tập hiện tại", không phải quét lại toàn bộ dự án
+- Nếu đã tồn tại trong dự án nhưng chưa liên kết với tập hiện tại, vẫn nên tái sử dụng và liên kết vào tập hiện tại
+- Quy tắc khử trùng lặp: nhân vật/đạo cụ so khớp chính xác theo tên, bối cảnh so khớp chính xác theo 【địa điểm + khung giờ】, khớp trúng thì ưu tiên tái sử dụng, không tạo trùng
+- Khử trùng lặp theo tên gần giống: tên có kèm ngoặc định vị hoặc biệt danh thì so sánh theo phần chính trước dấu ngoặc (ví dụ「Lâm Tiểu Vũ（nhân vật chính）」và「Lâm Tiểu Vũ」coi là cùng một nhân vật/đạo cụ, tái sử dụng bản ghi đã có); trường normalized_name mà read_existing_characters / read_existing_props trả về chính là tên đã chuẩn hóa, normalized_location của bối cảnh cũng tương tự, dựa vào đó để phán đoán

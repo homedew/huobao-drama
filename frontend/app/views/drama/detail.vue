@@ -2,7 +2,7 @@
   <div class="page" v-if="drama">
     <!-- Header -->
     <div class="page-head card">
-      <button class="back-btn" title="返回" @click="navigateTo('/')">
+      <button class="back-btn" :title="t('dramaDetail.backTitle')" @click="navigateTo('/')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
         </svg>
@@ -15,15 +15,15 @@
         <div class="page-meta">
           <span class="meta-item">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            {{ drama.characters?.length || 0 }} 角色
+            {{ t('dramaDetail.header.characterCount', { count: drama.characters?.length || 0 }) }}
           </span>
           <span class="meta-item">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
-            {{ drama.scenes?.length || 0 }} 场景
+            {{ t('dramaDetail.header.sceneCount', { count: drama.scenes?.length || 0 }) }}
           </span>
           <span class="meta-item">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.5"/><line x1="7" y1="8" x2="7" y2="16"/><line x1="10" y1="8" x2="10" y2="16"/><line x1="13" y1="8" x2="13" y2="16"/><line x1="16" y1="8" x2="16" y2="16"/></svg>
-            {{ drama.episodes?.length || 0 }} 集
+            {{ t('dramaDetail.header.episodeCount', { count: drama.episodes?.length || 0 }) }}
           </span>
         </div>
       </div>
@@ -31,7 +31,7 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
           <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
-        添加集
+        {{ t('dramaDetail.header.addEpisode') }}
       </button>
     </div>
 
@@ -39,12 +39,12 @@
     <nav class="page-tabs">
       <button type="button" :class="['tab-btn', { on: activeTab === 'episodes' }]" @click="activeTab = 'episodes'">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.5"/><line x1="7" y1="8" x2="7" y2="16"/><line x1="10" y1="8" x2="10" y2="16"/><line x1="13" y1="8" x2="13" y2="16"/><line x1="16" y1="8" x2="16" y2="16"/></svg>
-        剧集列表
+        {{ t('dramaDetail.tabs.episodes') }}
         <span class="tab-count">{{ drama.episodes?.length || 0 }}</span>
       </button>
       <button type="button" :class="['tab-btn', { on: activeTab === 'assets' }]" @click="switchToAssets">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        素材库
+        {{ t('dramaDetail.tabs.assets') }}
         <span v-if="assetTotal > 0" class="tab-count">{{ assetTotal }}</span>
       </button>
     </nav>
@@ -64,7 +64,7 @@
             <b>{{ String(ep.episode_number || ep.episodeNumber).padStart(2, '0') }}</b>
           </div>
           <div class="ep-badges" @click.stop>
-            <button type="button" :class="['tag', 'ep-status-btn', `ep-status-${epStatus(ep)}`]" title="点击标记本集状态" @click="epStatusMenuId = epStatusMenuId === ep.id ? null : ep.id">
+            <button type="button" :class="['tag', 'ep-status-btn', `ep-status-${epStatus(ep)}`]" :title="t('dramaDetail.episode.markStatusTitle')" @click="epStatusMenuId = epStatusMenuId === ep.id ? null : ep.id">
               <span :class="['status-dot', epStatusDotClass(ep)]"></span>
               {{ epStatusLabel(ep) }}
             </button>
@@ -80,7 +80,7 @@
             </div>
           </div>
           <div class="ep-actions" @click.stop>
-            <button type="button" :class="['tag', 'ep-res-btn']" title="点击修改本集视频分辨率" @click="epResMenuId = epResMenuId === ep.id ? null : ep.id">
+            <button type="button" :class="['tag', 'ep-res-btn']" :title="t('dramaDetail.episode.resolutionTitle')" @click="epResMenuId = epResMenuId === ep.id ? null : ep.id">
               {{ epResolution(ep) }}
             </button>
             <div v-if="epResMenuId === ep.id" class="status-menu">
@@ -96,7 +96,7 @@
             <button
               class="btn btn-icon btn-sm ep-delete"
               type="button"
-              title="删除本集"
+              :title="t('dramaDetail.episode.deleteTitle')"
               @click="episodeToDelete = ep"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -117,11 +117,11 @@
           </span>
           <span v-if="ep.scriptContent || ep.script_content" class="ep-meta ep-meta-ok">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-            剧本已录入
+            {{ t('dramaDetail.episode.scriptEntered') }}
           </span>
           <span v-if="ep.videoUrl || ep.video_url" class="ep-meta ep-meta-ok">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-            已合成
+            {{ t('dramaDetail.episode.videoSynthesized') }}
           </span>
         </div>
 
@@ -135,7 +135,7 @@
       </div>
 
       <!-- Empty episode state（点击也可直接添加第一集） -->
-      <div v-if="!drama.episodes?.length" class="card ep-empty" role="button" tabindex="0" title="点击创建第一集" @click="openAddEpisode" @keydown.enter="openAddEpisode">
+      <div v-if="!drama.episodes?.length" class="card ep-empty" role="button" tabindex="0" :title="t('dramaDetail.episode.createFirstTitle')" @click="openAddEpisode" @keydown.enter="openAddEpisode">
         <div class="ep-empty-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
             <circle cx="12" cy="12" r="10"/>
@@ -143,11 +143,11 @@
             <line x1="8" y1="12" x2="16" y2="12"/>
           </svg>
         </div>
-        <p>点击创建第一集</p>
+        <p>{{ t('dramaDetail.episode.createFirstText') }}</p>
       </div>
 
       <!-- 已有剧集时，列表末尾常驻「添加下一集」卡片 -->
-      <div v-else class="card ep-empty ep-add" role="button" tabindex="0" :title="`添加第 ${(drama.episodes?.length || 0) + 1} 集`" @click="openAddEpisode" @keydown.enter="openAddEpisode">
+      <div v-else class="card ep-empty ep-add" role="button" tabindex="0" :title="t('dramaDetail.episode.addNextTitle', { n: (drama.episodes?.length || 0) + 1 })" @click="openAddEpisode" @keydown.enter="openAddEpisode">
         <div class="ep-empty-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
             <circle cx="12" cy="12" r="10"/>
@@ -155,7 +155,7 @@
             <line x1="8" y1="12" x2="16" y2="12"/>
           </svg>
         </div>
-        <p>添加第 {{ (drama.episodes?.length || 0) + 1 }} 集</p>
+        <p>{{ t('dramaDetail.episode.addNextText', { n: (drama.episodes?.length || 0) + 1 }) }}</p>
       </div>
     </div>
 
@@ -163,13 +163,13 @@
     <div v-else-if="activeTab === 'assets'" class="assets-wrap">
       <div class="seg asset-filter">
         <button
-          v-for="t in assetTabs"
-          :key="t.value"
+          v-for="at in assetTabs"
+          :key="at.value"
           type="button"
           class="seg-item"
-          :class="{ on: assetTab === t.value }"
-          @click="assetTab = t.value"
-        >{{ t.label }}</button>
+          :class="{ on: assetTab === at.value }"
+          @click="assetTab = at.value"
+        >{{ at.label }}</button>
       </div>
 
       <!-- 全部素材为空 -->
@@ -179,8 +179,8 @@
             <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
           </svg>
         </div>
-        <p class="empty-title">还没有任何素材</p>
-        <p class="empty-desc">在剧情工作台中通过「提取资产」生成角色、场景与道具后，会自动收录到这里，并可直接生成素材图。</p>
+        <p class="empty-title">{{ t('dramaDetail.assets.emptyTitle') }}</p>
+        <p class="empty-desc">{{ t('dramaDetail.assets.emptyDesc') }}</p>
       </div>
 
       <div v-else-if="materials.length" class="asset-groups">
@@ -216,34 +216,34 @@
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                       </div>
                       <span class="asset-cover-badge" :class="matHasImage(m) ? 'is-ready' : (isPending(m) ? 'is-pending' : '')">
-                        {{ matHasImage(m) ? '形象已生成' : (isPending(m) ? '形象生成中' : '形象待生成') }}
+                        {{ matHasImage(m) ? t('dramaDetail.character.imageReady') : (isPending(m) ? t('dramaDetail.character.imageGenerating') : t('dramaDetail.character.imageNotGenerated')) }}
                       </span>
                     </div>
                     <div class="character-asset-head">
                       <div class="character-title-block">
                         <div class="character-name-row">
                           <strong class="character-name">{{ m.name }}</strong>
-                          <span class="tag">{{ m.role || '角色' }}</span>
+                          <span class="tag">{{ m.role || t('dramaDetail.kindLabel.character') }}</span>
                         </div>
                         <div class="character-visual-summary" :title="matDesc(m)">
-                          <span>样貌：{{ m.appearance || '待补充' }}</span>
-                          <span>妆造：{{ m.styling || '待补充' }}</span>
+                          <span>{{ t('dramaDetail.character.appearanceSummary', { value: m.appearance || t('dramaDetail.common.pendingFill') }) }}</span>
+                          <span>{{ t('dramaDetail.character.stylingSummary', { value: m.styling || t('dramaDetail.common.pendingFill') }) }}</span>
                         </div>
                       </div>
                       <button class="btn btn-sm character-gen-btn" type="button" :disabled="isPending(m)" @click.stop="generateMaterial(m)">
                         <span v-if="isPending(m)" class="ring-spinner sm"></span>
-                        {{ matHasImage(m) ? '重绘' : (isPending(m) ? '生成中' : '生成') }}
+                        {{ matHasImage(m) ? t('dramaDetail.gen.redraw') : (isPending(m) ? t('dramaDetail.gen.generating') : t('dramaDetail.gen.generate')) }}
                       </button>
-                      <button class="btn btn-sm" type="button" title="上传角色形象图" :disabled="isUploading(m)" @click.stop="uploadMaterial(m)">
+                      <button class="btn btn-sm" type="button" :title="t('dramaDetail.character.uploadImageTitle')" :disabled="isUploading(m)" @click.stop="uploadMaterial(m)">
                         <span v-if="isUploading(m)" class="ring-spinner sm"></span>
                         <svg v-else width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                        上传
+                        {{ t('dramaDetail.upload.short') }}
                       </button>
                     </div>
                   </div>
                   <div class="asset-final-prompt" :title="m.finalPrompt || ''">
-                    <span class="afp-label">最终提示词 · 三视图</span>
-                    <span :class="['afp-text', !m.finalPrompt && 'dim']">{{ m.finalPrompt || '首次生成形象时由提示词 Agent 自动生成' }}</span>
+                    <span class="afp-label">{{ t('dramaDetail.character.finalPromptLabel') }}</span>
+                    <span :class="['afp-text', !m.finalPrompt && 'dim']">{{ m.finalPrompt || t('dramaDetail.character.finalPromptAutoHint') }}</span>
                   </div>
                 </div>
               </article>
@@ -268,37 +268,37 @@
                     <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
                   </div>
                   <span class="asset-cover-badge" :class="matHasImage(m) ? 'is-ready' : (isPending(m) ? 'is-pending' : '')">
-                    {{ matHasImage(m) ? '已生成' : (isPending(m) ? '生成中' : '待生成') }}
+                    {{ matHasImage(m) ? t('dramaDetail.gen.ready') : (isPending(m) ? t('dramaDetail.gen.generating') : t('dramaDetail.gen.pending')) }}
                   </span>
                 </div>
                 <div class="asset-body">
                   <template v-if="g.kindKey === 'scene'">
                     <div class="asset-name" :title="m.location">{{ m.location }}</div>
-                    <div class="asset-meta asset-desc dim" :title="matDesc(m)">{{ matDesc(m) || '场景描述待补充' }}</div>
-                    <div v-if="m.lighting" class="asset-meta asset-light dim" :title="m.lighting">光照 · {{ m.lighting }}</div>
+                    <div class="asset-meta asset-desc dim" :title="matDesc(m)">{{ matDesc(m) || t('dramaDetail.scene.descPending') }}</div>
+                    <div v-if="m.lighting" class="asset-meta asset-light dim" :title="m.lighting">{{ t('dramaDetail.scene.lightingLabel', { lighting: m.lighting }) }}</div>
                   </template>
                   <template v-else>
                     <div class="prop-name-row">
                       <span class="asset-name" :title="m.name">{{ m.name }}</span>
-                      <span class="tag">{{ m.type || '道具' }}</span>
+                      <span class="tag">{{ m.type || t('dramaDetail.kindLabel.prop') }}</span>
                     </div>
-                    <div class="asset-meta asset-desc dim" :title="m.description || ''">{{ m.description || '暂无描述' }}</div>
+                    <div class="asset-meta asset-desc dim" :title="m.description || ''">{{ m.description || t('dramaDetail.common.noDescription') }}</div>
                   </template>
                   <div class="asset-meta asset-final" :class="{ dim: !m.finalPrompt }" :title="m.finalPrompt || ''">
-                    <span class="afp-label">{{ g.kindKey === 'scene' ? '最终提示词 · 固定视角' : '最终提示词 · 白底单品' }}</span>
-                    {{ m.finalPrompt || (g.kindKey === 'scene' ? '首次生成图片时由提示词 Agent 自动生成（前景/中景/后景）' : '首次生成图片时由提示词 Agent 自动生成（白底单品）') }}
+                    <span class="afp-label">{{ g.kindKey === 'scene' ? t('dramaDetail.scene.finalPromptLabel') : t('dramaDetail.prop.finalPromptLabel') }}</span>
+                    {{ m.finalPrompt || (g.kindKey === 'scene' ? t('dramaDetail.scene.finalPromptAutoHint') : t('dramaDetail.prop.finalPromptAutoHint')) }}
                   </div>
                 </div>
                 <div class="asset-foot">
                   <span :class="['dot', matHasImage(m) && 'ok', isPending(m) && 'pending']" />
-                  <button class="btn btn-sm ml-auto" type="button" title="上传图片" :disabled="isUploading(m)" @click.stop="uploadMaterial(m)">
+                  <button class="btn btn-sm ml-auto" type="button" :title="t('dramaDetail.upload.image')" :disabled="isUploading(m)" @click.stop="uploadMaterial(m)">
                     <span v-if="isUploading(m)" class="ring-spinner sm"></span>
                     <svg v-else width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                    上传
+                    {{ t('dramaDetail.upload.short') }}
                   </button>
                   <button class="btn btn-sm" type="button" :disabled="isPending(m)" @click.stop="generateMaterial(m)">
                     <span v-if="isPending(m)" class="ring-spinner sm"></span>
-                    {{ matHasImage(m) ? '重绘' : (isPending(m) ? '生成中' : '生成') }}
+                    {{ matHasImage(m) ? t('dramaDetail.gen.redraw') : (isPending(m) ? t('dramaDetail.gen.generating') : t('dramaDetail.gen.generate')) }}
                   </button>
                 </div>
               </div>
@@ -313,23 +313,23 @@
               <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
             </svg>
           </div>
-          <p class="empty-title">暂无{{ tabLabel(assetTab) }}素材</p>
-          <p class="empty-desc">在剧情工作台中提取并生成{{ tabLabel(assetTab) }}后，会显示在这里。</p>
+          <p class="empty-title">{{ t('dramaDetail.assets.noKindMaterial', { kind: tabLabel(assetTab) }) }}</p>
+          <p class="empty-desc">{{ t('dramaDetail.assets.kindHint', { kind: tabLabel(assetTab) }) }}</p>
         </div>
       </div>
 
       <!-- 素材详情 / 编辑对话框（与工作台资产卡片同款布局） -->
       <div v-if="editDialog && editTarget" class="overlay mat-detail-overlay" @click.self="closeEdit">
-        <section class="dialog mat-detail-dialog" aria-label="素材详情">
+        <section class="dialog mat-detail-dialog" :aria-label="t('dramaDetail.assets.detailAriaLabel')">
           <header class="dialog-head mat-detail-head">
             <div class="mat-detail-title-block">
-              <span class="mat-detail-kicker">{{ editTarget.kind === '角色' ? '角色资产' : editTarget.kind === '场景' ? '场景资产' : '道具资产' }}</span>
-              <h2 class="mat-detail-title">{{ editTarget.name || '未命名' }}</h2>
+              <span class="mat-detail-kicker">{{ editTarget.kindKey === 'character' ? t('dramaDetail.assets.kickerCharacter') : editTarget.kindKey === 'scene' ? t('dramaDetail.assets.kickerScene') : t('dramaDetail.assets.kickerProp') }}</span>
+              <h2 class="mat-detail-title">{{ editTarget.name || t('dramaDetail.common.unnamed') }}</h2>
             </div>
             <div class="mat-detail-head-actions">
-              <span v-if="editTarget.kindKey === 'character'" class="tag">{{ editTarget.role || '角色' }}</span>
-              <span v-else-if="editTarget.kindKey === 'prop'" class="tag">{{ editTarget.type || '道具' }}</span>
-              <span v-else class="tag">{{ editTarget.time || '未设时间' }}</span>
+              <span v-if="editTarget.kindKey === 'character'" class="tag">{{ editTarget.role || t('dramaDetail.kindLabel.character') }}</span>
+              <span v-else-if="editTarget.kindKey === 'prop'" class="tag">{{ editTarget.type || t('dramaDetail.kindLabel.prop') }}</span>
+              <span v-else class="tag">{{ editTarget.time || t('dramaDetail.common.noTime') }}</span>
               <button class="btn btn-ghost btn-icon" @click="closeEdit">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
@@ -341,9 +341,9 @@
               <!-- 左侧：视觉预览 -->
               <aside class="mat-detail-preview-panel">
                 <div class="mat-detail-section-title">
-                  <span>视觉预览</span>
+                  <span>{{ t('dramaDetail.editor.visualPreviewLabel') }}</span>
                   <span :class="['mat-detail-state', matHasImage(editTarget) ? 'is-ready' : '']">
-                    {{ matHasImage(editTarget) ? '已生成' : '待生成' }}
+                    {{ matHasImage(editTarget) ? t('dramaDetail.gen.ready') : t('dramaDetail.gen.pending') }}
                   </span>
                 </div>
 
@@ -363,12 +363,12 @@
 
                 <div class="mat-detail-meta-row">
                   <div class="mat-detail-meta-item">
-                    <span>类型</span>
-                    <strong>{{ editTarget.kind === '角色' ? '角色形象' : editTarget.kind === '道具' ? '道具' : '场景图片' }}</strong>
+                    <span>{{ t('dramaDetail.editor.typeLabel') }}</span>
+                    <strong>{{ editTarget.kindKey === 'character' ? t('dramaDetail.editor.typeCharacter') : editTarget.kindKey === 'prop' ? t('dramaDetail.editor.typeProp') : t('dramaDetail.editor.typeScene') }}</strong>
                   </div>
                   <div class="mat-detail-meta-item">
-                    <span>{{ editTarget.kindKey === 'character' ? '定位' : editTarget.kindKey === 'prop' ? '道具类型' : '时间' }}</span>
-                    <strong>{{ editTarget.kindKey === 'character' ? (editTarget.role || '角色') : editTarget.kindKey === 'prop' ? (editTarget.type || '道具') : (editTarget.time || '未设时间') }}</strong>
+                    <span>{{ editTarget.kindKey === 'character' ? t('dramaDetail.editor.positionLabel') : editTarget.kindKey === 'prop' ? t('dramaDetail.editor.propTypeLabel') : t('dramaDetail.editor.timeLabel') }}</span>
+                    <strong>{{ editTarget.kindKey === 'character' ? (editTarget.role || t('dramaDetail.kindLabel.character')) : editTarget.kindKey === 'prop' ? (editTarget.type || t('dramaDetail.kindLabel.prop')) : (editTarget.time || t('dramaDetail.common.noTime')) }}</strong>
                   </div>
                 </div>
               </aside>
@@ -376,67 +376,67 @@
               <!-- 右侧：编辑信息 -->
               <section class="mat-detail-editor-panel">
                 <div class="mat-detail-section-title">
-                  <span>编辑信息</span>
-                  <span class="dim">{{ editTarget.kindKey === 'character' ? '样貌与妆造会影响角色形象' : editTarget.kindKey === 'prop' ? '物品外貌会影响道具图' : '空间与光影会影响场景图' }}</span>
+                  <span>{{ t('dramaDetail.editor.editInfoLabel') }}</span>
+                  <span class="dim">{{ editTarget.kindKey === 'character' ? t('dramaDetail.editor.hintCharacter') : editTarget.kindKey === 'prop' ? t('dramaDetail.editor.hintProp') : t('dramaDetail.editor.hintScene') }}</span>
                 </div>
 
                 <!-- 道具：单列物品外貌 -->
                 <div v-if="editTarget.kindKey === 'prop'" class="mat-detail-edit-grid mat-detail-edit-grid--prop">
                   <label class="mat-detail-edit-field">
-                    <span>名称</span>
-                    <input v-model="editDraft.name" class="input" placeholder="道具名称" />
+                    <span>{{ t('dramaDetail.editor.fields.prop.nameLabel') }}</span>
+                    <input v-model="editDraft.name" class="input" :placeholder="t('dramaDetail.editor.fields.prop.namePlaceholder')" />
                   </label>
                   <label class="mat-detail-edit-field">
-                    <span>类型</span>
-                    <input v-model="editDraft.type" class="input" placeholder="如：武器 / 信物" />
+                    <span>{{ t('dramaDetail.editor.fields.prop.typeLabel') }}</span>
+                    <input v-model="editDraft.type" class="input" :placeholder="t('dramaDetail.editor.fields.prop.typePlaceholder')" />
                   </label>
                   <label class="mat-detail-edit-field">
-                    <span>物品外貌</span>
-                    <textarea v-model="editDraft.description" class="textarea mat-detail-textarea" rows="6" placeholder="材质、颜色、形状、大小、新旧程度、磨损痕迹等" />
+                    <span>{{ t('dramaDetail.editor.fields.prop.descLabel') }}</span>
+                    <textarea v-model="editDraft.description" class="textarea mat-detail-textarea" rows="6" :placeholder="t('dramaDetail.editor.fields.prop.descPlaceholder')" />
                   </label>
                 </div>
 
                 <!-- 角色：样貌 + 妆造 -->
                 <div v-else-if="editTarget.kindKey === 'character'" class="mat-detail-edit-grid mat-detail-edit-grid--character">
                   <label class="mat-detail-edit-field">
-                    <span>名称</span>
-                    <input v-model="editDraft.name" class="input" placeholder="角色名" />
+                    <span>{{ t('dramaDetail.editor.fields.character.nameLabel') }}</span>
+                    <input v-model="editDraft.name" class="input" :placeholder="t('dramaDetail.editor.fields.character.namePlaceholder')" />
                   </label>
                   <label class="mat-detail-edit-field">
-                    <span>定位</span>
-                    <input v-model="editDraft.role" class="input" placeholder="主角 / 反派 / 配角…" />
+                    <span>{{ t('dramaDetail.editor.fields.character.roleLabel') }}</span>
+                    <input v-model="editDraft.role" class="input" :placeholder="t('dramaDetail.editor.fields.character.rolePlaceholder')" />
                   </label>
                   <label class="mat-detail-edit-field">
-                    <span>样貌</span>
-                    <textarea v-model="editDraft.appearance" class="textarea mat-detail-textarea" rows="5" placeholder="年龄感、五官、体态、气质等" />
+                    <span>{{ t('dramaDetail.editor.fields.character.appearanceLabel') }}</span>
+                    <textarea v-model="editDraft.appearance" class="textarea mat-detail-textarea" rows="5" :placeholder="t('dramaDetail.editor.fields.character.appearancePlaceholder')" />
                   </label>
                   <label class="mat-detail-edit-field">
-                    <span>妆造</span>
-                    <textarea v-model="editDraft.styling" class="textarea mat-detail-textarea" rows="5" placeholder="发型、服装、妆面、配饰等" />
+                    <span>{{ t('dramaDetail.editor.fields.character.stylingLabel') }}</span>
+                    <textarea v-model="editDraft.styling" class="textarea mat-detail-textarea" rows="5" :placeholder="t('dramaDetail.editor.fields.character.stylingPlaceholder')" />
                   </label>
                   <label class="mat-detail-edit-field">
-                    <span>人物设定</span>
-                    <textarea v-model="editDraft.description" class="textarea mat-detail-textarea" rows="4" placeholder="性格、背景、动机…" />
+                    <span>{{ t('dramaDetail.editor.fields.character.descLabel') }}</span>
+                    <textarea v-model="editDraft.description" class="textarea mat-detail-textarea" rows="4" :placeholder="t('dramaDetail.editor.fields.character.descPlaceholder')" />
                   </label>
                 </div>
 
                 <!-- 场景：描述 + 光影 -->
                 <div v-else class="mat-detail-edit-grid mat-detail-edit-grid--scene">
                   <label class="mat-detail-edit-field">
-                    <span>地点</span>
-                    <input v-model="editDraft.location" class="input" placeholder="如：故宫太和殿" />
+                    <span>{{ t('dramaDetail.editor.fields.scene.locationLabel') }}</span>
+                    <input v-model="editDraft.location" class="input" :placeholder="t('dramaDetail.editor.fields.scene.locationPlaceholder')" />
                   </label>
                   <label class="mat-detail-edit-field">
-                    <span>时间</span>
-                    <input v-model="editDraft.time" class="input" placeholder="如：黄昏 / 深夜" />
+                    <span>{{ t('dramaDetail.editor.fields.scene.timeLabel') }}</span>
+                    <input v-model="editDraft.time" class="input" :placeholder="t('dramaDetail.editor.fields.scene.timePlaceholder')" />
                   </label>
                   <label class="mat-detail-edit-field">
-                    <span>场景描述</span>
-                    <textarea v-model="editDraft.prompt" class="textarea mat-detail-textarea" rows="5" placeholder="空间、陈设、年代质感、关键视觉元素等" />
+                    <span>{{ t('dramaDetail.editor.fields.scene.descLabel') }}</span>
+                    <textarea v-model="editDraft.prompt" class="textarea mat-detail-textarea" rows="5" :placeholder="t('dramaDetail.editor.fields.scene.descPlaceholder')" />
                   </label>
                   <label class="mat-detail-edit-field">
-                    <span>场景光影</span>
-                    <textarea v-model="editDraft.lighting" class="textarea mat-detail-textarea" rows="5" placeholder="光源、色调、明暗、氛围等" />
+                    <span>{{ t('dramaDetail.editor.fields.scene.lightingLabel') }}</span>
+                    <textarea v-model="editDraft.lighting" class="textarea mat-detail-textarea" rows="5" :placeholder="t('dramaDetail.editor.fields.scene.lightingPlaceholder')" />
                   </label>
                 </div>
               </section>
@@ -445,30 +445,30 @@
             <!-- 最终提示词：可生成 / 重新生成 / 手动编辑 -->
             <section class="mat-detail-prompt-panel">
               <div class="mat-detail-section-title">
-                <span>最终提示词</span>
-                <span class="dim">由 AI 根据信息生成，可手动修改后保存</span>
+                <span>{{ t('dramaDetail.editor.finalPromptTitle') }}</span>
+                <span class="dim">{{ t('dramaDetail.editor.finalPromptHint') }}</span>
                 <button
                   class="btn btn-sm mat-detail-prompt-gen"
                   :disabled="finalPromptGen || !firstEpisodeId"
-                  :title="firstEpisodeId ? '由 AI 生成最终提示词' : '请先在「剧集列表」创建至少一集'"
+                  :title="firstEpisodeId ? t('dramaDetail.editor.genPromptTitle') : t('dramaDetail.editor.needEpisodeTitle')"
                   @click="generateFinalPrompt(editTarget)"
                 >
                   <svg v-if="!finalPromptGen" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3m0 12v3m9-9h-3M6 12H3m13.5-6.5L14 8m-4 8-2.5 2.5m11 0L16 16M8 8 5.5 5.5"/><circle cx="12" cy="12" r="3"/></svg>
-                  {{ finalPromptGen ? '生成中…' : (editDraft.finalPrompt ? '重新生成' : '生成提示词') }}
+                  {{ finalPromptGen ? t('dramaDetail.gen.generatingEllipsis') : (editDraft.finalPrompt ? t('dramaDetail.gen.regenerate') : t('dramaDetail.gen.generatePrompt')) }}
                 </button>
               </div>
               <textarea
                 v-model="editDraft.finalPrompt"
                 class="textarea mat-detail-prompt-text"
                 rows="5"
-                placeholder="点击「生成提示词」由 AI 根据信息生成，或在此手动填写。手动修改并保存后，下次生成图片将使用此提示词。"
+                :placeholder="t('dramaDetail.editor.finalPromptPlaceholder')"
               ></textarea>
             </section>
           </div>
 
           <footer class="dialog-foot mat-detail-foot">
             <div class="mat-detail-secondary-actions">
-              <button class="btn" @click="closeEdit">关闭</button>
+              <button class="btn" @click="closeEdit">{{ t('dramaDetail.common.close') }}</button>
             </div>
             <div class="mat-detail-primary-actions">
               <button
@@ -478,17 +478,17 @@
               >
                 <span v-if="isUploading(editTarget)" class="ring-spinner sm"></span>
                 <svg v-else width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                上传图片
+                {{ t('dramaDetail.upload.image') }}
               </button>
               <button
                 class="btn"
                 :disabled="isPending(editTarget)"
                 @click="generateMaterial(editTarget)"
               >
-                {{ matHasImage(editTarget) ? '重新生成' : (isPending(editTarget) ? '生成中…' : '生成图片') }}
+                {{ matHasImage(editTarget) ? t('dramaDetail.gen.regenerate') : (isPending(editTarget) ? t('dramaDetail.gen.generatingEllipsis') : t('dramaDetail.gen.generateImage')) }}
               </button>
               <button class="btn btn-primary" :disabled="editSaving" @click="saveEdit">
-                {{ editSaving ? '保存中…' : '保存修改' }}
+                {{ editSaving ? t('dramaDetail.editor.saving') : t('dramaDetail.editor.saveChanges') }}
               </button>
             </div>
           </footer>
@@ -512,36 +512,36 @@
     <div v-if="addDialog" class="overlay" @click.self="addDialog = false">
       <div class="dialog ep-dialog">
         <div class="dialog-head">
-          <div class="dialog-title">创建新集</div>
+          <div class="dialog-title">{{ t('dramaDetail.addDialog.title') }}</div>
           <button class="btn btn-icon btn-sm btn-ghost ml-auto dialog-close" @click="addDialog = false">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
         <div class="dialog-body">
           <label class="field">
-            <span class="field-label">标题</span>
-            <input v-model="newEpisodeTitle" class="input" placeholder="默认按集数自动命名" />
-            <span class="field-hint">留空时会自动按集数命名，例如“第 3 集”。</span>
+            <span class="field-label">{{ t('dramaDetail.addDialog.titleLabel') }}</span>
+            <input v-model="newEpisodeTitle" class="input" :placeholder="t('dramaDetail.addDialog.titlePlaceholder')" />
+            <span class="field-hint">{{ t('dramaDetail.addDialog.titleHint') }}</span>
           </label>
           <label class="field">
-            <span class="field-label">视频分辨率</span>
-            <BaseSelect v-model="newEpisodeResolution" :options="resolutionOptions" placeholder="选择分辨率" />
-            <span class="field-hint">创建后本集视频按此分辨率生成，之后仍可在集卡片上修改。</span>
+            <span class="field-label">{{ t('dramaDetail.addDialog.resolutionLabel') }}</span>
+            <BaseSelect v-model="newEpisodeResolution" :options="resolutionOptions" :placeholder="t('dramaDetail.addDialog.resolutionPlaceholder')" />
+            <span class="field-hint">{{ t('dramaDetail.addDialog.resolutionHint') }}</span>
           </label>
         </div>
         <div class="dialog-foot">
-          <span class="dialog-foot-copy">创建后自动锁定当前启用的图片与视频生成能力。</span>
-          <button class="btn" @click="addDialog = false">取消</button>
+          <span class="dialog-foot-copy">{{ t('dramaDetail.addDialog.footCopy') }}</span>
+          <button class="btn" @click="addDialog = false">{{ t('common.cancel') }}</button>
           <button class="btn btn-primary" :disabled="creatingEpisode" @click="addEpisode">
-            {{ creatingEpisode ? '创建中...' : '创建' }}
+            {{ creatingEpisode ? t('dramaDetail.addDialog.creating') : t('common.create') }}
           </button>
         </div>
       </div>
     </div>
     <ConfirmDialog
       :open="!!episodeToDelete"
-      title="删除本集"
-      :message="`确定删除「${episodeToDelete?.title || `第 ${episodeToDelete?.episode_number || episodeToDelete?.episodeNumber} 集`}」？删除后不可在列表中查看，其分镜与生成记录将不再可访问。`"
+      :title="t('dramaDetail.deleteDialog.title')"
+      :message="t('dramaDetail.deleteDialog.message', { title: episodeToDelete?.title || t('dramaDetail.episode.numberedTitle', { n: episodeToDelete?.episode_number || episodeToDelete?.episodeNumber }) })"
       :loading="deletingEpisode"
       @confirm="confirmDelEpisode"
       @cancel="episodeToDelete = null"
@@ -554,6 +554,7 @@ import { toast } from 'vue-sonner'
 import { dramaAPI, episodeAPI, characterAPI, sceneAPI, propAPI, uploadAPI } from '~/composables/useApi'
 import BaseSelect from '~/components/BaseSelect.vue'
 
+const { t } = useI18n()
 const route = useRoute()
 const drama = ref(null)
 const dramaId = Number(route.params.id)
@@ -564,10 +565,10 @@ const episodeToDelete = ref(null)
 const deletingEpisode = ref(false)
 
 // 视频分辨率：创建集时固定（持久化到 episodes.resolution），集卡片上可修改
-const resolutionOptions = [
-  { label: '720p · 高清', value: '720p' },
-  { label: '480p · 流畅', value: '480p' },
-]
+const resolutionOptions = computed(() => [
+  { label: t('dramaDetail.resolution.hd'), value: '720p' },
+  { label: t('dramaDetail.resolution.smooth'), value: '480p' },
+])
 const newEpisodeResolution = ref('720p')
 const epResMenuId = ref(null)
 
@@ -580,7 +581,7 @@ async function setEpisodeResolution(ep, resolution) {
   ep.resolution = resolution
   try {
     await episodeAPI.update(ep.id, { resolution })
-    toast.success(`本集视频分辨率已切换为 ${resolution}`)
+    toast.success(t('dramaDetail.toast.resolutionSwitched', { resolution }))
   } catch (e) {
     ep.resolution = prev
     toast.error(e.message)
@@ -588,15 +589,15 @@ async function setEpisodeResolution(ep, resolution) {
 }
 
 // 集状态由用户手动标记（持久化到 episodes.status），不再按剧本内容自动推算
-const epStatusOptions = [
-  { label: '待开始', value: 'draft' },
-  { label: '进行中', value: 'active' },
-  { label: '已完成', value: 'completed' },
-]
+const epStatusOptions = computed(() => [
+  { label: t('dramaDetail.status.draft'), value: 'draft' },
+  { label: t('dramaDetail.status.active'), value: 'active' },
+  { label: t('dramaDetail.status.completed'), value: 'completed' },
+])
 const epStatusMenuId = ref(null)
 
 function epStatus(ep) { return ep.status || 'draft' }
-function epStatusLabel(ep) { return epStatusOptions.find(s => s.value === epStatus(ep))?.label || '待开始' }
+function epStatusLabel(ep) { return epStatusOptions.value.find(s => s.value === epStatus(ep))?.label || t('dramaDetail.status.draft') }
 function epStatusDotClass(ep) { return epStatus(ep) === 'active' ? 'dot-active' : epStatus(ep) === 'completed' ? 'dot-done' : 'dot-pending' }
 
 function formatEpTime(ts) {
@@ -604,9 +605,9 @@ function formatEpTime(ts) {
   const d = new Date(ts)
   const now = new Date()
   const diff = now - d
-  if (diff < 60_000) return '刚刚'
-  if (diff < 3600_000) return `${Math.floor(diff / 60000)} 分钟前`
-  if (diff < 86400_000) return `${Math.floor(diff / 3600000)} 小时前`
+  if (diff < 60_000) return t('dramaDetail.time.justNow')
+  if (diff < 3600_000) return t('dramaDetail.time.minutesAgo', { n: Math.floor(diff / 60000) })
+  if (diff < 86400_000) return t('dramaDetail.time.hoursAgo', { n: Math.floor(diff / 3600000) })
   return `${d.getMonth() + 1}/${d.getDate()}`
 }
 
@@ -646,7 +647,7 @@ async function addEpisode() {
       title: newEpisodeTitle.value || undefined,
       resolution: newEpisodeResolution.value,
     })
-    toast.success('已添加新集')
+    toast.success(t('dramaDetail.toast.episodeAdded'))
     addDialog.value = false
     load()
   } catch (e) {
@@ -662,7 +663,7 @@ async function confirmDelEpisode() {
   try {
     deletingEpisode.value = true
     await episodeAPI.del(ep.id)
-    toast.success('已删除')
+    toast.success(t('common.deleted'))
     episodeToDelete.value = null
     load()
   } catch (e) {
@@ -677,13 +678,17 @@ const activeTab = ref('episodes')
 const assetTab = ref('all')
 const assetViewer = ref({ open: false, src: '', title: '' })
 const pendingMaterials = ref(new Set())
-const assetTabs = [
-  { label: '全部', value: 'all' },
-  { label: '角色', value: 'character' },
-  { label: '场景', value: 'scene' },
-  { label: '道具', value: 'prop' },
-]
+const assetTabs = computed(() => [
+  { label: t('dramaDetail.assetTabs.all'), value: 'all' },
+  { label: t('dramaDetail.assetTabs.character'), value: 'character' },
+  { label: t('dramaDetail.assetTabs.scene'), value: 'scene' },
+  { label: t('dramaDetail.assetTabs.prop'), value: 'prop' },
+])
 const KIND_ORDER = { character: 0, scene: 1, prop: 2 }
+
+function kindLabel(kindKey) {
+  return kindKey === 'character' ? t('dramaDetail.kindLabel.character') : kindKey === 'scene' ? t('dramaDetail.kindLabel.scene') : t('dramaDetail.kindLabel.prop')
+}
 
 // 素材库以 characters / scenes / props 三张资产表为源（后端生图会写回其 imageUrl）
 function matImage(m) { return m.image_url || m.imageUrl || m.localPath || m.local_path || '' }
@@ -702,15 +707,15 @@ function matDesc(m) {
 function tagClass(kindKey) {
   return kindKey === 'character' ? 'is-character' : kindKey === 'scene' ? 'is-scene' : 'is-prop'
 }
-function tabLabel(v) { return assetTabs.find(t => t.value === v)?.label || '' }
+function tabLabel(v) { return assetTabs.value.find(at => at.value === v)?.label || '' }
 
 const materials = computed(() => {
   const d = drama.value
   if (!d) return []
   const list = []
-  for (const c of d.characters || []) list.push({ ...c, kind: '角色', kindKey: 'character' })
-  for (const s of d.scenes || []) list.push({ ...s, kind: '场景', kindKey: 'scene' })
-  for (const p of d.props || []) list.push({ ...p, kind: '道具', kindKey: 'prop' })
+  for (const c of d.characters || []) list.push({ ...c, kindKey: 'character' })
+  for (const s of d.scenes || []) list.push({ ...s, kindKey: 'scene' })
+  for (const p of d.props || []) list.push({ ...p, kindKey: 'prop' })
   return list.sort((a, b) => (KIND_ORDER[a.kindKey] - KIND_ORDER[b.kindKey]) || (a.id - b.id))
 })
 const visibleAssets = computed(() =>
@@ -720,9 +725,9 @@ const assetTotal = computed(() => materials.value.length)
 // 按类型分组：全部模式下分成 角色 / 场景 / 道具 三个分区；筛选单类时只保留该类
 const assetGroups = computed(() => {
   const groups = [
-    { kindKey: 'character', label: '角色', items: materials.value.filter(m => m.kindKey === 'character') },
-    { kindKey: 'scene', label: '场景', items: materials.value.filter(m => m.kindKey === 'scene') },
-    { kindKey: 'prop', label: '道具', items: materials.value.filter(m => m.kindKey === 'prop') },
+    { kindKey: 'character', label: kindLabel('character'), items: materials.value.filter(m => m.kindKey === 'character') },
+    { kindKey: 'scene', label: kindLabel('scene'), items: materials.value.filter(m => m.kindKey === 'scene') },
+    { kindKey: 'prop', label: kindLabel('prop'), items: materials.value.filter(m => m.kindKey === 'prop') },
   ]
   return assetTab.value === 'all'
     ? groups
@@ -736,7 +741,7 @@ function sleep(ms) { return new Promise(r => setTimeout(r, ms)) }
 
 async function generateMaterial(m) {
   const epId = drama.value?.episodes?.[0]?.id
-  if (!epId) { toast.error('请先在「剧集列表」创建至少一集，才能生成素材图'); return }
+  if (!epId) { toast.error(t('dramaDetail.toast.needEpisodeForImage')); return }
   const key = pendingKey(m)
   if (pendingMaterials.value.has(key)) return
   pendingMaterials.value = new Set(pendingMaterials.value).add(key)
@@ -744,7 +749,7 @@ async function generateMaterial(m) {
     if (m.kindKey === 'character') await characterAPI.generateImage(m.id, epId)
     else if (m.kindKey === 'scene') await sceneAPI.generateImage(m.id, epId)
     else await propAPI.generateImage(m.id, epId)
-    toast.success(`${m.kind}「${m.name}」图片生成中`)
+    toast.success(t('dramaDetail.toast.imageGenerating', { kind: kindLabel(m.kindKey), name: m.name }))
     pollMaterial(m)
   } catch (e) {
     pendingMaterials.value = new Set([...pendingMaterials.value].filter(k => k !== key))
@@ -767,7 +772,7 @@ async function pollMaterial(m) {
     }
   }
   pendingMaterials.value = new Set([...pendingMaterials.value].filter(k => k !== key))
-  toast.info(`${m.kind}「${m.name}」生成超时，可稍后刷新查看`)
+  toast.info(t('dramaDetail.toast.imageGenTimeout', { kind: kindLabel(m.kindKey), name: m.name }))
 }
 
 function switchToAssets() {
@@ -795,7 +800,7 @@ function uploadMaterial(m) {
       if (m.kindKey === 'character') await characterAPI.update(m.id, payload)
       else if (m.kindKey === 'scene') await sceneAPI.update(m.id, payload)
       else await propAPI.update(m.id, payload)
-      toast.success(`${m.kind}「${m.name}」图片已上传`)
+      toast.success(t('dramaDetail.toast.imageUploaded', { kind: kindLabel(m.kindKey), name: m.name }))
       await load()
       // 详情弹窗打开时同步刷新预览
       if (editTarget.value && editTarget.value.kindKey === m.kindKey && editTarget.value.id === m.id) {
@@ -811,7 +816,7 @@ function uploadMaterial(m) {
 }
 
 function openAssetViewer(m) {
-  assetViewer.value = { open: true, src: assetSrc(m), title: `${m.kind} · ${m.name}` }
+  assetViewer.value = { open: true, src: assetSrc(m), title: t('dramaDetail.viewer.titleFormat', { kind: kindLabel(m.kindKey), name: m.name }) }
 }
 function closeAssetViewer() {
   assetViewer.value = { open: false, src: '', title: '' }
@@ -850,7 +855,7 @@ const finalPromptGen = ref(false)
 const firstEpisodeId = computed(() => drama.value?.episodes?.[0]?.id || null)
 async function generateFinalPrompt(m) {
   const epId = firstEpisodeId.value
-  if (!epId) { toast.error('请先在「剧集列表」创建至少一集，才能生成最终提示词'); return }
+  if (!epId) { toast.error(t('dramaDetail.toast.needEpisodeForPrompt')); return }
   finalPromptGen.value = true
   try {
     let res
@@ -858,10 +863,10 @@ async function generateFinalPrompt(m) {
     else if (m.kindKey === 'scene') res = await sceneAPI.generatePrompt(m.id, epId, true)
     else res = await propAPI.generatePrompt(m.id, epId, true)
     const fp = res?.final_prompt || res?.finalPrompt
-    if (!fp) throw new Error('最终提示词生成失败，请重试')
+    if (!fp) throw new Error(t('dramaDetail.toast.finalPromptGenFailed'))
     editTarget.value = { ...m, finalPrompt: fp }
     editDraft.finalPrompt = fp
-    toast.success('最终提示词已生成')
+    toast.success(t('dramaDetail.toast.finalPromptGenerated'))
   } catch (e) {
     toast.error(e.message)
   } finally {
@@ -875,19 +880,19 @@ function closeEdit() {
 }
 
 async function saveEdit() {
-  const t = editTarget.value
-  if (!t) return
+  const target = editTarget.value
+  if (!target) return
   // 必填校验
-  if (t.kindKey === 'character' && !String(editDraft.name ?? '').trim()) { toast.error('请填写名称'); return }
-  if (t.kindKey === 'scene' && !String(editDraft.location ?? '').trim()) { toast.error('请填写地点'); return }
-  if (t.kindKey === 'prop' && !String(editDraft.name ?? '').trim()) { toast.error('请填写名称'); return }
+  if (target.kindKey === 'character' && !String(editDraft.name ?? '').trim()) { toast.error(t('dramaDetail.toast.nameRequired')); return }
+  if (target.kindKey === 'scene' && !String(editDraft.location ?? '').trim()) { toast.error(t('dramaDetail.toast.locationRequired')); return }
+  if (target.kindKey === 'prop' && !String(editDraft.name ?? '').trim()) { toast.error(t('dramaDetail.toast.nameRequired')); return }
   editSaving.value = true
   try {
     const fp = editDraft.finalPrompt || null
-    if (t.kindKey === 'character') await characterAPI.update(t.id, { name: editDraft.name, role: editDraft.role, appearance: editDraft.appearance, description: editDraft.description, styling: editDraft.styling, finalPrompt: fp })
-    else if (t.kindKey === 'scene') await sceneAPI.update(t.id, { location: editDraft.location, time: editDraft.time, prompt: editDraft.prompt, lighting: editDraft.lighting, finalPrompt: fp })
-    else await propAPI.update(t.id, { name: editDraft.name, type: editDraft.type, description: editDraft.description, finalPrompt: fp })
-    toast.success('已保存')
+    if (target.kindKey === 'character') await characterAPI.update(target.id, { name: editDraft.name, role: editDraft.role, appearance: editDraft.appearance, description: editDraft.description, styling: editDraft.styling, finalPrompt: fp })
+    else if (target.kindKey === 'scene') await sceneAPI.update(target.id, { location: editDraft.location, time: editDraft.time, prompt: editDraft.prompt, lighting: editDraft.lighting, finalPrompt: fp })
+    else await propAPI.update(target.id, { name: editDraft.name, type: editDraft.type, description: editDraft.description, finalPrompt: fp })
+    toast.success(t('common.saved'))
     closeEdit()
     load()
   } catch (e) {

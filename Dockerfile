@@ -4,7 +4,7 @@
 #   pip: 清华 pypi(Stage 2 预置 /etc/pip.conf,装 python 包时自动生效)
 
 # ── Stage 1: Build frontend ──────────────────────────────────
-FROM node:20-slim AS frontend-build
+FROM node:22-slim AS frontend-build
 
 ARG NPM_REGISTRY=https://registry.npmmirror.com
 RUN npm config set registry "$NPM_REGISTRY"
@@ -55,8 +55,12 @@ FROM node:20-slim
 
 ARG NPM_REGISTRY=https://registry.npmmirror.com
 
-# tsx 直接运行 TS 源码;ffmpeg 用 npm 包 ffmpeg-static/ffprobe-static 内置二进制,无需系统安装
-RUN npm config set registry "$NPM_REGISTRY" && npm i -g tsx
+# tsx 直接运行 TS 源码;ffmpeg 优先用 npm 包 ffmpeg-static/ffprobe-static 内置二进制,
+# 但 ffprobe-static 无 linux/arm64 构建(Apple Silicon 宿主机上 docker build 时会命中),
+# 故额外装系统 ffmpeg(含 ffprobe)兜底,通过 FFMPEG_BIN/FFPROBE_BIN 显式指向
+RUN npm config set registry "$NPM_REGISTRY" && npm i -g tsx \
+    && apt-get update && apt-get install -y --no-install-recommends ffmpeg fonts-dejavu-core \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -78,6 +82,9 @@ RUN mkdir -p data/static
 
 ENV NODE_ENV=production
 ENV PORT=5679
+# ffprobe-static 缺 linux/arm64 构建,显式指向系统 apt 装的 ffmpeg/ffprobe 兜底
+ENV FFMPEG_BIN=/usr/bin/ffmpeg
+ENV FFPROBE_BIN=/usr/bin/ffprobe
 
 EXPOSE 5679
 VOLUME ["/app/data"]

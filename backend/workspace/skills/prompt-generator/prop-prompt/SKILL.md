@@ -1,43 +1,43 @@
 ---
 name: prop-prompt
-description: 道具最终提示词规范 — 白底单品静物，标准产品摄影视角：比例准确、边缘完整、背景不承载叙事
+description: "Quy chuẩn prompt cuối cùng cho đạo cụ — ảnh tĩnh vật nền trắng, góc chụp sản phẩm chuẩn: tỷ lệ chính xác, viền trọn vẹn, nền không mang tính tự sự"
 ---
 
-# 道具最终提示词（白底单品 · 标准产品摄影）
+# Prompt cuối cùng cho đạo cụ (ảnh đơn vật nền trắng · chụp sản phẩm chuẩn)
 
-生成的是一张白底单品图（product shot）：**采用标准产品摄影视角**，画面中只有道具本身，孤立放置在纯白背景上，**不掺杂任何其他元素**——没有其他物品、没有人物、没有场景环境、没有手部持握。
+Kết quả tạo ra là một tấm ảnh đơn vật nền trắng (product shot): **dùng góc chụp sản phẩm chuẩn**, trong khung hình chỉ có đạo cụ, đặt độc lập trên nền trắng tinh, **không pha lẫn bất kỳ yếu tố nào khác** — không có vật phẩm khác, không có nhân vật, không có môi trường bối cảnh, không có tay cầm.
 
-三条硬性要求：
-1. **物品各部分比例准确**——不要夸张、变形或风格化拉伸，道具的相对尺寸关系必须真实
-2. **边缘完整**——道具整体完整入镜，四周留白，任何部分都不得被画面边缘裁切
-3. **背景不承载任何叙事内容**——纯白背景只是衬底，不带场景感、不带情节暗示、不带装饰元素
+Ba yêu cầu bắt buộc:
+1. **Tỷ lệ các bộ phận của vật phẩm chính xác** — không cường điệu, biến dạng hay kéo giãn theo phong cách hóa, quan hệ kích thước tương đối của đạo cụ phải chân thực
+2. **Viền trọn vẹn** — toàn bộ đạo cụ nằm trọn trong khung hình, có khoảng trống xung quanh, bất kỳ phần nào cũng không được bị cắt xén ở mép khung hình
+3. **Nền không mang bất kỳ nội dung tự sự nào** — nền trắng tinh chỉ là phông nền, không mang cảm giác bối cảnh, không gợi ý tình tiết, không có yếu tố trang trí
 
-## 输出结构（按此顺序组装单段连贯中文）
+## Cấu trúc đầu ra (ghép thành một đoạn liền mạch theo thứ tự này)
 
 ```
-单品产品图，标准产品摄影视角，[道具名 + 材质/颜色/形状/大小 + 新旧程度与磨损细节]，
-物品各部分比例准确，孤立放置在纯白背景上，居中完整入镜，边缘完整无裁切，
-背景纯净不承载任何叙事内容，无其他物品、无人物、无场景，
-柔和均匀的影棚光，轻淡阴影，高细节
+Ảnh sản phẩm đơn vật, góc chụp sản phẩm chuẩn, [tên đạo cụ + chất liệu/màu sắc/hình dạng/kích thước + độ mới cũ và chi tiết hao mòn],
+tỷ lệ các bộ phận của vật phẩm chính xác, đặt độc lập trên nền trắng tinh, nằm giữa khung hình trọn vẹn, viền trọn vẹn không bị cắt xén,
+nền tinh khiết không mang bất kỳ nội dung tự sự nào, không có vật phẩm khác, không có nhân vật, không có bối cảnh,
+ánh sáng studio đều và mềm mại, bóng đổ nhạt, độ chi tiết cao
 ```
 
-## 生成规则
+## Quy tắc tạo sinh
 
-- 以道具 `name`（名称）与 `description`（物品外貌）为核心：材质、颜色、形状、大小、新旧程度、磨损痕迹等物理细节**逐项落地**，这是道具辨识度的来源
-- 标准产品摄影视角：微俯视 3/4 视角（同时看清顶面与侧面，最有立体感）；扁平道具（纸张、证件、照片）用正俯视平铺
-- 单品居中完整呈现，四周留白，比例准确、边缘完整，不要裁切道具主体
-- 柔和均匀的影棚光，阴影轻淡，高细节
-- 只描写物品本身，不要提及剧情、角色或用途（背景与画面都不承载叙事内容）
-- 输出必须是纯中文，不要混入英文词汇；**不要**"电影质感"类词汇（道具图是产品图不是剧照）
+- Lấy `name` (tên) và `description` (ngoại hình vật thể) của đạo cụ làm trọng tâm: chất liệu, màu sắc, hình dạng, kích thước, độ mới cũ, dấu vết hao mòn... **triển khai đầy đủ từng chi tiết vật lý**, đây là nguồn gốc của tính nhận diện đạo cụ
+- Góc chụp sản phẩm chuẩn: góc 3/4 hơi từ trên xuống (nhìn rõ cả mặt trên lẫn mặt bên, cho cảm giác nổi khối tốt nhất); đạo cụ dẹt (giấy tờ, giấy chứng nhận, ảnh) dùng góc nhìn thẳng từ trên xuống, trải phẳng
+- Vật phẩm đơn nằm giữa khung hình trọn vẹn, có khoảng trống xung quanh, tỷ lệ chính xác, viền trọn vẹn, không cắt xén phần chính của đạo cụ
+- Ánh sáng studio đều và mềm mại, bóng đổ nhạt, độ chi tiết cao
+- Chỉ mô tả bản thân vật phẩm, không đề cập đến cốt truyện, nhân vật hay công dụng (cả nền lẫn khung hình đều không mang nội dung tự sự)
+- Toàn bộ đầu ra viết thành một đoạn liền mạch, không lẫn từ tiếng Anh; **không** dùng các từ kiểu "chất lượng điện ảnh" (ảnh đạo cụ là ảnh sản phẩm chứ không phải cảnh phim)
 
-## 禁止事项
+## Điều cấm
 
-- 手部持握、人物、其他物品、场景环境入镜
-- 包装、底座、展示架（除非它就是道具本体的一部分）
-- 文字、水印、签名（道具本体上印刷的文字图案可以保留并描述）
-- 环境反光、彩色光
-- 夸张透视、变形、比例失真、边缘裁切
+- Tay cầm, nhân vật, vật phẩm khác, môi trường bối cảnh xuất hiện trong khung hình
+- Bao bì, đế đặt, giá trưng bày (trừ khi nó chính là một phần của bản thân đạo cụ)
+- Chữ viết, watermark, chữ ký (chữ/hoa văn in sẵn trên chính đạo cụ thì có thể giữ lại và mô tả)
+- Phản chiếu môi trường, ánh sáng có màu
+- Phối cảnh cường điệu, biến dạng, sai lệch tỷ lệ, cắt xén viền
 
-## 保存
+## Lưu
 
-调用 `save_prop_final_prompt`：prompt 参数不含风格词，**项目视觉风格由工具自动注入到最终提示词的最前方**。
+Gọi `save_prop_final_prompt`: tham số prompt không chứa từ phong cách, **phong cách thị giác của dự án sẽ được công cụ tự động chèn vào đầu prompt cuối cùng**.

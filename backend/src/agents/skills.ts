@@ -21,8 +21,10 @@ fs.mkdirSync(SKILLS_DIR, { recursive: true })
 /** 每个 Agent 注册的 skill 目录（相对 workspace/skills/，含子规范目录；目录名需符合 Agent Skills 规范：小写+连字符） */
 const AGENT_SKILL_MAP: Record<string, string[]> = {
   script_rewriter: ['script-rewriter'],
+  script_rewriter_short: ['script-rewriter-short'],
   extractor: ['extractor'],
   storyboard_breaker: ['storyboard-breaker'],
+  storyboard_breaker_short: ['storyboard-breaker-short'],
   prompt_generator: [
     'prompt-generator/character-prompt',
     'prompt-generator/scene-prompt',

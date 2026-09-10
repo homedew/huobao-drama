@@ -7,6 +7,17 @@ export default defineNuxtConfig({
   experimental: {
     appManifest: false,
   },
+  modules: ['@nuxtjs/i18n'],
+  i18n: {
+    locales: [
+      { code: 'zh-CN', name: '中文', file: 'zh-CN.json' },
+      { code: 'en', name: 'English', file: 'en.json' },
+    ],
+    defaultLocale: 'en',
+    strategy: 'no_prefix',
+    langDir: 'locales/',
+    detectBrowserLanguage: false,
+  },
   hooks: {
     // 动态路由页面统一放在 app/views/ 手动注册，避免文件路径中出现 [id] 方括号
     // （方括号路径在 git/shell 中需转义，且部分部署环境不兼容）。URL 保持不变。
@@ -21,6 +32,11 @@ export default defineNuxtConfig({
           name: 'drama-episode',
           path: '/drama/:id/episode/:episodeNumber',
           file: fileURLToPath(new URL('./app/views/drama/episode.vue', import.meta.url)),
+        },
+        {
+          name: 'movie-workbench',
+          path: '/movies/:id',
+          file: fileURLToPath(new URL('./app/views/movie/workbench.vue', import.meta.url)),
         },
       )
     },

@@ -16,7 +16,7 @@
           @click="pick('')"
         >
           <Check :size="12" class="opt-check" />
-          <span class="opt-model dim">{{ defaultLabel }}</span>
+          <span class="opt-model dim">{{ effectiveDefaultLabel }}</span>
         </button>
         <button
           v-for="o in options"
@@ -40,15 +40,18 @@
 import { ref, computed, watch, nextTick, onBeforeUnmount } from 'vue'
 import { ChevronDown, Check } from 'lucide-vue-next'
 
+const { t } = useI18n()
+
 const props = defineProps({
   label: { type: String, required: true },          // 改写 / 图片 / 视频
   modelValue: { type: String, default: '' },        // '' = 默认（配置首个模型）；选中值为 'provider/model' 复合键
   options: { type: Array, default: () => [] },      // [{ key, model, provider, configId, configName }]
-  defaultLabel: { type: String, default: '默认' },
+  defaultLabel: { type: String, default: '' },
   showConfig: { type: Boolean, default: false },    // 多配置时显示来源配置名
   hideDefault: { type: Boolean, default: false },   // 无「默认」语义的选择器（如分辨率）隐藏默认项
 })
 const emit = defineEmits(['update:modelValue'])
+const effectiveDefaultLabel = computed(() => props.defaultLabel || t('components.modelSelect.defaultLabel'))
 
 const isOpen = ref(false)
 const rootEl = ref()
@@ -56,7 +59,7 @@ const menuEl = ref()
 const menuStyle = ref({})
 
 const currentOption = computed(() => props.options.find(o => (o.key || o.model) === props.modelValue) || null)
-const currentLabel = computed(() => currentOption.value?.model || props.defaultLabel)
+const currentLabel = computed(() => currentOption.value?.model || effectiveDefaultLabel.value)
 
 function toggle() { isOpen.value ? close() : open() }
 

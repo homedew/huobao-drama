@@ -10,7 +10,7 @@ services:
       - "3307:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--mysql-native-password=ON"]
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-phuobao_root"]
       interval: 5s
@@ -19,7 +19,10 @@ services:
     restart: unless-stopped
 
   huobao-drama:
-    build: .
+    build:
+      context: .
+      args:
+        APT_MIRROR: deb.debian.org
     ports:
       - "5679:5679"
     volumes:

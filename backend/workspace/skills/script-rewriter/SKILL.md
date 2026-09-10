@@ -1,56 +1,57 @@
 ---
 name: script-rewriter
-description: 小说改写为格式化剧本的方法论和规范
+description: Phương pháp và quy chuẩn viết lại tiểu thuyết thành kịch bản chuẩn hóa
 ---
 
-# 剧本改写指南
+# Hướng dẫn viết lại kịch bản
 
-## 改写原则
+## Nguyên tắc viết lại
 
-1. **保留核心情节**：不改变主线故事和角色关系
-2. **增强画面感**：将叙述性文字转化为可视化的场景描写
-3. **对话驱动**：用对白推动情节，减少旁白
-4. **节奏把控**：每场戏控制在 30-60 秒，适合短视频
-5. **不写镜头语言**：不涉及景别、角度、运镜，这些属于分镜拆解步骤
+1. **Giữ nguyên cốt truyện cốt lõi**: không thay đổi mạch truyện chính và quan hệ nhân vật
+2. **Tăng cường tính hình ảnh**: chuyển văn bản tường thuật thành mô tả cảnh có thể hình dung được
+3. **Lời thoại dẫn dắt**: dùng lời thoại để đẩy tình tiết, giảm bớt lời dẫn (旁白)
+4. **Kiểm soát nhịp độ**: mỗi cảnh giới hạn trong 30-60 giây, phù hợp với video ngắn
+5. **Không viết ngôn ngữ máy quay**: không đề cập cỡ cảnh, góc quay, chuyển động máy quay — những thứ này thuộc bước chia tách phân cảnh
 
-## 格式化剧本格式
+## Định dạng kịch bản chuẩn hóa
 
 ```
-## S01 | 内景 · 咖啡厅 | 黄昏
+## S01 | Nội cảnh · Quán cà phê | Hoàng hôn
 
-黄昏的光线透过落地窗洒进咖啡厅，吧台上咖啡杯热气升腾。
+Ánh nắng hoàng hôn xuyên qua khung cửa kính rọi vào quán cà phê, ly cà phê trên quầy bốc hơi nghi ngút.
 
-小明独自坐在角落卡座，低头看手机，神情有些焦虑。
+Tiểu Minh ngồi một mình ở góc bàn, cúi đầu nhìn điện thoại, vẻ mặt có chút lo lắng.
 
-门铃响起，小红推门而入。她看到小明，微笑着走过去。
+Chuông cửa vang lên, Tiểu Hồng đẩy cửa bước vào. Cô nhìn thấy Tiểu Minh, mỉm cười bước tới.
 
-小红：（微笑）等很久了吗？
-小明：（抬头）还好，刚到。
+Tiểu Hồng: (mỉm cười) Đợi lâu chưa?
+Tiểu Minh: (ngẩng đầu) Cũng không lâu, vừa mới tới.
 ```
 
-### 格式规则
+### Quy tắc định dạng
 
-- `## S编号 | 内景/外景 · 地点 | 时间段` — 场景头
-- 动作描写自然段 — 不包含任何镜头语言
-- `角色名：（状态/表情）台词内容` — 对白格式
+- `## SSố thứ tự | Nội cảnh/Ngoại cảnh · Địa điểm | Khung giờ` — tiêu đề cảnh
+- Đoạn mô tả hành động tự nhiên — không chứa bất kỳ ngôn ngữ máy quay nào
+- `Tên nhân vật: (trạng thái/biểu cảm) nội dung lời thoại` — định dạng lời thoại
 
-### 内容量参考
+### Tham khảo mức độ nội dung
 
-格式化剧本相比原始内容增加约 20-30%，主要增量是场景头标记和对白格式化，不是扩写。
+Kịch bản chuẩn hóa tăng khoảng 20-30% so với nội dung gốc, phần tăng thêm chủ yếu là nhãn tiêu đề cảnh và định dạng hóa lời thoại, không phải viết thêm mở rộng nội dung.
 
-## 改写步骤
+## Các bước viết lại
 
-1. 先调用 `read_episode_script` 读取原始内容
-2. 分析内容结构（对话、叙述、心理描写的比例）
-3. 调用 `rewrite_to_screenplay` 执行改写
-4. 检查改写结果，确认符合格式化剧本格式
-5. 调用 `save_script` 保存最终结果
+1. Trước tiên gọi `read_episode_script` để đọc nội dung gốc
+2. Phân tích cấu trúc nội dung (tỷ lệ giữa hội thoại, tường thuật, mô tả tâm lý)
+3. Gọi `rewrite_to_screenplay` để thực hiện viết lại
+4. Kiểm tra kết quả viết lại, xác nhận đúng định dạng kịch bản chuẩn hóa
+5. Gọi `save_script` để lưu kết quả cuối cùng
 
-## 注意事项
+## Lưu ý
 
-- 心理描写可转化为角色表情/动作或画外音
-- 长段叙述拆分为多个短场景
-- 确保每个场景有明确的情绪转折点
-- 保持角色语言风格一致性
-- 场景编号连续递增（S01, S02, S03...）
-- 时间段要具体（黄昏、深夜、清晨），不要笼统写"白天"
+- Mô tả tâm lý có thể chuyển hóa thành biểu cảm/hành động của nhân vật hoặc lời dẫn ngoài hình
+- Đoạn tường thuật dài nên tách thành nhiều cảnh ngắn
+- Đảm bảo mỗi cảnh có điểm chuyển biến cảm xúc rõ ràng
+- Giữ nhất quán phong cách ngôn ngữ của từng nhân vật
+- Số thứ tự cảnh tăng dần liên tục (S01, S02, S03...)
+- Khung giờ phải cụ thể (hoàng hôn, đêm khuya, sáng sớm), không viết chung chung "ban ngày"
+- Toàn bộ nội dung chính văn (mô tả hành động, lời thoại) viết bằng tiếng Việt; nếu nội dung gốc đã là tiếng Việt thì giữ nguyên, không dịch sang ngôn ngữ khác

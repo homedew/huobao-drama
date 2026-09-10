@@ -7,6 +7,7 @@ export const dramas = mysqlTable('dramas', {
   id: int('id').primaryKey().autoincrement(),
   title: text('title').notNull(),
   description: text('description'),
+  type: varchar('type', { length: 16 }).default('drama'),
   genre: text('genre'),
   style: varchar('style', { length: 64 }).default('3d'),
   aspectRatio: varchar('aspect_ratio', { length: 16 }).default('16:9'),

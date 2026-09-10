@@ -3,6 +3,7 @@ import { and, eq, isNull, like, desc } from 'drizzle-orm'
 import { db, getInsertId, schema } from '../db/index.js'
 import { success, badRequest, notFound, created, now } from '../utils/response.js'
 import { toSnakeCase, toSnakeCaseArray } from '../utils/transform.js'
+import { createEpisode } from './episodes.js'
 
 const app = new Hono()
 
@@ -12,6 +13,7 @@ app.get('/', async (c) => {
   const pageSize = Number(c.req.query('page_size') || 20)
   const status = c.req.query('status')
   const keyword = c.req.query('keyword')
+  const type = c.req.query('type')
 
   const allRows = await db.select().from(schema.dramas)
     .where(isNull(schema.dramas.deletedAt))
@@ -20,6 +22,10 @@ app.get('/', async (c) => {
 
   if (status) filtered = filtered.filter(d => d.status === status)
   if (keyword) filtered = filtered.filter(d => d.title.includes(keyword))
+  // 长剧列表默认排除短片（历史数据 type 为空也视为长剧）
+  filtered = type
+    ? filtered.filter(d => (d.type || 'drama') === type)
+    : filtered.filter(d => (d.type || 'drama') === 'drama')
 
   const total = filtered.length
   const items = filtered.slice((page - 1) * pageSize, page * pageSize)
@@ -51,10 +57,12 @@ app.get('/', async (c) => {
 // POST /dramas - Create drama
 app.post('/', async (c) => {
   const body = await c.req.json()
+  const type = body.type === 'short_movie' ? 'short_movie' : 'drama'
   const ts = now()
   const res = await db.insert(schema.dramas).values({
     title: body.title,
     description: body.description,
+    type,
     genre: body.genre,
     style: body.style,
     aspectRatio: body.aspect_ratio || '16:9',
@@ -64,11 +72,22 @@ app.post('/', async (c) => {
     createdAt: ts,
     updatedAt: ts,
   })
+  const dramaId = getInsertId(res)
 
   const [result] = await db.select().from(schema.dramas)
-    .where(eq(schema.dramas.id, getInsertId(res)))
+    .where(eq(schema.dramas.id, dramaId))
 
-  // 不再预建集 — 用户通过「添加集」流程创建（该流程会锁定图片/视频生成配置）
+  // 长剧不再预建集 — 用户通过「添加集」流程创建
+  // 短片是单集概念，创建项目时直接自动建好唯一一集，前端可直接跳工作台
+  if (type === 'short_movie') {
+    try {
+      const ep = await createEpisode({ drama_id: dramaId, title: body.title })
+      return created(c, { ...toSnakeCase(result), episode_id: ep.id })
+    } catch (err: any) {
+      return badRequest(c, err.message)
+    }
+  }
+
   return created(c, toSnakeCase(result))
 })
 

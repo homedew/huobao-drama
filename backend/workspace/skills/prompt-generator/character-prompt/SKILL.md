@@ -1,55 +1,55 @@
 ---
 name: character-prompt
-description: 角色最终提示词规范 — 正脸特写 + 三视图（character turnaround：正面/90 度侧面/背面），作为后续所有生成的形象锚点
+description: "Quy chuẩn prompt cuối cùng cho nhân vật — cận cảnh chính diện + ba góc nhìn (character turnaround: chính diện/nghiêng 90 độ/sau lưng), làm điểm neo hình ảnh cho mọi bước tạo sinh sau này"
 ---
 
-# 角色最终提示词（左侧正脸特写 + 右侧三视图）
+# Prompt cuối cùng cho nhân vật (cận cảnh chính diện bên trái + ba góc nhìn bên phải)
 
-生成的是一张角色设定参考图（character reference sheet），构图固定为：
+Kết quả tạo ra là một tấm ảnh tham chiếu thiết lập nhân vật (character reference sheet), bố cục cố định là:
 
-- **左侧：正脸特写**——头部与肩部的正面近景，五官、发型、肤质清晰可见，作为脸部辨识度的锚点
-- **右侧：并列展示正面、90 度侧面、背面三张等高全身视图**——同一角色的三个全身视图等高并排，头顶与脚底对齐
+- **Bên trái: cận cảnh chính diện** — cận cảnh phần đầu và vai nhìn thẳng, ngũ quan, kiểu tóc, chất da rõ nét, làm điểm neo nhận diện khuôn mặt
+- **Bên phải: xếp cạnh nhau ba góc nhìn toàn thân cao bằng nhau — chính diện, nghiêng 90 độ, sau lưng** — ba góc nhìn toàn thân của cùng một nhân vật xếp cạnh nhau cao bằng nhau, đỉnh đầu và gót chân thẳng hàng
 
-**核心原则：一致性 > 美观。** 这张图是后续所有角色图片、视频参考的形象锚点，必须中性、清晰、可复用——不要追求单张图的艺术感。
+**Nguyên tắc cốt lõi: tính nhất quán > tính thẩm mỹ.** Tấm ảnh này là điểm neo hình ảnh cho mọi ảnh nhân vật và video tham chiếu sau này, phải trung tính, rõ ràng, tái sử dụng được — không theo đuổi tính nghệ thuật của một tấm ảnh đơn lẻ.
 
-## 输出结构（按此顺序组装单段连贯中文）
+## Cấu trúc đầu ra (ghép thành một đoạn liền mạch theo thứ tự này)
 
 ```
-角色设定参考图，左侧为正脸特写，右侧并列展示正面、90 度侧面、背面三张等高全身视图，
-特写与全身视图都是同一角色，全身入镜，中性 A 字站姿，三张全身视图等高并排、头顶脚底对齐，
-[年龄感 + 性别感 + 体态]，[五官特征]，[发型]，[服装 + 配饰]，
-正脸特写与三个视图的脸、发型和服装完全一致，
-纯白背景，柔和均匀的光线，电影质感
+Ảnh tham chiếu thiết lập nhân vật, bên trái là cận cảnh chính diện, bên phải xếp cạnh nhau ba góc nhìn toàn thân cao bằng nhau — chính diện, nghiêng 90 độ, sau lưng,
+cận cảnh và các góc nhìn toàn thân đều là cùng một nhân vật, toàn thân trong khung hình, tư thế đứng chữ A trung tính, ba góc nhìn toàn thân cao bằng nhau xếp cạnh nhau, đỉnh đầu và gót chân thẳng hàng,
+[cảm giác tuổi tác + giới tính + dáng vóc], [đặc điểm ngũ quan], [kiểu tóc], [trang phục + phụ kiện],
+khuôn mặt, kiểu tóc và trang phục ở cận cảnh chính diện và ba góc nhìn hoàn toàn giống nhau,
+nền trắng tinh, ánh sáng đều và mềm mại, chất lượng điện ảnh
 ```
 
-## 描述顺序规则
+## Quy tắc thứ tự mô tả
 
-把**最有辨识度的特征放在前面**，按此顺序落地 `appearance`（样貌）与 `styling`（妆造）的每个关键元素，不遗漏：
+Đặt **đặc điểm nhận diện rõ nhất lên trước**, triển khai theo thứ tự này từng yếu tố then chốt của `appearance` (ngoại hình) và `styling` (tạo hình), không bỏ sót:
 
-1. 身份锚点：年龄感（如"二十出头"）、性别感、体态（高矮胖瘦、姿态习惯）
-2. 五官：脸型、眼睛、其他显著特征（疤、痣、眼镜等）——正脸特写尤其依赖这部分描写
-3. 发型：颜色、长度、样式
-4. 服装：款式、颜色、材质、状态（如"袖口有焊锡痕迹的皱褶工服"）
-5. 配饰：只写有辨识度的，不堆砌
+1. Điểm neo nhận dạng: cảm giác tuổi tác (như "ngoài hai mươi"), giới tính, dáng vóc (cao thấp gầy béo, thói quen tư thế)
+2. Ngũ quan: hình dáng khuôn mặt, đôi mắt, các đặc điểm nổi bật khác (sẹo, nốt ruồi, kính...) — phần cận cảnh chính diện đặc biệt phụ thuộc vào mô tả này
+3. Kiểu tóc: màu sắc, độ dài, kiểu dáng
+4. Trang phục: kiểu dáng, màu sắc, chất liệu, tình trạng (như "đồng phục công nhân có nếp nhăn và vết hàn ở cổ tay áo")
+5. Phụ kiện: chỉ viết những thứ có tính nhận diện, không liệt kê tràn lan
 
-角色的性格特点要转化为外在气质与神态描写（如"憔悴" → "眼神疲惫、肩膀微垮"），不要直接出现性格词汇。
+Đặc điểm tính cách của nhân vật phải chuyển hóa thành mô tả khí chất và thần thái bên ngoài (như "tiều tụy" → "ánh mắt mệt mỏi, vai hơi chùng xuống"), không được để trực tiếp xuất hiện từ ngữ chỉ tính cách.
 
-## 构图与一致性
+## Bố cục và tính nhất quán
 
-- 左侧正脸特写：正面朝向镜头、中性表情、头顶到肩膀完整入镜
-- 右侧三张全身视图：同一角色的正面、90 度侧面、背面，**等高并排、间距均匀**，头顶与脚底在同一水平线上
-- 特写与三张全身视图必须是同一张脸、同一发型、同一服装——明确写出"正脸特写与三张全身视图的脸、发型和服装完全一致"
-- 中性站姿、自然表情——方便作为参考图复用
-- 柔和均匀的棚拍光，不要戏剧性光影（参考图要在各种场景下都能用）
-- 输出必须是纯中文，不要混入英文词汇
+- Cận cảnh chính diện bên trái: nhìn thẳng vào ống kính, biểu cảm trung tính, trọn vẹn từ đỉnh đầu đến vai
+- Ba góc nhìn toàn thân bên phải: chính diện, nghiêng 90 độ, sau lưng của cùng một nhân vật, **xếp cạnh nhau cao bằng nhau, khoảng cách đều**, đỉnh đầu và gót chân nằm trên cùng một đường ngang
+- Cận cảnh và ba góc nhìn toàn thân bắt buộc là cùng một khuôn mặt, cùng một kiểu tóc, cùng một trang phục — phải nêu rõ "khuôn mặt, kiểu tóc và trang phục ở cận cảnh chính diện và ba góc nhìn hoàn toàn giống nhau"
+- Tư thế trung tính, biểu cảm tự nhiên — thuận tiện để tái sử dụng làm ảnh tham chiếu
+- Ánh sáng studio đều và mềm mại, không dùng ánh sáng kịch tính (ảnh tham chiếu cần dùng được trong nhiều bối cảnh khác nhau)
+- Toàn bộ đầu ra viết thành một đoạn liền mạch, không lẫn từ tiếng Anh
 
-## 禁止事项
+## Điều cấm
 
-- 动态姿势、夸张表情、手持道具、与他人同框
-- 裁切身体（全身视图必须 full body，头顶到脚底完整入镜；特写必须头部肩部完整入镜）
-- 文字、标签、水印、签名
-- 重阴影、彩色背景光、背景道具
+- Tư thế động, biểu cảm cường điệu, cầm đạo cụ trên tay, xuất hiện cùng khung hình với người khác
+- Cắt xén cơ thể (góc nhìn toàn thân phải trọn vẹn full body, từ đỉnh đầu đến gót chân; cận cảnh phải trọn vẹn từ đầu đến vai)
+- Chữ viết, nhãn, watermark, chữ ký
+- Bóng đổ nặng, ánh sáng nền có màu, đạo cụ nền
 
-## 保存
+## Lưu
 
-调用 `save_character_final_prompt`：prompt 参数不含风格词，**项目视觉风格由工具自动注入到最终提示词的最前方**。
+Gọi `save_character_final_prompt`: tham số prompt không chứa từ phong cách, **phong cách thị giác của dự án sẽ được công cụ tự động chèn vào đầu prompt cuối cùng**.

@@ -1,17 +1,17 @@
 <template>
   <Teleport to="body">
     <div v-if="open" class="overlay" @click.self="emit('cancel')">
-      <div class="dialog confirm-dialog" role="alertdialog" aria-modal="true" :aria-label="title">
+      <div class="dialog confirm-dialog" role="alertdialog" aria-modal="true" :aria-label="effectiveTitle">
         <div class="confirm-icon">
           <Trash2 :size="20" :stroke-width="1.8" />
         </div>
-        <h2 class="confirm-title">{{ title }}</h2>
+        <h2 class="confirm-title">{{ effectiveTitle }}</h2>
         <p class="confirm-message">{{ message }}</p>
         <div class="confirm-actions">
-          <button type="button" class="btn" :disabled="loading" @click="emit('cancel')">取消</button>
+          <button type="button" class="btn" :disabled="loading" @click="emit('cancel')">{{ t('components.confirmDialog.cancel') }}</button>
           <button type="button" class="btn confirm-danger-btn" :disabled="loading" @click="emit('confirm')">
             <Loader2 v-if="loading" :size="13" class="animate-spin" />
-            {{ loading ? loadingText : confirmText }}
+            {{ loading ? effectiveLoadingText : effectiveConfirmText }}
           </button>
         </div>
       </div>
@@ -22,14 +22,20 @@
 <script setup>
 import { Trash2, Loader2 } from 'lucide-vue-next'
 
+const { t } = useI18n()
+
 const props = defineProps({
   open: { type: Boolean, default: false },
-  title: { type: String, default: '确认删除' },
+  title: { type: String, default: '' },
   message: { type: String, default: '' },
-  confirmText: { type: String, default: '删除' },
-  loadingText: { type: String, default: '删除中...' },
+  confirmText: { type: String, default: '' },
+  loadingText: { type: String, default: '' },
   loading: { type: Boolean, default: false },
 })
+
+const effectiveTitle = computed(() => props.title || t('components.confirmDialog.defaultTitle'))
+const effectiveConfirmText = computed(() => props.confirmText || t('components.confirmDialog.defaultConfirmText'))
+const effectiveLoadingText = computed(() => props.loadingText || t('components.confirmDialog.defaultLoadingText'))
 
 const emit = defineEmits(['confirm', 'cancel'])
 

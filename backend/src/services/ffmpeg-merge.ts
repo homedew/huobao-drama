@@ -11,6 +11,7 @@ import { now } from '../utils/response.js'
 import { logTaskError, logTaskStart, logTaskSuccess } from '../utils/task-logger.js'
 import { extractVideoPoster } from '../utils/video-poster.js'
 import { ffmpeg, checkFfmpegSuite } from '../utils/ffmpeg.js'
+import { buildSrtFromClips } from './subtitles.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const STORAGE_ROOT = process.env.STORAGE_PATH || path.resolve(__dirname, '../../../data/static')
@@ -77,8 +78,11 @@ export async function mergeEpisodeVideos(episodeId: number, dramaId: number, sto
   })
   const mergeId = getInsertId(res)
 
-  // 异步执行
-  doMerge(mergeId, episodeId, videos).catch(async err => {
+  // 异步执行：字幕时间轴用每个片段的真实视频时长（而非计划 duration），
+  // 因为视频模型实际生成时长常与计划值有出入，用计划值会导致字幕逐渐错位
+  const actualDurations = await Promise.all(clips.map(c => getVideoDuration(toAbsPath(c.url))))
+  const subtitleClips = clips.map((c, i) => ({ description: c.sb.description, duration: actualDurations[i] || c.sb.duration }))
+  doMerge(mergeId, episodeId, videos, subtitleClips).catch(async err => {
     logTaskError('MergeTask', 'episode-merge', { mergeId, episodeId, error: err.message })
     console.error(`[Merge] Failed:`, err)
     await db.update(schema.videoMerges)
@@ -89,7 +93,12 @@ export async function mergeEpisodeVideos(episodeId: number, dramaId: number, sto
   return mergeId
 }
 
-async function doMerge(mergeId: number, episodeId: number, videos: string[]) {
+async function doMerge(
+  mergeId: number,
+  episodeId: number,
+  videos: string[],
+  subtitleClips: { description: string | null; duration: number | null }[],
+) {
   // 生成 concat 列表文件
   const listDir = path.join(STORAGE_ROOT, 'temp')
   fs.mkdirSync(listDir, { recursive: true })
@@ -130,10 +139,46 @@ async function doMerge(mergeId: number, episodeId: number, videos: string[]) {
   // 清理临时文件
   fs.unlinkSync(listPath)
 
-  // 获取时长
-  const duration = await getVideoDuration(outputPath)
+  // 烧录越南语字幕（音频是中文配音，字幕译为越南语）
+  const srtContent = buildSrtFromClips(subtitleClips)
+  let finalPath = outputPath
+  let finalFilename = outputFilename
+  if (srtContent.trim()) {
+    const srtPath = path.join(listDir, `${uuid()}.srt`)
+    fs.writeFileSync(srtPath, srtContent, 'utf-8')
+    const subbedFilename = `${uuid()}.mp4`
+    const subbedPath = path.join(outputDir, subbedFilename)
 
-  const mergedRelative = `static/merged/${outputFilename}`
+    try {
+      await new Promise<void>((resolve, reject) => {
+        ffmpeg(outputPath)
+          .outputOptions([
+            '-vf', `subtitles=${srtPath.replace(/:/g, '\\:')}:force_style='FontSize=20,PrimaryColour=&H00FFFFFF,OutlineColour=&H80000000,BorderStyle=1,Outline=1.5,Shadow=0,MarginV=40'`,
+            '-c:v', 'libx264',
+            '-preset', 'medium',
+            '-crf', '23',
+            '-c:a', 'copy',
+            '-movflags', '+faststart',
+          ])
+          .output(subbedPath)
+          .on('end', () => resolve())
+          .on('error', (err) => reject(err))
+          .run()
+      })
+      fs.unlinkSync(outputPath)
+      fs.unlinkSync(srtPath)
+      finalPath = subbedPath
+      finalFilename = subbedFilename
+    } catch (err: any) {
+      // 字幕烧录失败不阻塞整体拼接，退回无字幕成片
+      logTaskError('MergeTask', 'burn-subtitles', { mergeId, episodeId, error: err.message })
+    }
+  }
+
+  // 获取时长
+  const duration = await getVideoDuration(finalPath)
+
+  const mergedRelative = `static/merged/${finalFilename}`
 
   // 成片海报帧（导出页封面用）
   await extractVideoPoster(mergedRelative)

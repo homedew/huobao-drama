@@ -1,53 +1,53 @@
 ---
 name: scene-prompt
-description: 场景最终提示词规范 — 清晰广角建立镜头：前景/中景/后景/出入口/地面/墙面/主要陈设的固定相对位置，空间连续自洽可复用，无人物
+description: "Quy chuẩn prompt cuối cùng cho bối cảnh — cảnh thiết lập góc rộng rõ ràng: vị trí tương đối cố định của tiền cảnh/trung cảnh/hậu cảnh/lối ra vào/mặt sàn/mặt tường/bài trí chính, không gian liền mạch tự thân và tái sử dụng được, không có nhân vật"
 ---
 
-# 场景最终提示词（广角建立镜头 · 无人物空镜）
+# Prompt cuối cùng cho bối cảnh (cảnh thiết lập góc rộng · cảnh trống không người)
 
-生成的是一张**清晰的广角建立镜头（establishing shot）**场景图：**完全没有人物**的纯场景空镜，完整展示**前景、中景、后景、出入口、地面、墙面及主要陈设的固定相对位置**，空间结构连续、自洽且可复用。
+Kết quả tạo ra là một tấm ảnh bối cảnh **cảnh thiết lập góc rộng rõ ràng** (establishing shot): cảnh trống thuần túy **hoàn toàn không có nhân vật**, thể hiện đầy đủ **tiền cảnh, trung cảnh, hậu cảnh, lối ra vào, mặt sàn, mặt tường và vị trí tương đối cố định của bài trí chính**, cấu trúc không gian liền mạch, tự thân hợp lý và tái sử dụng được.
 
-这张图会作为该场景所有镜头的背景参考锚点：观众和模型都必须能从这张图读懂整个空间的布局——从哪里进出、地面与墙面是什么质感、核心陈设各自固定在什么位置。视角必须稳定、通用。
+Tấm ảnh này sẽ làm điểm neo tham chiếu nền cho mọi cảnh quay trong bối cảnh đó: cả khán giả lẫn mô hình đều phải đọc hiểu được toàn bộ bố cục không gian qua tấm ảnh này — lối vào ra ở đâu, mặt sàn và mặt tường có chất liệu gì, các món bài trí cốt lõi cố định ở vị trí nào. Góc nhìn phải ổn định, thông dụng.
 
-## 输出结构（按此顺序组装单段连贯中文）
+## Cấu trúc đầu ra (ghép thành một đoạn liền mạch theo thứ tự này)
 
 ```
-固定机位广角镜头，清晰的建立镜头，[地点 + 年代质感]，[时间段]，
-前景（[前景元素]）、中景（[中景主体空间]）、后景（[后景纵深]）三层分层构图，
-出入口（[门/通道的位置与样式]），地面（[地面材质与状态]），墙面（[墙面材质与颜色]），
-[主要陈设及其固定相对位置]，
-空间结构连续、自洽，
-[光源 + 色温 + 明暗对比]，[氛围]，
-画面中没有任何人物，空场景，电影质感
+Góc quay rộng cố định, cảnh thiết lập rõ ràng, [địa điểm + cảm giác niên đại], [khung giờ],
+bố cục ba lớp gồm tiền cảnh ([yếu tố tiền cảnh]), trung cảnh ([không gian chủ thể trung cảnh]), hậu cảnh ([chiều sâu hậu cảnh]),
+lối ra vào ([vị trí và kiểu dáng cửa/lối đi]), mặt sàn ([chất liệu và tình trạng mặt sàn]), mặt tường ([chất liệu và màu sắc mặt tường]),
+[các món bài trí chính và vị trí tương đối cố định của chúng],
+cấu trúc không gian liền mạch, tự thân hợp lý,
+[nguồn sáng + nhiệt độ màu + độ tương phản sáng tối], [không khí],
+trong khung hình không có bất kỳ nhân vật nào, cảnh trống, chất lượng điện ảnh
 ```
 
-## 空间结构规则
+## Quy tắc cấu trúc không gian
 
-空间必须**读得懂、对得上、可复用**：
+Không gian phải **đọc hiểu được, khớp logic, tái sử dụng được**:
 
-- **前景**：框景/遮挡物（门框、桌角、植物、设备边缘），制造纵深——写出 1-2 个具体元素
-- **中景**：场景的主体空间与核心陈设（流水线、床铺、柜台）
-- **后景**：空间的延伸（远处的墙、窗、走廊、城市轮廓）
-- **出入口**：门、楼梯、通道的位置与样式必须明确（如"画面左侧一扇铁门"），这是后续镜头调度人物进出的依据
-- **地面与墙面**：材质、颜色、状态具体化（如"水泥地面有油渍""墙面石灰斑驳"）
-- **主要陈设**：写出 2-4 个核心陈设及它们的**固定相对位置**（如"流水线沿墙排开，尽头是吧台"），陈设之间的左右/远近关系要自洽，不要只罗列物品名
+- **Tiền cảnh**: vật che khung/vật cản (khung cửa, góc bàn, cây cảnh, mép thiết bị), tạo chiều sâu — viết ra 1-2 yếu tố cụ thể
+- **Trung cảnh**: không gian chủ thể và bài trí cốt lõi của bối cảnh (dây chuyền sản xuất, giường, quầy)
+- **Hậu cảnh**: phần mở rộng của không gian (bức tường xa, cửa sổ, hành lang, đường chân trời thành phố)
+- **Lối ra vào**: vị trí và kiểu dáng của cửa, cầu thang, lối đi phải rõ ràng (như "một cánh cửa sắt ở bên trái khung hình"), đây là căn cứ để các cảnh quay sau bố trí nhân vật ra vào
+- **Mặt sàn và mặt tường**: chất liệu, màu sắc, tình trạng phải cụ thể (như "sàn xi măng có vết dầu loang", "tường vôi bong tróc lốm đốm")
+- **Bài trí chính**: viết ra 2-4 món bài trí cốt lõi và **vị trí tương đối cố định** của chúng (như "dây chuyền sản xuất xếp dọc theo tường, cuối dãy là quầy bar"), quan hệ trái phải/xa gần giữa các món bài trí phải tự thân hợp lý, không chỉ liệt kê tên vật phẩm
 
-`prompt`（场景描述）中的陈设、年代质感、关键视觉元素必须全部落地；`lighting`（场景光影）要具体化：光源方向、色温冷暖、明暗对比（如"头顶灯管发出冷白光，机器下方投下硬阴影"）。
+Bài trí, cảm giác niên đại, yếu tố thị giác then chốt trong `prompt` (mô tả bối cảnh) phải được triển khai đầy đủ; `lighting` (ánh sáng bối cảnh) phải cụ thể hóa: hướng nguồn sáng, nhiệt độ màu nóng lạnh, độ tương phản sáng tối (như "ống đèn trên trần hắt ánh sáng trắng lạnh, dưới máy móc đổ bóng gắt").
 
-## 视角与氛围
+## Góc nhìn và không khí
 
-- 稳定的平视或微俯广角，不要极端俯仰、鱼眼、倾斜构图（要作为固定场景反复复用）
-- 以 `location` + `time` 确定时间段与光线基调（日/夜/黄昏的光完全不同）
-- 氛围词具体化："压抑" → "空气闷热、光线昏暗低沉"，不要只写抽象情绪词
-- 输出必须是纯中文，不要混入英文词汇
+- Góc rộng ngang tầm mắt hoặc hơi từ trên xuống ổn định, không dùng góc cực đoan, mắt cá, hay bố cục nghiêng (vì cần dùng lại nhiều lần làm bối cảnh cố định)
+- Dùng `location` + `time` để xác định khung giờ và tông ánh sáng (ánh sáng ngày/đêm/hoàng hôn hoàn toàn khác nhau)
+- Cụ thể hóa từ ngữ không khí: "ngột ngạt" → "không khí oi bức, ánh sáng u ám", không chỉ viết từ cảm xúc trừu tượng
+- Toàn bộ đầu ra viết thành một đoạn liền mạch, không lẫn từ tiếng Anh
 
-## 禁止事项
+## Điều cấm
 
-- 任何人物——包括背影、剪影、照片/屏幕里的人（明确写"画面中没有任何人物"）
-- 文字、招牌上的可读文字、水印、签名
-- 动态模糊、运动中的物体（场景参考图必须静止稳定）
-- 只罗列陈设清单而不交代相对位置（空间结构必须连续、自洽）
+- Bất kỳ nhân vật nào — kể cả bóng lưng, bóng đổ, người trong ảnh/màn hình (phải nêu rõ "trong khung hình không có bất kỳ nhân vật nào")
+- Chữ viết, chữ có thể đọc được trên biển hiệu, watermark, chữ ký
+- Chuyển động mờ nhòe, vật thể đang chuyển động (ảnh tham chiếu bối cảnh phải tĩnh và ổn định)
+- Chỉ liệt kê danh sách bài trí mà không nói rõ vị trí tương đối (cấu trúc không gian phải liền mạch, tự thân hợp lý)
 
-## 保存
+## Lưu
 
-调用 `save_scene_final_prompt`：prompt 参数不含风格词，**项目视觉风格由工具自动注入到最终提示词的最前方**。
+Gọi `save_scene_final_prompt`: tham số prompt không chứa từ phong cách, **phong cách thị giác của dự án sẽ được công cụ tự động chèn vào đầu prompt cuối cùng**.

@@ -5,8 +5,10 @@ export function useAgent() {
   const running = ref(false)
   const runningType = ref<string | null>(null)
 
+  const { t } = useI18n()
+
   async function run(type: string, msg: string, dramaId: number, episodeId: number, onDone?: () => void, model?: string, configId?: number) {
-    if (running.value) { toast.warning('操作执行中'); return }
+    if (running.value) { toast.warning(t('composables.useAgent.runningWarning')); return }
     running.value = true
     runningType.value = type
     try {
@@ -17,7 +19,7 @@ export function useAgent() {
         model: model || undefined,
         config_id: configId || undefined,
       })
-      toast.success('完成')
+      toast.success(t('composables.useAgent.done'))
       onDone?.()
     } catch (err: any) {
       toast.error(err.message)

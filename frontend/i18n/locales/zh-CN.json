@@ -1,0 +1,863 @@
+{
+  "common": {
+    "cancel": "取消",
+    "save": "保存",
+    "saved": "已保存",
+    "delete": "删除",
+    "deleted": "已删除",
+    "deleting": "删除中...",
+    "edit": "编辑",
+    "add": "添加",
+    "create": "创建",
+    "test": "测试",
+    "default": "默认",
+    "disabled": "已停用",
+    "recommended": "推荐",
+    "custom": "自定义",
+    "empty": "暂无",
+    "serviceType": {
+      "text": "文本",
+      "image": "图片",
+      "video": "视频"
+    }
+  },
+  "layout": {
+    "brandName": "火宝短剧",
+    "nav": {
+      "projects": "项目",
+      "settings": "设置"
+    },
+    "banner": {
+      "notConfigured": "尚未配置{models}模型,AI 功能无法使用",
+      "goToSettings": "前往设置"
+    }
+  },
+  "components": {
+    "confirmDialog": {
+      "cancel": "取消",
+      "defaultTitle": "确认删除",
+      "defaultConfirmText": "删除",
+      "defaultLoadingText": "删除中..."
+    },
+    "baseSelect": {
+      "searchPlaceholder": "搜索...",
+      "noMatch": "无匹配结果",
+      "placeholder": "请选择..."
+    },
+    "modelSelect": {
+      "defaultLabel": "默认"
+    },
+    "mentionTextarea": {
+      "noMatch": "无匹配的参考"
+    }
+  },
+  "composables": {
+    "useAgent": {
+      "runningWarning": "操作执行中",
+      "done": "完成"
+    }
+  },
+  "index": {
+    "title": "项目启动台",
+    "subtitle": "从一个创意到一部短剧，AI 全流程为你代工",
+    "stats": {
+      "projectCount": "{count} 个项目",
+      "active": "进行中",
+      "styleCount": "{count} 种视觉风格"
+    },
+    "newProject": "新建项目",
+    "searchPlaceholder": "搜索项目",
+    "sortAriaLabel": "项目排序",
+    "sort": {
+      "updated": "最近更新",
+      "title": "项目名称"
+    },
+    "filters": {
+      "all": "全部",
+      "draft": "待开始",
+      "active": "进行中",
+      "completed": "已完成"
+    },
+    "openProjectAria": "打开项目 {title}",
+    "markStatusTitle": "点击标记项目状态",
+    "moreTitle": "更多",
+    "openProject": "打开项目",
+    "deleteProject": "删除项目",
+    "stat": {
+      "role": "角色",
+      "scene": "场景",
+      "episode": "集"
+    },
+    "empty": {
+      "noMatch": "没有匹配的项目",
+      "createFirst": "新建第一个短剧项目",
+      "adjustFilter": "调整搜索词或筛选条件。",
+      "createHint": "创建后选择集开始制作。"
+    },
+    "createDialog": {
+      "title": "新建项目",
+      "desc": "创建后进入项目页选择集",
+      "nameLabel": "项目名称",
+      "namePlaceholder": "例如：都市情感短剧《时光邮局》",
+      "styleLabel": "视觉风格",
+      "stylePlaceholder": "选择风格",
+      "aspectLabel": "画面比例",
+      "aspectPlaceholder": "选择画面比例",
+      "aspectHint": "创建后固定，视频生成将统一使用该比例",
+      "submit": "创建项目"
+    },
+    "aspectRatio": {
+      "landscape": "16:9 · 横屏",
+      "portrait": "9:16 · 竖屏",
+      "square": "1:1 · 方形",
+      "adaptive": "自适应"
+    },
+    "deleteDialog": {
+      "title": "删除项目",
+      "message": "确定删除「{title}」？项目下的剧集、分镜与生成记录将一并删除，此操作不可恢复。"
+    },
+    "toast": {
+      "deleted": "已删除"
+    },
+    "noEpisode": "暂无剧集",
+    "latestEpisode": "第 {n} 集",
+    "time": {
+      "justNow": "刚刚",
+      "minutesAgo": "{n} 分钟前",
+      "hoursAgo": "{n} 小时前",
+      "daysAgo": "{n} 天前"
+    }
+  },
+  "settings": {
+    "pageTitle": "设置中心",
+    "nav": {
+      "basic": "基础",
+      "advanced": "高级"
+    },
+    "advancedToggle": {
+      "label": "Agent 高级配置",
+      "note": "仅展开 Agent 配置与 Skills。工作台功能和分镜字段保持默认可见。"
+    },
+    "tabs": {
+      "ai": "AI 服务",
+      "styles": "风格预设",
+      "agents": "Agent 配置",
+      "skills": "Skills"
+    },
+    "ai": {
+      "title": "AI 服务配置",
+      "desc": "先用推荐模板快速落配置，再按服务类型微调。工作台创建集时会锁定所选图片和视频能力。",
+      "quick": {
+        "title": "火宝快捷配置",
+        "desc": "输入 Huobao API Key，一次写入文本、图片、视频三条推荐配置。",
+        "linkText": "前往 api.chatfire.site 获取 Key",
+        "keyPlaceholder": "Huobao API Key",
+        "applyBtn": "写入火宝配置"
+      },
+      "manual": {
+        "title": "手动模板",
+        "desc": "选择服务类型后，直接用模板填充推荐的 `provider / base URL / model`。"
+      },
+      "serviceMeta": {
+        "textDesc": "剧本改写、角色场景提取、分镜拆解等 Agent 文本能力",
+        "imageDesc": "角色图、场景图与镜头图等静态图像生成",
+        "videoDesc": "镜头视频直出生成，默认 Seedance 2.0"
+      },
+      "enabledCount": "{count} 已启用",
+      "hasKey": "已配置",
+      "noKey": "无密钥",
+      "currentDefaultModel": "当前默认模型",
+      "setDefaultModel": "设为该类型默认模型",
+      "noBaseUrl": "未设置 Base URL",
+      "noConfig": "暂无配置",
+      "nameLabel": "配置名称",
+      "namePlaceholder": "如 火宝默认图像服务",
+      "providerLabel": "服务商",
+      "providerPlaceholder": "选择服务商",
+      "priorityLabel": "优先级",
+      "priorityHint": "数值越高越优先。工作台默认会优先使用同类型里优先级最高的启用配置。",
+      "apiKeyLabel": "API Key",
+      "baseUrlLabel": "Base URL",
+      "modelLabel": "模型（逗号分隔）",
+      "modelPlaceholder": "model-name",
+      "temperatureLabel": "Temperature",
+      "temperatureHintOptional": "(留空跟随服务商默认)",
+      "temperaturePlaceholder": "如 0.6",
+      "temperatureHint": "部分模型强制固定温度（如 kimi-k2 系只允许 0.6），报 invalid temperature 错误时在此填入对应值。",
+      "testConfig": "测试配置",
+      "toast": {
+        "defaultModelSwitched": "默认{type}模型已切换为 {model}",
+        "deleted": "已删除",
+        "fillApiKey": "请填写 Huobao API Key",
+        "quickApplied": "火宝快捷配置已写入",
+        "endpointOk": "端点已响应",
+        "endpointFailed": "端点未通过测试",
+        "selectProvider": "选择服务商",
+        "temperatureRange": "Temperature 需为 0~2 的数字",
+        "saved": "已保存"
+      }
+    },
+    "styles": {
+      "title": "风格预设",
+      "desc": "创建项目时选择的视觉风格，其英文提示词片段会自动注入角色图与场景图生成。停用的风格不出现在创建选项中。",
+      "all": "全部风格",
+      "countSummary": "{active} 个启用 · {total} 个总计",
+      "empty": "暂无风格预设",
+      "deleteDialog": {
+        "title": "删除风格预设",
+        "message": "确定删除风格「{name}」？已使用此风格的项目不受影响，但删除的内置风格重启后可能恢复，建议改用「停用」。"
+      },
+      "dialog": {
+        "editTitle": "编辑风格预设",
+        "addTitle": "添加风格预设",
+        "sub": "提示词片段为英文，会在生成角色图与场景图时自动拼入提示词。",
+        "tag": "风格",
+        "nameLabel": "风格名称",
+        "namePlaceholder": "如 3D、动漫、写实电影",
+        "keyLabel": "风格 key",
+        "keyPlaceholder": "如 3d、anime（小写字母/数字/中划线）",
+        "keyHint": "存入项目的风格标识，创建后不可修改。",
+        "promptLabel": "提示词片段（英文）",
+        "promptPlaceholder": "如 anime style, cel shading, vibrant colors, clean line art",
+        "descLabel": "描述",
+        "descPlaceholder": "一句话说明该风格的适用场景",
+        "sortLabel": "排序"
+      },
+      "toast": {
+        "requiredFields": "名称、key、提示词片段必填",
+        "saved": "已保存",
+        "deleted": "已删除"
+      }
+    },
+    "agents": {
+      "title": "Agent 配置",
+      "desc": "高级区只保留 Agent 运行配置。这里可以调整模型、提示词和参数，保存后立即生效。",
+      "custom": "自定义",
+      "default": "默认",
+      "modelLabel": "模型",
+      "modelHint": "(留空使用 AI 服务默认)",
+      "modelPlaceholder": "— 使用 AI 服务默认 —",
+      "promptLabel": "System Prompt",
+      "promptHint": "(保存为 workspace/prompts/{type}.md)",
+      "promptPlaceholder": "Agent 系统提示词...",
+      "resetBtn": "恢复默认",
+      "saved": "已保存",
+      "save": "保存",
+      "defs": {
+        "scriptRewriter": "剧本改写",
+        "extractor": "角色场景提取",
+        "storyboardBreaker": "分镜拆解",
+        "promptGenerator": "提示词"
+      },
+      "toast": {
+        "resetDone": "已恢复默认提示词（prompt 文件已删除）",
+        "saved": "{label} 配置已保存"
+      }
+    },
+    "skills": {
+      "agentListTitle": "Agent 列表",
+      "desc": "Skills 仅作为 Agent 的高级提示词层使用，不影响工作台常规功能入口。",
+      "addBtn": "新增 Skill",
+      "skillsSuffix": "Skills",
+      "empty": {
+        "title": "暂无 Skill",
+        "desc": "点击右上角「新增 Skill」创建第一个提示词文件"
+      },
+      "contentPlaceholder": "编写 SKILL.md 内容...",
+      "saved": "已保存",
+      "save": "保存",
+      "addDialog": {
+        "title": "新增 Skill — {label}",
+        "dirLabel": "Skill 目录名",
+        "dirHint": "(英文，唯一)",
+        "dirPlaceholder": "如 custom-extraction",
+        "nameLabel": "名称",
+        "namePlaceholder": "如 自定义提取规则",
+        "descLabel": "描述",
+        "descPlaceholder": "简短描述此 Skill 的用途"
+      },
+      "deleteDialog": {
+        "title": "删除 Skill",
+        "message": "确定删除 Skill「{id}」？删除后对应 Agent 将回退到内置默认提示词。"
+      },
+      "toast": {
+        "created": "Skill 创建成功",
+        "deleted": "已删除"
+      }
+    },
+    "presetLabel": {
+      "geminiOfficial": "Gemini 官方",
+      "openaiOfficial": "OpenAI 官方",
+      "seedanceOfficial": "Seedance 2.0 官方",
+      "minimaxOfficial": "MiniMax H3 官方"
+    },
+    "dialogs": {
+      "editConfigTitle": "编辑服务配置",
+      "addConfigTitle": "添加{type}服务",
+      "configSub": "推荐先选择模板，系统会自动填入更合理的 `Base URL` 与默认模型。"
+    },
+    "language": {
+      "label": "语言",
+      "zh": "中文",
+      "en": "English"
+    }
+  },
+  "dramaDetail": {
+    "backTitle": "返回",
+    "header": {
+      "characterCount": "{count} 角色",
+      "sceneCount": "{count} 场景",
+      "episodeCount": "{count} 集",
+      "addEpisode": "添加集"
+    },
+    "tabs": {
+      "episodes": "剧集列表",
+      "assets": "素材库"
+    },
+    "episode": {
+      "markStatusTitle": "点击标记本集状态",
+      "resolutionTitle": "点击修改本集视频分辨率",
+      "deleteTitle": "删除本集",
+      "scriptEntered": "剧本已录入",
+      "videoSynthesized": "已合成",
+      "createFirstTitle": "点击创建第一集",
+      "createFirstText": "点击创建第一集",
+      "addNextTitle": "添加第 {n} 集",
+      "addNextText": "添加第 {n} 集",
+      "numberedTitle": "第 {n} 集"
+    },
+    "status": {
+      "draft": "待开始",
+      "active": "进行中",
+      "completed": "已完成"
+    },
+    "resolution": {
+      "hd": "720p · 高清",
+      "smooth": "480p · 流畅"
+    },
+    "time": {
+      "justNow": "刚刚",
+      "minutesAgo": "{n} 分钟前",
+      "hoursAgo": "{n} 小时前"
+    },
+    "assetTabs": {
+      "all": "全部",
+      "character": "角色",
+      "scene": "场景",
+      "prop": "道具"
+    },
+    "kindLabel": {
+      "character": "角色",
+      "scene": "场景",
+      "prop": "道具"
+    },
+    "assets": {
+      "emptyTitle": "还没有任何素材",
+      "emptyDesc": "在剧情工作台中通过「提取资产」生成角色、场景与道具后，会自动收录到这里，并可直接生成素材图。",
+      "noKindMaterial": "暂无{kind}素材",
+      "kindHint": "在剧情工作台中提取并生成{kind}后，会显示在这里。",
+      "detailAriaLabel": "素材详情",
+      "kickerCharacter": "角色资产",
+      "kickerScene": "场景资产",
+      "kickerProp": "道具资产"
+    },
+    "gen": {
+      "generate": "生成",
+      "generating": "生成中",
+      "generatingEllipsis": "生成中…",
+      "redraw": "重绘",
+      "regenerate": "重新生成",
+      "ready": "已生成",
+      "pending": "待生成",
+      "generateImage": "生成图片",
+      "generatePrompt": "生成提示词"
+    },
+    "common": {
+      "unnamed": "未命名",
+      "noTime": "未设时间",
+      "pendingFill": "待补充",
+      "noDescription": "暂无描述",
+      "close": "关闭"
+    },
+    "character": {
+      "imageReady": "形象已生成",
+      "imageGenerating": "形象生成中",
+      "imageNotGenerated": "形象待生成",
+      "uploadImageTitle": "上传角色形象图",
+      "appearanceSummary": "样貌：{value}",
+      "stylingSummary": "妆造：{value}",
+      "finalPromptLabel": "最终提示词 · 三视图",
+      "finalPromptAutoHint": "首次生成形象时由提示词 Agent 自动生成"
+    },
+    "scene": {
+      "descPending": "场景描述待补充",
+      "lightingLabel": "光照 · {lighting}",
+      "finalPromptLabel": "最终提示词 · 固定视角",
+      "finalPromptAutoHint": "首次生成图片时由提示词 Agent 自动生成（前景/中景/后景）"
+    },
+    "prop": {
+      "finalPromptLabel": "最终提示词 · 白底单品",
+      "finalPromptAutoHint": "首次生成图片时由提示词 Agent 自动生成（白底单品）"
+    },
+    "upload": {
+      "short": "上传",
+      "image": "上传图片"
+    },
+    "editor": {
+      "visualPreviewLabel": "视觉预览",
+      "typeLabel": "类型",
+      "typeCharacter": "角色形象",
+      "typeProp": "道具",
+      "typeScene": "场景图片",
+      "positionLabel": "定位",
+      "propTypeLabel": "道具类型",
+      "timeLabel": "时间",
+      "editInfoLabel": "编辑信息",
+      "hintCharacter": "样貌与妆造会影响角色形象",
+      "hintProp": "物品外貌会影响道具图",
+      "hintScene": "空间与光影会影响场景图",
+      "finalPromptTitle": "最终提示词",
+      "finalPromptHint": "由 AI 根据信息生成，可手动修改后保存",
+      "genPromptTitle": "由 AI 生成最终提示词",
+      "needEpisodeTitle": "请先在「剧集列表」创建至少一集",
+      "finalPromptPlaceholder": "点击「生成提示词」由 AI 根据信息生成，或在此手动填写。手动修改并保存后，下次生成图片将使用此提示词。",
+      "saving": "保存中…",
+      "saveChanges": "保存修改",
+      "fields": {
+        "prop": {
+          "nameLabel": "名称",
+          "namePlaceholder": "道具名称",
+          "typeLabel": "类型",
+          "typePlaceholder": "如：武器 / 信物",
+          "descLabel": "物品外貌",
+          "descPlaceholder": "材质、颜色、形状、大小、新旧程度、磨损痕迹等"
+        },
+        "character": {
+          "nameLabel": "名称",
+          "namePlaceholder": "角色名",
+          "roleLabel": "定位",
+          "rolePlaceholder": "主角 / 反派 / 配角…",
+          "appearanceLabel": "样貌",
+          "appearancePlaceholder": "年龄感、五官、体态、气质等",
+          "stylingLabel": "妆造",
+          "stylingPlaceholder": "发型、服装、妆面、配饰等",
+          "descLabel": "人物设定",
+          "descPlaceholder": "性格、背景、动机…"
+        },
+        "scene": {
+          "locationLabel": "地点",
+          "locationPlaceholder": "如：故宫太和殿",
+          "timeLabel": "时间",
+          "timePlaceholder": "如：黄昏 / 深夜",
+          "descLabel": "场景描述",
+          "descPlaceholder": "空间、陈设、年代质感、关键视觉元素等",
+          "lightingLabel": "场景光影",
+          "lightingPlaceholder": "光源、色调、明暗、氛围等"
+        }
+      }
+    },
+    "addDialog": {
+      "title": "创建新集",
+      "titleLabel": "标题",
+      "titlePlaceholder": "默认按集数自动命名",
+      "titleHint": "留空时会自动按集数命名，例如“第 3 集”。",
+      "resolutionLabel": "视频分辨率",
+      "resolutionPlaceholder": "选择分辨率",
+      "resolutionHint": "创建后本集视频按此分辨率生成，之后仍可在集卡片上修改。",
+      "footCopy": "创建后自动锁定当前启用的图片与视频生成能力。",
+      "creating": "创建中..."
+    },
+    "deleteDialog": {
+      "title": "删除本集",
+      "message": "确定删除「{title}」？删除后不可在列表中查看，其分镜与生成记录将不再可访问。"
+    },
+    "toast": {
+      "resolutionSwitched": "本集视频分辨率已切换为 {resolution}",
+      "episodeAdded": "已添加新集",
+      "needEpisodeForImage": "请先在「剧集列表」创建至少一集，才能生成素材图",
+      "needEpisodeForPrompt": "请先在「剧集列表」创建至少一集，才能生成最终提示词",
+      "finalPromptGenerated": "最终提示词已生成",
+      "finalPromptGenFailed": "最终提示词生成失败，请重试",
+      "nameRequired": "请填写名称",
+      "locationRequired": "请填写地点",
+      "imageGenerating": "{kind}「{name}」图片生成中",
+      "imageGenTimeout": "{kind}「{name}」生成超时，可稍后刷新查看",
+      "imageUploaded": "{kind}「{name}」图片已上传"
+    },
+    "viewer": {
+      "titleFormat": "{kind} · {name}"
+    }
+  },
+  "dramaEpisode": {
+    "assets": {
+      "extract": "提取{label}",
+      "reExtract": "重提{label}",
+      "sectionLabel": "资产",
+      "readyCount": "{ready}/{total} 已就绪",
+      "batchCharacter": "批量角色",
+      "batchScene": "批量场景",
+      "batchProp": "批量道具",
+      "extracting": "正在提取{labels}...",
+      "extractingEllipsis": "正在提取{labels}…",
+      "extractEmptyTitle": "开始提取资产",
+      "extractEmptyDesc": "角色、场景和道具会在提取后显示在这里，可分别单独提取，也可一键并行提取全部。",
+      "startExtract": "开始提取",
+      "character": "角色",
+      "addNew": "新增",
+      "deleteCharacter": "删除角色",
+      "deleteScene": "删除场景",
+      "deleteProp": "删除道具",
+      "characterImageSuffix": "角色形象",
+      "sceneImageSuffix": "场景图",
+      "propImageSuffix": "道具图",
+      "uploadScene": "上传场景图",
+      "uploadProp": "上传道具图",
+      "noKeyProps": "本集暂无涉及事态发展的关键道具",
+      "shortChar": "角",
+      "shortScene": "景",
+      "shortProp": "具",
+      "notConfigured": "未配置",
+      "genericAsset": "资产",
+      "fillSceneLocation": "请填写场景地点",
+      "fillName": "请填写名称",
+      "addedToast": "已新增{label}",
+      "deletedToast": "已删除{label}",
+      "unnamedCharacter": "未命名角色",
+      "unnamedProp": "未命名道具",
+      "unnamedScene": "未命名场景",
+      "kickerCharacter": "角色资产",
+      "kickerScene": "场景资产",
+      "kickerProp": "道具资产",
+      "appearancePending": "样貌待补充",
+      "stylingPending": "妆造待补充",
+      "visualSummary": "样貌：{appearance} · 妆造：{styling}",
+      "sceneDescPending": "场景描述待补充",
+      "sceneLightingPending": "场景光影待补充",
+      "propItemImage": "道具单品图"
+    },
+    "header": {
+      "back": "返回项目",
+      "episodeChip": "第 {n} 集",
+      "charsAndParagraphs": "{chars} 角色 · {paragraphs} 段落",
+      "modelTextLabel": "文本",
+      "modelImageLabel": "图片",
+      "modelVideoLabel": "视频",
+      "defaultLabel": "默认 · {model}",
+      "refresh": "刷新",
+      "tasks": "任务",
+      "viewMerge": "查看成片",
+      "continueProduction": "继续制作",
+      "startProduction": "开始制作"
+    },
+    "sidebar": {
+      "inProgress": "进行中",
+      "refreshData": "刷新数据"
+    },
+    "script": {
+      "rawContentStep": "原始内容",
+      "charCount": "{n} 字",
+      "save": "保存",
+      "rawPlaceholder": "粘贴小说原文、故事大纲或分镜描述...",
+      "aiRewriteStep": "AI 改写",
+      "skipRewrite": "跳过改写",
+      "redoRewrite": "重新改写",
+      "rewriteEmptyTitle": "AI 改写为格式化剧本",
+      "rewriteEmptyDesc": "你可以先用 AI 把原始内容整理成格式化剧本，也可以跳过这一步，直接进入资产制作。",
+      "startRewrite": "开始改写",
+      "rewriting": "正在改写剧本...",
+      "scriptPlaceholder": "格式化剧本内容..."
+    },
+    "production": {
+      "notReadyTitle": "尚未准备就绪",
+      "blockNeedScript": "请先完成剧本编写",
+      "goToScript": "前往剧本",
+      "backToProduction": "返回处理"
+    },
+    "storyboard": {
+      "sectionLabel": "分镜拆分",
+      "paragraphsAndDuration": "{count} 段落 · {duration}s",
+      "resplit": "重新拆分",
+      "startSplit": "开始拆分",
+      "promptProgress": "提示词 {completed}/{total}",
+      "generateSelectedPrompts": "生成所选提示词({n})",
+      "batchVideoPrompts": "批量视频提示词",
+      "listTitle": "分镜列表",
+      "listSub": "检查拆分描述和绑定的角色场景",
+      "select": "选择",
+      "selectAll": "全选",
+      "onlyMissing": "仅缺失",
+      "clear": "清空",
+      "videoGenerated": "已生成视频",
+      "videoGeneratedTag": "已出片",
+      "noDescription": "暂无画面描述",
+      "zeroCharacters": "0 角色",
+      "videoNotGenerated": "未生成视频",
+      "videoFlagShort": "视",
+      "selectedCount": "已选 {n} 个",
+      "cancel": "取消",
+      "generatingProgress": "生成中 {completed}/{total}",
+      "generateVideoPrompts": "生成视频提示词({n})",
+      "shotNumbered": "分镜 #{n}",
+      "ofTotal": "/ 共 {n} 个",
+      "durationLabel": "时长",
+      "descSectionTitle": "分镜描述",
+      "descFieldLabel": "画面描述",
+      "descFieldHint": "(按【镜头1】【镜头2】…逐子镜头描述；台词写「角色名说：「台词」」，旁白写「旁白：内容」)",
+      "descPlaceholder": "分镜画面描述",
+      "atmosphereLabel": "氛围",
+      "atmospherePlaceholder": "光线、色调、空气感、环境氛围",
+      "videoPromptTitle": "视频提示词",
+      "regenerate": "重新生成",
+      "aiGenerate": "AI 生成",
+      "videoPromptCopy": "根据当前分镜的画面描述（含台词/旁白）与氛围生成",
+      "videoPromptPlaceholder": "用 \\@角色名 / \\@场景名 / \\@道具名 引用参考素材，按 3 秒一段换行描述画面运动与镜头；也可点 AI 生成由提示词 Agent 自动创作…",
+      "refTitle": "参考素材",
+      "refCopy": "绑定角色 / 场景 / 道具作为视频参考",
+      "boundCount": "{bound}/{total} 已绑定",
+      "unbindTitle": "点击移出参考",
+      "bindTitle": "点击添加为参考",
+      "refReady": "可参考",
+      "refNotReady": "未生成",
+      "refUnbound": "未绑定",
+      "goGenerate": "去生成 →",
+      "refEmpty": "当前集还没有场景、角色或道具，先到「资产」提取素材后即可绑定。",
+      "splitting": "正在拆分分镜...",
+      "splitEmptyTitle": "开始拆分分镜",
+      "splitEmptyDesc": "根据剧本、角色和场景拆分镜头，生成分镜描述和绑定信息。",
+      "shotNumberedShort": "镜头 #{n}",
+      "referenceCountUnit": "{n} 个参考素材",
+      "narrationKeyword": "旁白",
+      "unboundScene": "未绑定场景"
+    },
+    "videos": {
+      "shotCount": "{n} 个镜头",
+      "generatedCount": "{ready}/{total} 已生成",
+      "batchVideo": "批量视频",
+      "needShotsTitle": "先生成分镜",
+      "needShotsDesc": "视频任务来自分镜拆分结果。先生成分镜描述和视频提示词，再批量生成视频。",
+      "lockedModelBanner": "当前集视频模型：{model}",
+      "aiGenerateShots": "AI 生成分镜",
+      "taskListTitle": "视频任务列表",
+      "taskListMeta": "按镜头顺序 · {n} 个任务",
+      "generatingCount": "{n} 生成中",
+      "doneCount": "{n} 完成",
+      "failedCount": "{n} 失败",
+      "referenceCount": "参考 {n}",
+      "shotNumbered": "分镜 {n}",
+      "setAsMain": "设为主视频",
+      "download": "下载",
+      "generatingEllipsis": "视频生成中…",
+      "notGenerated": "尚未生成视频",
+      "willPlayAfterGen": "生成完成后可在此播放预览",
+      "clickToGenerate": "点击下方按钮为当前分镜生成视频",
+      "generateVideo": "生成视频",
+      "historyTitle": "历史视频",
+      "current": "当前",
+      "deleteRecord": "删除该记录",
+      "videoPromptLabel": "视频提示词",
+      "regenerate": "重新生成",
+      "aiGenerate": "AI 生成",
+      "videoPromptPlaceholder": "用 \\@角色名 / \\@场景名 / \\@道具名 引用参考素材，生成时自动映射为参考图片；再按时间段描述画面运动与镜头…",
+      "refAssetsLabel": "参考素材",
+      "refAssetsEmpty": "当前分镜未绑定参考素材",
+      "refMediaLabel": "参考图片 / 视频 / 音频",
+      "refImageChip": "图片 {n}",
+      "refVideoChip": "视频 {n}",
+      "refAudioChip": "音频 {n}",
+      "uploadRefImage": "上传参考图片 ({used}/9)",
+      "uploadRefVideo": "上传参考视频 ({used}/3)",
+      "uploadRefAudio": "上传参考音频 ({used}/3)",
+      "refAudioHint": "参考音频需至少 1 个参考图片或视频",
+      "genParamsLabel": "生成参数",
+      "genDurationLabel": "生成时长",
+      "genDurationUnit": "s（4-15）",
+      "refAudioLabel": "音频"
+    },
+    "export": {
+      "notReadyTitle": "尚未准备就绪",
+      "notReadyDesc": "请先完成分镜和制作流程",
+      "goToScript": "前往剧本",
+      "mergeListTitle": "成片列表",
+      "countUnit": "{n} 个",
+      "refresh": "刷新",
+      "mergeFailed": "拼接失败",
+      "merging": "拼接中…",
+      "download": "下载",
+      "mergeEmpty": "暂无成片，在下方勾选镜头后点击「拼接所选」",
+      "shotAssetsTitle": "镜头素材",
+      "shotAssetsMeta": "{ready}/{total} 已生成 · 已选 {selected}",
+      "clearSelection": "清空选择",
+      "selectAllGenerated": "全选已生成",
+      "mergeSelected": "拼接所选 ({n})"
+    },
+    "taskDrawer": {
+      "ariaLabel": "生成任务列表",
+      "title": "生成任务列表",
+      "meta": "按创建时间倒序 · {n} 个任务",
+      "refresh": "刷新",
+      "generatingCount": "{n} 生成中",
+      "doneCount": "{n} 完成",
+      "failedCount": "{n} 失败",
+      "emptyTitle": "暂无生成任务",
+      "emptyDesc": "在资产、分镜或视频步骤中触发图片 / 视频生成后,任务会自动出现在这里。",
+      "duration": "耗时 {duration}",
+      "general": "通用",
+      "wholeEpisodeMerge": "整集拼接",
+      "merge": "合并"
+    },
+    "nav": {
+      "prevStep": "上一步",
+      "nextStep": "下一步",
+      "enterExport": "进入导出"
+    },
+    "assetDetail": {
+      "ariaLabelSuffix": "详情",
+      "viewLabel": "视觉预览",
+      "ready": "已生成",
+      "pending": "待生成",
+      "typeLabel": "类型",
+      "characterImageType": "角色形象",
+      "propType": "道具",
+      "sceneImageType": "场景图片",
+      "positionOrTypeOrTime": "定位",
+      "propTypeLabel": "道具类型",
+      "timeLabel": "时间",
+      "editInfoLabel": "编辑信息",
+      "hintCharacter": "样貌与妆造会影响角色形象",
+      "hintProp": "物品外貌会影响道具图",
+      "hintScene": "空间与光影会影响场景图",
+      "propDescLabel": "物品外貌",
+      "propDescPlaceholder": "材质、颜色、形状、大小、新旧程度、磨损痕迹等",
+      "appearanceLabel": "样貌",
+      "appearancePlaceholder": "年龄感、五官、体态、气质等",
+      "stylingLabel": "妆造",
+      "stylingPlaceholder": "发型、服装、妆面、配饰等",
+      "sceneDescLabel": "场景描述",
+      "sceneDescPlaceholder": "空间、陈设、年代质感、关键视觉元素等",
+      "sceneLightingLabel": "场景光影",
+      "sceneLightingPlaceholder": "光源、色调、明暗、氛围等",
+      "finalPromptCharacter": "最终提示词 · 三视图",
+      "finalPromptScene": "最终提示词 · 固定视角",
+      "finalPromptProp": "最终提示词 · 白底单品",
+      "generatingEllipsis": "生成中",
+      "regenerate": "重新生成",
+      "generatePrompt": "生成提示词",
+      "copy": "复制",
+      "manualHintCharacter": "可手动编写三视图最终提示词，或点击「生成提示词」由 Agent 生成",
+      "manualHintScene": "可手动编写固定视角最终提示词，或点击「生成提示词」由 Agent 生成",
+      "manualHintProp": "可手动编写白底单品最终提示词，或点击「生成提示词」由 Agent 生成",
+      "editableHintCharacter": "提示词可直接编辑，保存后生效；修改样貌或妆造并保存后，最终提示词将被清空，下次生成形象时由提示词 Agent 重新生成。",
+      "editableHintScene": "提示词可直接编辑，保存后生效；修改场景描述或光影并保存后，最终提示词将被清空，下次生成场景图时由提示词 Agent 重新生成。",
+      "editableHintProp": "提示词可直接编辑，保存后生效；修改物品外貌并保存后，最终提示词将被清空，下次生成道具图时由提示词 Agent 重新生成。",
+      "delete": "删除",
+      "close": "关闭",
+      "imagePreview": "图片预览",
+      "mergePreview": "成片预览",
+      "downloadMerge": "下载成片"
+    },
+    "addAssetDialog": {
+      "title": "新增{label}",
+      "nameLabel": "名称",
+      "characterNamePlaceholder": "角色名称",
+      "roleLabel": "角色定位",
+      "rolePlaceholder": "如：主角 / 反派 / 配角",
+      "appearancePlaceholder": "外貌特征（可融入性格）",
+      "stylingPlaceholder": "服装、妆容、配饰",
+      "locationLabel": "地点",
+      "locationPlaceholder": "场景地点",
+      "timePlaceholder": "如：白天 / 夜晚",
+      "sceneDescPlaceholder": "环境、陈设、氛围",
+      "lightingPlaceholder": "如：黄昏暖光、冷清顶光",
+      "propNamePlaceholder": "道具名称",
+      "propTypePlaceholder": "如：武器 / 信物 / 文件",
+      "propDescPlaceholder": "只描述物品的外观，与其他无关"
+    },
+    "deleteAssetDialog": {
+      "title": "删除{label}",
+      "message": "确定删除{label}「{name}」吗？将从本剧所有集中移除。"
+    },
+    "gen": {
+      "done": "已完成",
+      "generating": "生成中",
+      "failed": "失败",
+      "pending": "待生成",
+      "regenerate": "重新生成",
+      "generate": "生成"
+    },
+    "toast": {
+      "finalPromptGenFailed": "最终提示词生成失败，请重试",
+      "finalPromptRegenerated": "最终提示词已重新生成",
+      "finalPromptGenerated": "最终提示词已生成",
+      "finalPromptGenFailedShort": "最终提示词生成失败",
+      "finalPromptCopied": "最终提示词已复制",
+      "copyFailed": "复制失败，请手动选择文本复制",
+      "noChangesToSave": "没有需要保存的修改",
+      "changesSaved": "修改已保存",
+      "saveFailed": "保存失败",
+      "videoGenFailed": "视频生成失败",
+      "fillRawContentFirst": "请先填写原始内容",
+      "rewriteSkipped": "已跳过 AI 改写，当前将直接使用原始内容",
+      "extractDone": "{label}提取完成",
+      "extractFailed": "{label}提取失败",
+      "splitStoryboardFirst": "请先拆分分镜",
+      "selectedShotsNotFound": "所选分镜不存在",
+      "allShotsHavePrompts": "所有分镜已有视频提示词",
+      "startGeneratingPrompts": "开始生成 {n} 个分镜的视频提示词…",
+      "batchPromptsDoneWithFailures": "视频提示词批量生成完成，{n} 个失败",
+      "batchPromptsDone": "视频提示词批量生成完成",
+      "batchPromptsFailed": "视频提示词批量生成失败",
+      "shotPromptGenerated": "分镜 #{n} 视频提示词已生成",
+      "generatingFinalPrompt": "正在生成最终提示词…",
+      "characterImageGenerating": "角色图片生成中",
+      "allCharacterImagesGenerated": "所有角色图片已生成",
+      "characterImageBatchGenerating": "角色图片批量生成中",
+      "sceneImageGenerating": "场景图片生成中",
+      "propImageGenerating": "道具图片生成中",
+      "allSceneImagesGenerated": "所有场景图片已生成",
+      "sceneImageBatchGenerating": "场景图片批量生成中",
+      "allPropImagesGenerated": "所有道具图片已生成",
+      "propImageBatchGenerating": "道具图片批量生成中",
+      "setAsMainVideo": "已设为主视频",
+      "setFailed": "设置失败",
+      "historyDeleted": "已删除该历史记录",
+      "deleteFailed": "删除失败",
+      "assetImageUploaded": "{label}已上传",
+      "refImageLimitReached": "参考图片已达上限（含场景/角色素材）",
+      "refImageUploaded": "参考图片已上传",
+      "refMediaLimit": "参考{label}最多 3 个",
+      "refMediaUploaded": "参考{label}已上传",
+      "needRefOrPrompt": "需要至少一个参考素材或视频提示词",
+      "videoGenerating": "视频生成中",
+      "videoGenDone": "视频生成完成",
+      "videoGenTimeout": "视频生成超时",
+      "allShotsVideosGenerated": "所有镜头视频已生成",
+      "selectAtLeastOneVideo": "请先勾选至少一个已生成视频的镜头",
+      "merging": "拼接中...",
+      "mergeFailed": "拼接失败",
+      "mergeDone": "拼接完成"
+    },
+    "tabs": {
+      "script": "剧本",
+      "assets": "资产",
+      "storyboard": "分镜拆分",
+      "storyboardShort": "分镜",
+      "videos": "视频生成",
+      "videosShort": "视频",
+      "export": "导出",
+      "exportMerge": "拼接导出",
+      "production": "制作",
+      "scriptDesc": "内容改写与整理",
+      "assetsDesc": "角色 / 场景 / 道具",
+      "storyboardDesc": "分镜拆分与提示词",
+      "videosDesc": "视频任务与生成",
+      "exportDesc": "拼接与成片输出"
+    },
+    "workbenchFallback": "工作台",
+    "stage": {
+      "scriptStage": "剧本阶段",
+      "productionStage": "制作阶段",
+      "exportStageReady": "导出阶段 · 成片已生成",
+      "exportStageWaiting": "导出阶段 · 等待拼接"
+    }
+  }
+}

@@ -143,10 +143,21 @@ export class GeminiImageAdapter implements ImageProviderAdapter {
   }
 
   extractImageUrl(result: any): string | null {
-    return result?.data?.[0]?.url
+    const direct = result?.data?.[0]?.url
       || result?.image_url
       || result?.url
       || null
+    if (direct) return direct
+
+    // 部分中转站(如 chatfire)不返回原生 inline_data,而是把图片 URL
+    // 以 markdown 形式塞进 candidates[0].content.parts[].text: ![image](url)
+    const parts = result?.candidates?.[0]?.content?.parts || []
+    for (const part of parts) {
+      const text = typeof part?.text === 'string' ? part.text : ''
+      const match = text.match(/!\[[^\]]*\]\((https?:\/\/[^\s)]+)\)/)
+      if (match) return match[1]
+    }
+    return null
   }
 
   extractImageBase64(result: any): { data: string; mimeType: string } | null {

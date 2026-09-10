@@ -36,7 +36,7 @@ export const api = {
 }
 
 export const dramaAPI = {
-  list: () => api.get<{ items: any[] }>('/dramas'),
+  list: (params?: { type?: string }) => api.get<{ items: any[] }>(`/dramas${params?.type ? `?type=${params.type}` : ''}`),
   get: (id: number) => api.get(`/dramas/${id}`),
   create: (data: any) => api.post('/dramas', data),
   update: (id: number, data: any) => api.put(`/dramas/${id}`, data),

@@ -1,63 +1,63 @@
 ---
 name: video-prompt
-description: 视频提示词规范 — 根据分镜段落内容生成按时间分段、段内可切镜的视频生成提示词
+description: Quy chuẩn prompt video — dựa trên nội dung đoạn phân cảnh, tạo prompt video chia theo thời gian, cho phép chuyển cảnh bên trong đoạn
 ---
 
-# 视频提示词（分镜段落 → video_prompt）
+# Prompt video (đoạn phân cảnh → video_prompt)
 
-根据单个分镜段落的 description（含【镜头N】子镜头结构与台词/旁白）/ atmosphere / duration，生成驱动 AI 视频生成的 `video_prompt`。**一个分镜段落 = 一段 8-15 秒的视频，内部允许切镜**：段与段之间可以是不同镜头（换景别/角度/对象），用硬切衔接；但**全程不跨场景**、不闪回。
+Dựa trên `description` (gồm cấu trúc cảnh con `【Cảnh N】` cùng lời thoại/lời dẫn), `atmosphere`, `duration` của một đoạn phân cảnh, tạo ra `video_prompt` để dẫn dắt AI tạo video. **Một đoạn phân cảnh = một video 8-15 giây, bên trong được phép chuyển cảnh**: các đoạn 3 giây có thể là những cảnh khác nhau (đổi cỡ cảnh/góc quay/đối tượng), nối bằng chuyển cứng (hard cut); nhưng **toàn bộ không được đổi bối cảnh**, không hồi tưởng (flashback).
 
-## 格式
+## Định dạng
 
-按 3 秒为一段，每段单独一行、用换行分隔，时间范围连续衔接（无重叠、无空缺）：
+Chia theo từng đoạn 3 giây, mỗi đoạn một dòng riêng, cách nhau bằng xuống dòng, khoảng thời gian nối tiếp liên tục (không chồng lấn, không bỏ trống):
 
 ```
-0-3秒：@咖啡厅，近景固定镜头，@小明低头看手机，手指反复敲桌面，表情焦虑。
-3-6秒：切到门口全景，门铃响，@小红推门走入，带进一阵冷风。
-6-9秒：切回中景，@小红微笑着走向小明坐下，小明说：「你终于来了。」
+0-3 giây: @Quán cà phê, cận cảnh máy quay cố định, @Tiểu Minh cúi đầu nhìn điện thoại, ngón tay liên tục gõ lên bàn, vẻ mặt lo lắng.
+3-6 giây: Chuyển sang toàn cảnh cửa ra vào, chuông cửa vang lên, @Tiểu Hồng đẩy cửa bước vào, mang theo một luồng gió lạnh.
+6-9 giây: Chuyển về trung cảnh, @Tiểu Hồng mỉm cười bước tới ngồi xuống cạnh Tiểu Minh, Tiểu Minh nói: "Em đến rồi à."
 ```
 
-## 与分镜描述的映射
+## Ánh xạ với mô tả phân cảnh
 
-`description` 是 video_prompt 的唯一内容来源（画面、动作、台词、旁白都在其中），转换规则：
+`description` là nguồn nội dung duy nhất của video_prompt (hình ảnh, hành động, lời thoại, lời dẫn đều nằm trong đó), quy tắc chuyển đổi:
 
-- `description` 的每个 `【镜头N】` 映射为 **1-2 个连续的 3 秒段**，顺序一致、不遗漏、不合并、不新增子镜头
-- 台词/旁白从对应 `【镜头N】` 内的「角色名说：「…」」「旁白：…」提取，分配到该子镜头映射的段；**不要创作 description 之外的新台词**
-- 画面动作以 `description` 为准；`atmosphere` 只用于补各段的光线、色调与氛围描写
+- Mỗi `【Cảnh N】` trong `description` ánh xạ thành **1-2 đoạn 3 giây liên tiếp**, giữ đúng thứ tự, không bỏ sót, không gộp, không thêm cảnh con mới
+- Lời thoại/lời dẫn được lấy từ「Tên nhân vật nói: "…"」「Lời dẫn: …」trong `【Cảnh N】` tương ứng, phân bổ vào đoạn được ánh xạ từ cảnh con đó, rồi **dịch sang tiếng Trung tự nhiên, đúng ngữ cảnh** (video model đọc giọng tiếng Trung; phụ đề tiếng Việt được ghép riêng ở bước xuất video, không liên quan đến bước này); **không được tự sáng tác lời thoại ngoài description**
+- Hành động hình ảnh lấy theo `description`; `atmosphere` chỉ dùng để bổ sung ánh sáng, tông màu và mô tả không khí cho mỗi đoạn
 
-## 段内结构
+## Cấu trúc bên trong một đoạn
 
-每一段按此顺序组织内容（可省略无内容的项，但动作/画面必须有）：
+Mỗi đoạn tổ chức nội dung theo thứ tự này (có thể lược bỏ mục không có nội dung, nhưng hành động/hình ảnh bắt buộc phải có):
 
-**时间范围 ＋ 场景@引用 ＋ 景别/运镜 ＋ 角色@引用＋主体动作·表情 ＋ 对白/旁白 ＋ 氛围光线**
+**Khoảng thời gian ＋ @tham chiếu bối cảnh ＋ cỡ cảnh/chuyển động máy quay ＋ @tham chiếu nhân vật ＋ hành động chủ thể · biểu cảm ＋ lời thoại/lời dẫn ＋ ánh sáng không khí**
 
-- **第一段必须建立空间**：场景 + 机位 + 角色的位置与状态，让观众一眼知道在哪、看谁
-- **切镜**：切镜后的段开头用"切到/切回"等衔接词，并重新交代景别与主体；切镜点应对齐分镜 `description` 中的 `【镜头N】` 结构
-- **景别/运镜**：每段一个镜头状态（近景/中景/全景/特写；固定/推/拉/摇/跟）；单个子镜头内运镜连续，切镜后可更换运镜方式
-- **动作**：每段一个主动作，动词具体可见（走、转身、抬头、攥紧、停顿）
-- **情绪全部转为可见描写**：不要"他很伤心/气氛紧张"这类抽象词，写成"他低下头、手指攥紧杯沿、呼吸变重"
-- **对白/旁白**：写「角色名说：「台词」」，旁白写「旁白：内容」；3 秒念不完的长台词拆到多段；无对白的段可写环境音/动作音（如"机器持续轰鸣"）
+- **Đoạn đầu tiên bắt buộc phải thiết lập không gian**: bối cảnh + vị trí máy quay + vị trí và trạng thái của nhân vật, để khán giả nhìn là biết đang ở đâu, đang xem ai
+- **Chuyển cảnh**: đoạn sau khi chuyển cảnh mở đầu bằng từ nối như "chuyển sang/chuyển về", và nêu lại cỡ cảnh và chủ thể; điểm chuyển cảnh phải khớp với cấu trúc `【Cảnh N】` trong `description` của phân cảnh
+- **Cỡ cảnh/chuyển động máy quay**: mỗi đoạn một trạng thái cảnh quay (cận cảnh/trung cảnh/toàn cảnh/đặc tả; cố định/đẩy vào/kéo ra/lia/theo); chuyển động máy quay liên tục trong một cảnh con, có thể đổi cách chuyển động sau khi chuyển cảnh
+- **Hành động**: mỗi đoạn một hành động chính, động từ cụ thể có thể nhìn thấy (đi, quay người, ngẩng đầu, siết chặt, dừng lại)
+- **Toàn bộ cảm xúc chuyển thành mô tả có thể nhìn thấy**: không viết những từ trừu tượng kiểu "anh ấy rất buồn/bầu không khí căng thẳng", hãy viết thành "anh ấy cúi đầu, ngón tay siết chặt miệng ly, hơi thở nặng nề hơn"
+- **Lời thoại/lời dẫn**: viết「Tên nhân vật nói: "lời thoại"」, lời dẫn viết「Lời dẫn: nội dung」; lời thoại dài 3 giây không đọc hết thì tách sang nhiều đoạn; đoạn không có lời thoại có thể viết âm thanh môi trường/âm thanh hành động (như "tiếng máy móc gầm rú liên tục")
 
-## 引用规则
+## Quy tắc tham chiếu
 
-- `@场景名` — 场景引用，名字必须与场景列表中的地点完全一致
-- `@角色名` — 角色引用，名字必须与角色列表中的名字完全一致
-- `@道具名` — 道具引用，名字必须与道具列表中的名字完全一致；道具在画面中明显可见、被使用或特写时引用
-- 生成时会自动把 `@名字` 替换为对应参考图片标记（如 `@小明` → `@图片1小明`），因此名字必须精确匹配，不要缩写或加额外符号
-- **每段至少一个 @ 引用锚定画面**；角色出场的段必须 @ 该角色；只引用该分镜段落已绑定的场景/角色/道具
+- `@Tên bối cảnh` — tham chiếu bối cảnh, tên phải khớp hoàn toàn với địa điểm trong danh sách bối cảnh
+- `@Tên nhân vật` — tham chiếu nhân vật, tên phải khớp hoàn toàn với tên trong danh sách nhân vật
+- `@Tên đạo cụ` — tham chiếu đạo cụ, tên phải khớp hoàn toàn với tên trong danh sách đạo cụ; khi đạo cụ xuất hiện rõ ràng, được sử dụng hoặc quay cận trong khung hình thì tham chiếu
+- Khi tạo, hệ thống sẽ tự động thay `@Tên` bằng ký hiệu ảnh tham chiếu tương ứng (ví dụ `@Tiểu Minh` → `@Ảnh1 Tiểu Minh`), vì vậy tên phải khớp chính xác, không viết tắt hay thêm ký hiệu thừa
+- **Mỗi đoạn ít nhất một tham chiếu @ để neo khung hình**; đoạn nào có nhân vật xuất hiện thì bắt buộc phải @ nhân vật đó; chỉ tham chiếu bối cảnh/nhân vật/đạo cụ đã được gắn cho đoạn phân cảnh đó
 
-## 时间轴规则
+## Quy tắc trục thời gian
 
-- 段数 = 分镜段落 duration ÷ 3 秒（向上取整），各段时间范围相加必须等于段落总时长
-- 内容节奏：第一段建立 → 中段推进动作/冲突 → 末段落到结果或情绪点
+- Số đoạn = thời lượng đoạn phân cảnh ÷ 3 giây (làm tròn lên), tổng các khoảng thời gian của các đoạn phải bằng đúng tổng thời lượng của đoạn phân cảnh
+- Nhịp nội dung: đoạn đầu thiết lập → đoạn giữa đẩy hành động/xung đột → đoạn cuối đi đến kết quả hoặc điểm cảm xúc
 
-## 禁止事项
+## Điều cấm
 
-- 跨场景切换、闪回（一个段落只发生在一个场景内）
-- 引用列表之外的场景/角色名
-- 抽象心理描写、文学化比喻（模型只认可见画面）
-- 英文混写（视频提示词用中文）
+- Chuyển bối cảnh, hồi tưởng (một đoạn phân cảnh chỉ diễn ra trong một bối cảnh)
+- Tham chiếu bối cảnh/nhân vật ngoài danh sách đã cho
+- Mô tả tâm lý trừu tượng, ẩn dụ văn học (mô hình chỉ hiểu được hình ảnh có thể nhìn thấy)
+- Lẫn tiếng Anh trong prompt (toàn bộ video_prompt, kể cả lời thoại/lời dẫn đã dịch, đều dùng tiếng Trung)
 
-## 保存
+## Lưu
 
-调用 `update_storyboard` 仅更新该分镜段落的 `video_prompt` 字段，不要改动其他字段，不要重新拆分整集。
+Gọi `update_storyboard` chỉ cập nhật trường `video_prompt` của đoạn phân cảnh đó, không thay đổi các trường khác, không chia tách lại toàn tập.

@@ -5,6 +5,7 @@ export const mysqlSchemaStatements = [
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title TEXT NOT NULL,
     description TEXT,
+    type VARCHAR(16) DEFAULT 'drama',
     genre TEXT,
     style VARCHAR(64) DEFAULT '3d',
     aspect_ratio VARCHAR(16) DEFAULT '16:9',
@@ -301,10 +302,29 @@ export const mysqlDataSeedStatements = stylePresetSeeds.map((s) => ({
   params: [s.name, s.value, s.prompt, s.description, s.sortOrder, new Date().toISOString(), new Date().toISOString(), s.value],
 }))
 
+/**
+ * 增量列迁移 — CREATE TABLE IF NOT EXISTS 对已存在的表不会补列，
+ * 老库需要显式 ALTER TABLE 补齐新增字段（如 dramas.type）
+ */
+const mysqlColumnMigrations = [
+  { table: 'dramas', column: 'type', ddl: "ALTER TABLE `dramas` ADD COLUMN `type` VARCHAR(16) DEFAULT 'drama'" },
+]
+
+async function runColumnMigrations(pool: Pool) {
+  for (const m of mysqlColumnMigrations) {
+    const [rows] = await pool.query(
+      'SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?',
+      [m.table, m.column],
+    ) as any
+    if (!rows.length) await pool.query(m.ddl)
+  }
+}
+
 export async function initMySqlSchema(pool: Pool) {
   for (const statement of mysqlSchemaStatements) {
     await pool.query(statement)
   }
+  await runColumnMigrations(pool)
   for (const seed of mysqlDataSeedStatements) {
     await pool.query(seed.sql, seed.params)
   }

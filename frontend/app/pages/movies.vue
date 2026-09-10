@@ -1,0 +1,449 @@
+<template>
+  <div class="page">
+    <div class="launcher-hero">
+      <div class="head-left">
+        <h1 class="launcher-title">Phim ngắn</h1>
+        <p class="launcher-sub">Video hành động ngắn 30-60 giây, dựng từ văn bản (đánh nhau, rượt đuổi, cao trào...)</p>
+        <div class="hero-stats">
+          <span class="tag">{{ movies.length }} dự án</span>
+          <span class="tag tag-accent">{{ stylePresets.length }} phong cách</span>
+        </div>
+      </div>
+      <button class="btn btn-primary" @click="showCreate = true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Phim ngắn mới
+      </button>
+    </div>
+
+    <div v-if="loading" class="project-grid">
+      <div v-for="i in 6" :key="i" class="card skeleton-card">
+        <div class="skeleton-cover"></div>
+        <div class="skeleton-body">
+          <div class="skeleton-line w-60"></div>
+          <div class="skeleton-line w-40"></div>
+        </div>
+      </div>
+    </div>
+
+    <div v-else-if="movies.length" class="project-grid">
+      <article
+        v-for="(d, i) in movies"
+        :key="d.id"
+        class="card project-card"
+        :style="{ animationDelay: `${i * 0.04}s` }"
+        tabindex="0"
+        role="button"
+        @click="openMovie(d)"
+        @keydown.enter.prevent="openMovie(d)"
+        @keydown.space.prevent="openMovie(d)"
+      >
+        <div class="project-thumb" aria-hidden="true">
+          <Clapperboard :size="34" :stroke-width="1.4" />
+          <div class="more-wrap">
+            <button class="btn btn-icon btn-sm cover-more" type="button" title="Thêm" @click.stop="toggleMenu(d.id)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>
+              </svg>
+            </button>
+            <div v-if="activeMenuId === d.id" class="more-menu" @click.stop>
+              <button type="button" class="menu-item" @click="openMovie(d)">Mở</button>
+              <button type="button" class="menu-item is-danger" @click="activeMenuId = null; movieToDelete = d">Xóa</button>
+            </div>
+          </div>
+        </div>
+        <div class="project-body">
+          <h2 class="project-name truncate">{{ d.title }}</h2>
+          <div class="project-meta">
+            <span v-if="d.style" class="tag tag-accent">{{ styleLabel(d.style) }}</span>
+            <span>{{ d.characters?.length || 0 }} nhân vật · {{ d.scenes?.length || 0 }} bối cảnh</span>
+          </div>
+          <div class="project-foot">
+            <span class="updated">
+              <Clock :size="11" :stroke-width="1.8" />
+              {{ fmtDate(d.updated_at || d.updatedAt) }}
+            </span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div v-else class="empty-state">
+      <div class="empty-icon">
+        <Clapperboard :size="26" :stroke-width="1.3" />
+      </div>
+      <p class="empty-title">Chưa có phim ngắn nào</p>
+      <p class="empty-desc">Tạo phim ngắn đầu tiên từ một trường đoạn hành động trong truyện của bạn</p>
+      <button class="btn btn-primary" @click="showCreate = true">Phim ngắn mới</button>
+    </div>
+
+    <div v-if="showCreate" class="overlay" @click.self="showCreate = false">
+      <div class="dialog create-dialog">
+        <div class="dialog-head">
+          <div class="modal-icon">
+            <Clapperboard :size="18" :stroke-width="1.8" />
+          </div>
+          <div class="dialog-head-copy">
+            <h2 class="dialog-title">Tạo phim ngắn mới</h2>
+            <p class="dialog-desc">Một video hành động duy nhất, 30-60 giây</p>
+          </div>
+        </div>
+        <form @submit.prevent="create" class="dialog-form">
+          <div class="dialog-body">
+            <label class="field">
+              <span class="field-label">Tên phim <span class="required">*</span></span>
+              <input v-model="form.title" class="input" placeholder="Ví dụ: Songoku đại chiến Vegeta" required autofocus />
+            </label>
+            <label class="field">
+              <span class="field-label">Phong cách</span>
+              <BaseSelect v-model="form.style" :options="styleSelectOptions" placeholder="Chọn phong cách hình ảnh" searchable />
+              <span v-if="selectedStyleDesc" class="field-hint">{{ selectedStyleDesc }}</span>
+            </label>
+            <label class="field">
+              <span class="field-label">Tỉ lệ khung hình</span>
+              <BaseSelect v-model="form.aspect_ratio" :options="aspectRatioOptions" placeholder="Chọn tỉ lệ khung hình" />
+            </label>
+          </div>
+          <div class="dialog-foot">
+            <button type="button" class="btn" @click="showCreate = false">Hủy</button>
+            <button type="submit" class="btn btn-primary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              Tạo
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <ConfirmDialog
+      :open="!!movieToDelete"
+      title="Xóa phim ngắn"
+      :message="`Xóa '${movieToDelete?.title}'? Hành động này không thể hoàn tác.`"
+      :loading="deletingMovie"
+      @confirm="confirmDelMovie"
+      @cancel="movieToDelete = null"
+    />
+  </div>
+</template>
+
+<script setup>
+import { toast } from 'vue-sonner'
+import { Clapperboard, Clock } from 'lucide-vue-next'
+import { dramaAPI, stylePresetAPI } from '~/composables/useApi'
+import BaseSelect from '~/components/BaseSelect.vue'
+import ConfirmDialog from '~/components/ConfirmDialog.vue'
+
+const movies = ref([])
+const loading = ref(false)
+const showCreate = ref(false)
+const activeMenuId = ref(null)
+const movieToDelete = ref(null)
+const deletingMovie = ref(false)
+const form = ref({ title: '', style: '', aspect_ratio: '9:16' })
+const stylePresets = ref([])
+const styleSelectOptions = computed(() => stylePresets.value.map(p => ({ label: p.name, value: p.value })))
+const selectedStyleDesc = computed(() => stylePresets.value.find(p => p.value === form.value.style)?.description || '')
+const aspectRatioOptions = [
+  { label: 'Dọc (9:16)', value: '9:16' },
+  { label: 'Ngang (16:9)', value: '16:9' },
+  { label: 'Vuông (1:1)', value: '1:1' },
+]
+
+function styleLabel(key) {
+  return stylePresets.value.find(p => p.value === key)?.name || key || ''
+}
+
+async function load() {
+  loading.value = true
+  try {
+    const [res, presets] = await Promise.all([dramaAPI.list({ type: 'short_movie' }), stylePresetAPI.list()])
+    movies.value = res.items || []
+    stylePresets.value = presets || []
+    if (!form.value.style && stylePresets.value.length) {
+      form.value.style = stylePresets.value[0].value
+    }
+  } catch (e) {
+    toast.error(e.message)
+  } finally {
+    loading.value = false
+  }
+}
+
+async function create() {
+  if (!form.value.title?.trim()) return
+  try {
+    const d = await dramaAPI.create({ ...form.value, type: 'short_movie' })
+    showCreate.value = false
+    navigateTo(`/movies/${d.id}`)
+  } catch (e) {
+    toast.error(e.message)
+  }
+}
+
+async function confirmDelMovie() {
+  const d = movieToDelete.value
+  if (!d) return
+  try {
+    deletingMovie.value = true
+    await dramaAPI.del(d.id)
+    toast.success('Đã xóa')
+    movieToDelete.value = null
+    load()
+  } catch (e) {
+    toast.error(e.message)
+  } finally {
+    deletingMovie.value = false
+  }
+}
+
+function toggleMenu(id) {
+  activeMenuId.value = activeMenuId.value === id ? null : id
+}
+
+function openMovie(d) {
+  activeMenuId.value = null
+  navigateTo(`/movies/${d.id}`)
+}
+
+function fmtDate(s) {
+  if (!s) return ''
+  const d = new Date(s)
+  const diff = Date.now() - d.getTime()
+  if (diff < 60000) return 'vừa xong'
+  if (diff < 3600000) return `${Math.floor(diff / 60000)} phút trước`
+  if (diff < 86400000) return `${Math.floor(diff / 3600000)} giờ trước`
+  if (diff < 604800000) return `${Math.floor(diff / 86400000)} ngày trước`
+  return d.toLocaleDateString('vi-VN', { month: 'short', day: 'numeric' })
+}
+
+onMounted(load)
+</script>
+
+<style scoped>
+.page {
+  padding: 40px 48px 64px;
+  overflow-y: auto;
+  height: 100%;
+  animation: fadeUp 0.35s var(--ease-out) both;
+  background: var(--surface-base);
+}
+
+.launcher-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  padding: var(--sp-4) 0 var(--sp-6);
+}
+.head-left { display: flex; flex-direction: column; }
+.launcher-title {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-0);
+}
+.launcher-sub { color: var(--text-2); font-size: 14px; margin-top: 4px; }
+.hero-stats { display: flex; gap: var(--sp-2); margin-top: var(--sp-3); }
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(258px, 1fr));
+  gap: var(--sp-5);
+}
+.project-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  animation: fadeUp 0.32s var(--ease-out) both;
+}
+.project-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
+.project-card:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3.5px var(--button-focus);
+}
+.project-thumb {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  max-height: 220px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffe3ec;
+  color: #b5527a;
+}
+.more-wrap {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+.cover-more {
+  width: 30px;
+  min-width: 30px;
+  height: 30px;
+  min-height: 30px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text-1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  transition: opacity 0.15s var(--ease-out), background 0.15s var(--ease-out);
+}
+.cover-more:hover { background: #fff; }
+.project-card:hover .cover-more,
+.more-wrap:focus-within .cover-more { opacity: 1; }
+.more-menu {
+  position: absolute;
+  top: 36px;
+  right: 0;
+  width: 138px;
+  display: grid;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-lg);
+  z-index: 5;
+}
+.menu-item {
+  min-height: var(--button-height-sm);
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-1);
+  padding: 0 9px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.14s var(--ease-out);
+}
+.menu-item:hover { background: var(--bg-hover); color: var(--text-0); }
+.menu-item:focus-visible {
+  outline: none;
+  background: var(--bg-hover);
+  box-shadow: 0 0 0 2px var(--button-focus);
+}
+.menu-item.is-danger { color: var(--action-danger); }
+.menu-item.is-danger:hover { background: var(--action-danger-bg); color: var(--action-danger); }
+
+.project-body { padding: var(--sp-4); }
+.project-name {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-0);
+}
+.project-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-2);
+  flex-wrap: wrap;
+}
+.project-foot {
+  margin-top: var(--sp-3);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.project-foot .updated {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.skeleton-card { overflow: hidden; }
+.skeleton-cover {
+  aspect-ratio: 9 / 16;
+  max-height: 220px;
+  background: var(--bg-2);
+  animation: skeleton-pulse 1.4s ease-in-out infinite alternate;
+}
+.skeleton-body { padding: var(--sp-4); display: grid; gap: 10px; }
+.skeleton-line {
+  height: 12px;
+  border-radius: 99px;
+  background: var(--bg-2);
+  animation: skeleton-pulse 1.4s ease-in-out infinite alternate;
+}
+.skeleton-line.w-60 { width: 60%; }
+.skeleton-line.w-40 { width: 40%; }
+@keyframes skeleton-pulse { to { opacity: 0.55; } }
+
+.empty-state {
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  text-align: center;
+}
+.empty-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-3);
+  margin-bottom: 4px;
+}
+.empty-title { font-size: 14px; font-weight: 700; color: var(--text-1); }
+.empty-desc { font-size: 12px; color: var(--text-3); max-width: 240px; line-height: 1.6; }
+
+.create-dialog { width: 460px; max-width: calc(100vw - 32px); }
+.dialog-head-copy { display: flex; flex-direction: column; gap: 2px; }
+.dialog-desc { font-size: 12.5px; color: var(--text-3); }
+.modal-icon {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  border-radius: var(--radius);
+  background: var(--accent-bg);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+.dialog-body { display: flex; flex-direction: column; gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field-label { font-size: 12px; font-weight: 600; color: var(--text-1); }
+.required { color: var(--error); }
+.field-hint { font-size: 11px; color: var(--text-3); line-height: 1.5; }
+
+@media (max-width: 760px) {
+  .page { padding: 24px 16px 40px; }
+  .launcher-hero {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--sp-4);
+  }
+  .launcher-hero .btn { width: 100%; }
+  .dialog-foot { flex-direction: column-reverse; }
+  .dialog-foot .btn { width: 100%; }
+}
+</style>

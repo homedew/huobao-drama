@@ -38,7 +38,7 @@
             </button>
           </template>
         </template>
-        <div v-else class="mention-empty">无匹配的参考</div>
+        <div v-else class="mention-empty">{{ t('components.mentionTextarea.noMatch') }}</div>
       </div>
     </Teleport>
   </div>
@@ -47,6 +47,8 @@
 <script setup>
 import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { User, MapPin, Package } from 'lucide-vue-next'
+
+const { t } = useI18n()
 
 // 无图资产在下拉中显示分组图标兜底（场景=定位、道具=包裹、角色=人物）
 const groupIcon = (group) => (group === '场景' ? MapPin : group === '道具' ? Package : User)

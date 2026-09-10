@@ -9,16 +9,21 @@ import { getVideoPromptBatchStatus, startVideoPromptBatch } from '../services/vi
 
 const app = new Hono()
 
-// POST /episodes — Create a new episode
-app.post('/', async (c) => {
-  const body = await c.req.json()
-  if (!body.drama_id) return badRequest(c, 'drama_id required')
-
-  // 图片/视频配置：显式传入优先，缺省时自动锁定当前启用的最高优先级官方配置
+/**
+ * 创建一集的核心逻辑，供 POST /episodes 与短片创建时自动建集复用
+ * 图片/视频配置：显式传入优先，缺省时自动锁定当前启用的最高优先级官方配置
+ */
+export async function createEpisode(body: {
+  drama_id: number
+  title?: string
+  image_config_id?: number
+  video_config_id?: number
+  resolution?: string
+}) {
   const imageConfigId = body.image_config_id ?? await getActiveConfigId('image')
   const videoConfigId = body.video_config_id ?? await getActiveConfigId('video')
-  if (!imageConfigId) return badRequest(c, '未找到启用的图片生成配置，请先在设置中心添加')
-  if (!videoConfigId) return badRequest(c, '未找到启用的视频生成配置，请先在设置中心添加')
+  if (!imageConfigId) throw new Error('未找到启用的图片生成配置，请先在设置中心添加')
+  if (!videoConfigId) throw new Error('未找到启用的视频生成配置，请先在设置中心添加')
   const ts = now()
 
   // Get next episode number（忽略已软删的集，删除中间集后新集号可复用空位之后的最大值）
@@ -41,6 +46,21 @@ app.post('/', async (c) => {
 
   const [ep] = await db.select().from(schema.episodes)
     .where(eq(schema.episodes.id, getInsertId(res)))
+  return ep
+}
+
+// POST /episodes — Create a new episode
+app.post('/', async (c) => {
+  const body = await c.req.json()
+  if (!body.drama_id) return badRequest(c, 'drama_id required')
+
+  let ep
+  try {
+    ep = await createEpisode(body)
+  } catch (err: any) {
+    return badRequest(c, err.message)
+  }
+
   return success(c, {
     id: ep.id,
     episode_number: ep.episodeNumber,

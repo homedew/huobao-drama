@@ -5,11 +5,11 @@
       <div class="header-left">
         <button class="brand" @click="navigateTo('/')">
           <div class="brand-mark">
-            <img v-if="showBrandImage" :src="brandLogo" alt="火宝短剧" class="brand-logo" @error="showBrandImage = false" />
+            <img v-if="showBrandImage" :src="brandLogo" :alt="t('layout.brandName')" class="brand-logo" @error="showBrandImage = false" />
             <span v-else class="brand-fallback">火</span>
           </div>
           <div class="brand-text">
-            <span class="brand-name">火宝短剧</span>
+            <span class="brand-name">{{ t('layout.brandName') }}</span>
             <span class="brand-sub">Huobao Shorts</span>
           </div>
         </button>
@@ -18,11 +18,15 @@
       <nav class="header-nav">
         <NuxtLink to="/" class="nav-link" :class="{ active: route.path === '/' }">
           <LayoutGrid :size="15" :stroke-width="1.8" />
-          <span>项目</span>
+          <span>{{ t('layout.nav.projects') }}</span>
+        </NuxtLink>
+        <NuxtLink to="/movies" class="nav-link" :class="{ active: route.path.startsWith('/movies') }">
+          <Clapperboard :size="15" :stroke-width="1.8" />
+          <span>Phim ngắn</span>
         </NuxtLink>
         <NuxtLink to="/settings" class="nav-link" :class="{ active: route.path === '/settings' }">
           <Settings :size="15" :stroke-width="1.8" />
-          <span>设置</span>
+          <span>{{ t('layout.nav.settings') }}</span>
         </NuxtLink>
       </nav>
     </header>
@@ -30,8 +34,8 @@
     <!-- AI 服务未配置引导横幅(缺任一类型即提示) -->
     <div v-if="missingConfigLabels.length" class="config-banner">
       <TriangleAlert :size="14" :stroke-width="1.8" />
-      <span>尚未配置{{ missingConfigLabels.join('、') }}模型,AI 功能无法使用</span>
-      <NuxtLink to="/settings" class="config-banner-link">前往设置</NuxtLink>
+      <span>{{ t('layout.banner.notConfigured', { models: missingConfigLabels.join('、') }) }}</span>
+      <NuxtLink to="/settings" class="config-banner-link">{{ t('layout.banner.goToSettings') }}</NuxtLink>
     </div>
 
     <main class="content">
@@ -41,22 +45,22 @@
 </template>
 
 <script setup>
-import { LayoutGrid, Settings, TriangleAlert } from 'lucide-vue-next'
+import { LayoutGrid, Clapperboard, Settings, TriangleAlert } from 'lucide-vue-next'
 import { aiConfigAPI } from '~/composables/useApi'
 import brandLogo from '~/assets/huobao-logo.png'
 
 const route = useRoute()
+const { t, tm } = useI18n()
 const showBrandImage = ref(true)
 
-const SERVICE_TYPE_LABELS = { text: '文本', image: '图片', video: '视频' }
 const missingConfigLabels = ref([])
 
 async function checkAiConfigs() {
   try {
     const configs = await aiConfigAPI.list()
-    missingConfigLabels.value = Object.entries(SERVICE_TYPE_LABELS)
-      .filter(([type]) => !configs.some(c => c.service_type === type && c.is_active))
-      .map(([, label]) => label)
+    missingConfigLabels.value = Object.keys(tm('common.serviceType'))
+      .filter(type => !configs.some(c => c.service_type === type && c.is_active))
+      .map(type => t(`common.serviceType.${type}`))
   } catch { /* 配置检查失败不阻塞页面 */ }
 }
 

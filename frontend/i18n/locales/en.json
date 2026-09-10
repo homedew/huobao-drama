@@ -1,0 +1,863 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "saved": "Saved",
+    "delete": "Delete",
+    "deleted": "Deleted",
+    "deleting": "Deleting...",
+    "edit": "Edit",
+    "add": "Add",
+    "create": "Create",
+    "test": "Test",
+    "default": "Default",
+    "disabled": "Disabled",
+    "recommended": "Recommended",
+    "custom": "Custom",
+    "empty": "None",
+    "serviceType": {
+      "text": "Text",
+      "image": "Image",
+      "video": "Video"
+    }
+  },
+  "layout": {
+    "brandName": "Huobao Drama",
+    "nav": {
+      "projects": "Projects",
+      "settings": "Settings"
+    },
+    "banner": {
+      "notConfigured": "{models} model(s) not configured yet, AI features unavailable",
+      "goToSettings": "Go to Settings"
+    }
+  },
+  "components": {
+    "confirmDialog": {
+      "cancel": "Cancel",
+      "defaultTitle": "Confirm Delete",
+      "defaultConfirmText": "Delete",
+      "defaultLoadingText": "Deleting..."
+    },
+    "baseSelect": {
+      "searchPlaceholder": "Search...",
+      "noMatch": "No matches",
+      "placeholder": "Select..."
+    },
+    "modelSelect": {
+      "defaultLabel": "Default"
+    },
+    "mentionTextarea": {
+      "noMatch": "No matching references"
+    }
+  },
+  "composables": {
+    "useAgent": {
+      "runningWarning": "An operation is already running",
+      "done": "Done"
+    }
+  },
+  "index": {
+    "title": "Project Launcher",
+    "subtitle": "From one idea to a full drama — AI handles the whole pipeline for you",
+    "stats": {
+      "projectCount": "{count} projects",
+      "active": "in progress",
+      "styleCount": "{count} visual styles"
+    },
+    "newProject": "New Project",
+    "searchPlaceholder": "Search projects",
+    "sortAriaLabel": "Sort projects",
+    "sort": {
+      "updated": "Recently updated",
+      "title": "Project name"
+    },
+    "filters": {
+      "all": "All",
+      "draft": "Not started",
+      "active": "In progress",
+      "completed": "Completed"
+    },
+    "openProjectAria": "Open project {title}",
+    "markStatusTitle": "Click to mark project status",
+    "moreTitle": "More",
+    "openProject": "Open project",
+    "deleteProject": "Delete project",
+    "stat": {
+      "role": "characters",
+      "scene": "scenes",
+      "episode": "episodes"
+    },
+    "empty": {
+      "noMatch": "No matching projects",
+      "createFirst": "Create your first drama project",
+      "adjustFilter": "Try adjusting your search or filters.",
+      "createHint": "After creating it, pick an episode to start."
+    },
+    "createDialog": {
+      "title": "New Project",
+      "desc": "After creating, go to the project page to pick an episode",
+      "nameLabel": "Project name",
+      "namePlaceholder": "e.g. Urban Romance Short Drama \"Time Post Office\"",
+      "styleLabel": "Visual style",
+      "stylePlaceholder": "Select a style",
+      "aspectLabel": "Aspect ratio",
+      "aspectPlaceholder": "Select aspect ratio",
+      "aspectHint": "Fixed after creation; video generation will use this ratio consistently",
+      "submit": "Create Project"
+    },
+    "aspectRatio": {
+      "landscape": "16:9 · Landscape",
+      "portrait": "9:16 · Portrait",
+      "square": "1:1 · Square",
+      "adaptive": "Adaptive"
+    },
+    "deleteDialog": {
+      "title": "Delete Project",
+      "message": "Delete \"{title}\"? Episodes, storyboards, and generation records under this project will all be deleted. This cannot be undone."
+    },
+    "toast": {
+      "deleted": "Deleted"
+    },
+    "noEpisode": "No episodes yet",
+    "latestEpisode": "Episode {n}",
+    "time": {
+      "justNow": "just now",
+      "minutesAgo": "{n} min ago",
+      "hoursAgo": "{n} hr ago",
+      "daysAgo": "{n} d ago"
+    }
+  },
+  "settings": {
+    "pageTitle": "Settings",
+    "nav": {
+      "basic": "Basic",
+      "advanced": "Advanced"
+    },
+    "advancedToggle": {
+      "label": "Agent Advanced Settings",
+      "note": "Only expands Agent config and Skills. Workbench features and storyboard fields stay visible by default."
+    },
+    "tabs": {
+      "ai": "AI Services",
+      "styles": "Style Presets",
+      "agents": "Agent Config",
+      "skills": "Skills"
+    },
+    "ai": {
+      "title": "AI Service Configuration",
+      "desc": "Use a recommended template to get set up quickly, then fine-tune by service type. Creating an episode in the workbench locks in the selected image and video capabilities.",
+      "quick": {
+        "title": "Huobao Quick Setup",
+        "desc": "Enter a Huobao API Key to write text, image, and video recommended configs in one go.",
+        "linkText": "Get a key at api.chatfire.site",
+        "keyPlaceholder": "Huobao API Key",
+        "applyBtn": "Apply Huobao Config"
+      },
+      "manual": {
+        "title": "Manual Templates",
+        "desc": "After choosing a service type, use a template to fill in a recommended `provider / base URL / model`."
+      },
+      "serviceMeta": {
+        "textDesc": "Text Agent capabilities: script rewriting, character/scene extraction, storyboard breakdown, etc.",
+        "imageDesc": "Static image generation for characters, scenes, and shots",
+        "videoDesc": "Direct shot video generation, defaults to Seedance 2.0"
+      },
+      "enabledCount": "{count} enabled",
+      "hasKey": "Configured",
+      "noKey": "No key",
+      "currentDefaultModel": "Current default model",
+      "setDefaultModel": "Set as default model for this type",
+      "noBaseUrl": "Base URL not set",
+      "noConfig": "No configuration yet",
+      "nameLabel": "Config name",
+      "namePlaceholder": "e.g. Huobao Default Image Service",
+      "providerLabel": "Provider",
+      "providerPlaceholder": "Select a provider",
+      "priorityLabel": "Priority",
+      "priorityHint": "Higher values take priority. The workbench defaults to the highest-priority enabled config of the same type.",
+      "apiKeyLabel": "API Key",
+      "baseUrlLabel": "Base URL",
+      "modelLabel": "Models (comma-separated)",
+      "modelPlaceholder": "model-name",
+      "temperatureLabel": "Temperature",
+      "temperatureHintOptional": "(leave blank to use the provider's default)",
+      "temperaturePlaceholder": "e.g. 0.6",
+      "temperatureHint": "Some models require a fixed temperature (e.g. the kimi-k2 series only allows 0.6) — set the required value here if you get an \"invalid temperature\" error.",
+      "testConfig": "Test Config",
+      "toast": {
+        "defaultModelSwitched": "Default {type} model switched to {model}",
+        "deleted": "Deleted",
+        "fillApiKey": "Please enter a Huobao API Key",
+        "quickApplied": "Huobao quick config applied",
+        "endpointOk": "Endpoint responded",
+        "endpointFailed": "Endpoint test failed",
+        "selectProvider": "Select a provider",
+        "temperatureRange": "Temperature must be a number between 0 and 2",
+        "saved": "Saved"
+      }
+    },
+    "styles": {
+      "title": "Style Presets",
+      "desc": "Visual styles chosen at project creation. Their English prompt fragments are auto-injected into character and scene image generation. Disabled styles won't appear as creation options.",
+      "all": "All Styles",
+      "countSummary": "{active} enabled · {total} total",
+      "empty": "No style presets yet",
+      "deleteDialog": {
+        "title": "Delete Style Preset",
+        "message": "Delete style \"{name}\"? Projects already using this style are unaffected, but a deleted built-in style may reappear after a restart — consider disabling it instead."
+      },
+      "dialog": {
+        "editTitle": "Edit Style Preset",
+        "addTitle": "Add Style Preset",
+        "sub": "Prompt fragments should be in English; they're appended automatically when generating character and scene images.",
+        "tag": "Style",
+        "nameLabel": "Style name",
+        "namePlaceholder": "e.g. 3D, Anime, Photorealistic",
+        "keyLabel": "Style key",
+        "keyPlaceholder": "e.g. 3d, anime (lowercase letters/digits/hyphens)",
+        "keyHint": "The identifier stored on projects; cannot be changed after creation.",
+        "promptLabel": "Prompt fragment (English)",
+        "promptPlaceholder": "e.g. anime style, cel shading, vibrant colors, clean line art",
+        "descLabel": "Description",
+        "descPlaceholder": "A one-line note on when to use this style",
+        "sortLabel": "Sort order"
+      },
+      "toast": {
+        "requiredFields": "Name, key, and prompt fragment are required",
+        "saved": "Saved",
+        "deleted": "Deleted"
+      }
+    },
+    "agents": {
+      "title": "Agent Configuration",
+      "desc": "The advanced section only keeps Agent runtime config. Adjust the model, prompt, and parameters here — changes apply immediately after saving.",
+      "custom": "Custom",
+      "default": "Default",
+      "modelLabel": "Model",
+      "modelHint": "(leave blank to use the AI service default)",
+      "modelPlaceholder": "— Use AI service default —",
+      "promptLabel": "System Prompt",
+      "promptHint": "(saved to workspace/prompts/{type}.md)",
+      "promptPlaceholder": "Agent system prompt...",
+      "resetBtn": "Reset to Default",
+      "saved": "Saved",
+      "save": "Save",
+      "defs": {
+        "scriptRewriter": "Script Rewriter",
+        "extractor": "Character/Scene Extraction",
+        "storyboardBreaker": "Storyboard Breakdown",
+        "promptGenerator": "Prompt Generator"
+      },
+      "toast": {
+        "resetDone": "Reset to default prompt (custom prompt file removed)",
+        "saved": "{label} config saved"
+      }
+    },
+    "skills": {
+      "agentListTitle": "Agents",
+      "desc": "Skills are only an advanced prompt layer for the Agent; they don't affect the regular workbench feature entry points.",
+      "addBtn": "New Skill",
+      "skillsSuffix": "Skills",
+      "empty": {
+        "title": "No Skills yet",
+        "desc": "Click \"New Skill\" in the top right to create your first prompt file"
+      },
+      "contentPlaceholder": "Write SKILL.md content...",
+      "saved": "Saved",
+      "save": "Save",
+      "addDialog": {
+        "title": "New Skill — {label}",
+        "dirLabel": "Skill directory name",
+        "dirHint": "(English, unique)",
+        "dirPlaceholder": "e.g. custom-extraction",
+        "nameLabel": "Name",
+        "namePlaceholder": "e.g. Custom Extraction Rules",
+        "descLabel": "Description",
+        "descPlaceholder": "A short description of this Skill's purpose"
+      },
+      "deleteDialog": {
+        "title": "Delete Skill",
+        "message": "Delete Skill \"{id}\"? The corresponding Agent will fall back to its built-in default prompt."
+      },
+      "toast": {
+        "created": "Skill created",
+        "deleted": "Deleted"
+      }
+    },
+    "presetLabel": {
+      "geminiOfficial": "Gemini (Official)",
+      "openaiOfficial": "OpenAI (Official)",
+      "seedanceOfficial": "Seedance 2.0 (Official)",
+      "minimaxOfficial": "MiniMax H3 (Official)"
+    },
+    "dialogs": {
+      "editConfigTitle": "Edit Service Config",
+      "addConfigTitle": "Add {type} Service",
+      "configSub": "Recommended: pick a template first — the system will auto-fill a sensible `Base URL` and default model."
+    },
+    "language": {
+      "label": "Language",
+      "zh": "中文",
+      "en": "English"
+    }
+  },
+  "dramaDetail": {
+    "backTitle": "Back",
+    "header": {
+      "characterCount": "{count} characters",
+      "sceneCount": "{count} scenes",
+      "episodeCount": "{count} episodes",
+      "addEpisode": "Add Episode"
+    },
+    "tabs": {
+      "episodes": "Episodes",
+      "assets": "Asset Library"
+    },
+    "episode": {
+      "markStatusTitle": "Click to mark this episode's status",
+      "resolutionTitle": "Click to change this episode's video resolution",
+      "deleteTitle": "Delete this episode",
+      "scriptEntered": "Script entered",
+      "videoSynthesized": "Composited",
+      "createFirstTitle": "Click to create the first episode",
+      "createFirstText": "Click to create the first episode",
+      "addNextTitle": "Add Episode {n}",
+      "addNextText": "Add Episode {n}",
+      "numberedTitle": "Episode {n}"
+    },
+    "status": {
+      "draft": "Not started",
+      "active": "In progress",
+      "completed": "Completed"
+    },
+    "resolution": {
+      "hd": "720p · HD",
+      "smooth": "480p · Smooth"
+    },
+    "time": {
+      "justNow": "just now",
+      "minutesAgo": "{n} min ago",
+      "hoursAgo": "{n} hr ago"
+    },
+    "assetTabs": {
+      "all": "All",
+      "character": "Characters",
+      "scene": "Scenes",
+      "prop": "Props"
+    },
+    "kindLabel": {
+      "character": "Character",
+      "scene": "Scene",
+      "prop": "Prop"
+    },
+    "assets": {
+      "emptyTitle": "No assets yet",
+      "emptyDesc": "Generate characters, scenes, and props via \"Extract Assets\" in the workbench — they'll be collected here automatically, and you can generate asset images directly.",
+      "noKindMaterial": "No {kind} assets yet",
+      "kindHint": "After extracting and generating {kind} in the workbench, they will show up here.",
+      "detailAriaLabel": "Asset Detail",
+      "kickerCharacter": "Character Asset",
+      "kickerScene": "Scene Asset",
+      "kickerProp": "Prop Asset"
+    },
+    "gen": {
+      "generate": "Generate",
+      "generating": "Generating",
+      "generatingEllipsis": "Generating…",
+      "redraw": "Redraw",
+      "regenerate": "Regenerate",
+      "ready": "Generated",
+      "pending": "Not generated",
+      "generateImage": "Generate Image",
+      "generatePrompt": "Generate Prompt"
+    },
+    "common": {
+      "unnamed": "Unnamed",
+      "noTime": "No time set",
+      "pendingFill": "To be filled",
+      "noDescription": "No description",
+      "close": "Close"
+    },
+    "character": {
+      "imageReady": "Image generated",
+      "imageGenerating": "Image generating",
+      "imageNotGenerated": "Image not generated",
+      "uploadImageTitle": "Upload character image",
+      "appearanceSummary": "Appearance: {value}",
+      "stylingSummary": "Styling: {value}",
+      "finalPromptLabel": "Final Prompt · Three Views",
+      "finalPromptAutoHint": "Auto-generated by the prompt Agent the first time the image is generated"
+    },
+    "scene": {
+      "descPending": "Scene description to be filled",
+      "lightingLabel": "Lighting · {lighting}",
+      "finalPromptLabel": "Final Prompt · Fixed Angle",
+      "finalPromptAutoHint": "Auto-generated by the prompt Agent the first time the image is generated (foreground/midground/background)"
+    },
+    "prop": {
+      "finalPromptLabel": "Final Prompt · White Background Item",
+      "finalPromptAutoHint": "Auto-generated by the prompt Agent the first time the image is generated (white background item)"
+    },
+    "upload": {
+      "short": "Upload",
+      "image": "Upload Image"
+    },
+    "editor": {
+      "visualPreviewLabel": "Visual Preview",
+      "typeLabel": "Type",
+      "typeCharacter": "Character Image",
+      "typeProp": "Prop",
+      "typeScene": "Scene Image",
+      "positionLabel": "Position",
+      "propTypeLabel": "Prop Type",
+      "timeLabel": "Time",
+      "editInfoLabel": "Edit Info",
+      "hintCharacter": "Appearance and styling affect the character image",
+      "hintProp": "Item appearance affects the prop image",
+      "hintScene": "Space and lighting affect the scene image",
+      "finalPromptTitle": "Final Prompt",
+      "finalPromptHint": "Generated by AI from the info above; you can edit manually before saving",
+      "genPromptTitle": "Generate the final prompt with AI",
+      "needEpisodeTitle": "Create at least one episode in \"Episodes\" first",
+      "finalPromptPlaceholder": "Click \"Generate Prompt\" to have AI generate it from the info above, or fill it in manually. After manual edits are saved, the next image generation will use this prompt.",
+      "saving": "Saving…",
+      "saveChanges": "Save Changes",
+      "fields": {
+        "prop": {
+          "nameLabel": "Name",
+          "namePlaceholder": "Prop name",
+          "typeLabel": "Type",
+          "typePlaceholder": "e.g. Weapon / Keepsake",
+          "descLabel": "Item Appearance",
+          "descPlaceholder": "Material, color, shape, size, condition, wear marks, etc."
+        },
+        "character": {
+          "nameLabel": "Name",
+          "namePlaceholder": "Character name",
+          "roleLabel": "Position",
+          "rolePlaceholder": "Protagonist / Antagonist / Supporting…",
+          "appearanceLabel": "Appearance",
+          "appearancePlaceholder": "Apparent age, features, build, temperament, etc.",
+          "stylingLabel": "Styling",
+          "stylingPlaceholder": "Hairstyle, outfit, makeup, accessories, etc.",
+          "descLabel": "Character Profile",
+          "descPlaceholder": "Personality, background, motivation…"
+        },
+        "scene": {
+          "locationLabel": "Location",
+          "locationPlaceholder": "e.g. Hall of Supreme Harmony",
+          "timeLabel": "Time",
+          "timePlaceholder": "e.g. Dusk / Late night",
+          "descLabel": "Scene Description",
+          "descPlaceholder": "Space, furnishings, period feel, key visual elements, etc.",
+          "lightingLabel": "Scene Lighting",
+          "lightingPlaceholder": "Light source, tone, contrast, mood, etc."
+        }
+      }
+    },
+    "addDialog": {
+      "title": "Create New Episode",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Auto-named by episode number if left blank",
+      "titleHint": "If left blank, it will be auto-named by episode number, e.g. \"Episode 3\".",
+      "resolutionLabel": "Video resolution",
+      "resolutionPlaceholder": "Select resolution",
+      "resolutionHint": "The episode's video will be generated at this resolution; you can still change it on the episode card afterwards.",
+      "footCopy": "Creating locks in the currently enabled image and video generation capabilities.",
+      "creating": "Creating..."
+    },
+    "deleteDialog": {
+      "title": "Delete Episode",
+      "message": "Delete \"{title}\"? Once deleted it can no longer be viewed in the list, and its storyboards and generation records will become inaccessible."
+    },
+    "toast": {
+      "resolutionSwitched": "Episode video resolution switched to {resolution}",
+      "episodeAdded": "New episode added",
+      "needEpisodeForImage": "Create at least one episode in \"Episodes\" first to generate asset images",
+      "needEpisodeForPrompt": "Create at least one episode in \"Episodes\" first to generate the final prompt",
+      "finalPromptGenerated": "Final prompt generated",
+      "finalPromptGenFailed": "Failed to generate the final prompt, please retry",
+      "nameRequired": "Please enter a name",
+      "locationRequired": "Please enter a location",
+      "imageGenerating": "Generating image for {kind} \"{name}\"",
+      "imageGenTimeout": "Generating {kind} \"{name}\" timed out; refresh later to check",
+      "imageUploaded": "Image uploaded for {kind} \"{name}\""
+    },
+    "viewer": {
+      "titleFormat": "{kind} · {name}"
+    }
+  },
+  "dramaEpisode": {
+    "assets": {
+      "extract": "Extract {label}",
+      "reExtract": "Re-extract {label}",
+      "sectionLabel": "Assets",
+      "readyCount": "{ready}/{total} ready",
+      "batchCharacter": "Batch Characters",
+      "batchScene": "Batch Scenes",
+      "batchProp": "Batch Props",
+      "extracting": "Extracting {labels}...",
+      "extractingEllipsis": "Extracting {labels}…",
+      "extractEmptyTitle": "Start Extracting Assets",
+      "extractEmptyDesc": "Characters, scenes, and props will appear here after extraction. Extract them individually or all at once.",
+      "startExtract": "Start Extracting",
+      "character": "Character",
+      "addNew": "Add",
+      "deleteCharacter": "Delete Character",
+      "deleteScene": "Delete Scene",
+      "deleteProp": "Delete Prop",
+      "characterImageSuffix": "Character Image",
+      "sceneImageSuffix": "Scene Image",
+      "propImageSuffix": "Prop Image",
+      "uploadScene": "Upload Scene Image",
+      "uploadProp": "Upload Prop Image",
+      "noKeyProps": "No key props involved in this episode's plot yet",
+      "shortChar": "C",
+      "shortScene": "S",
+      "shortProp": "P",
+      "notConfigured": "Not configured",
+      "genericAsset": "Asset",
+      "fillSceneLocation": "Please enter a scene location",
+      "fillName": "Please enter a name",
+      "addedToast": "{label} added",
+      "deletedToast": "{label} deleted",
+      "unnamedCharacter": "Unnamed Character",
+      "unnamedProp": "Unnamed Prop",
+      "unnamedScene": "Unnamed Scene",
+      "kickerCharacter": "Character Asset",
+      "kickerScene": "Scene Asset",
+      "kickerProp": "Prop Asset",
+      "appearancePending": "Appearance not filled in yet",
+      "stylingPending": "Styling not filled in yet",
+      "visualSummary": "Appearance: {appearance} · Styling: {styling}",
+      "sceneDescPending": "Scene description not filled in yet",
+      "sceneLightingPending": "Scene lighting not filled in yet",
+      "propItemImage": "Prop Item Image"
+    },
+    "header": {
+      "back": "Back to Project",
+      "episodeChip": "Episode {n}",
+      "charsAndParagraphs": "{chars} characters · {paragraphs} shots",
+      "modelTextLabel": "Text",
+      "modelImageLabel": "Image",
+      "modelVideoLabel": "Video",
+      "defaultLabel": "Default · {model}",
+      "refresh": "Refresh",
+      "tasks": "Tasks",
+      "viewMerge": "View Final Cut",
+      "continueProduction": "Continue Production",
+      "startProduction": "Start Production"
+    },
+    "sidebar": {
+      "inProgress": "In progress",
+      "refreshData": "Refresh Data"
+    },
+    "script": {
+      "rawContentStep": "Raw Content",
+      "charCount": "{n} chars",
+      "save": "Save",
+      "rawPlaceholder": "Paste the novel text, story outline, or storyboard description...",
+      "aiRewriteStep": "AI Rewrite",
+      "skipRewrite": "Skip Rewrite",
+      "redoRewrite": "Rewrite Again",
+      "rewriteEmptyTitle": "AI Rewrite into Formatted Script",
+      "rewriteEmptyDesc": "You can use AI to turn the raw content into a formatted script first, or skip this step and go straight to asset production.",
+      "startRewrite": "Start Rewrite",
+      "rewriting": "Rewriting script...",
+      "scriptPlaceholder": "Formatted script content..."
+    },
+    "production": {
+      "notReadyTitle": "Not Ready Yet",
+      "blockNeedScript": "Please finish writing the script first",
+      "goToScript": "Go to Script",
+      "backToProduction": "Back to Production"
+    },
+    "storyboard": {
+      "sectionLabel": "Storyboard Split",
+      "paragraphsAndDuration": "{count} shots · {duration}s",
+      "resplit": "Re-split",
+      "startSplit": "Start Split",
+      "promptProgress": "Prompts {completed}/{total}",
+      "generateSelectedPrompts": "Generate Selected Prompts ({n})",
+      "batchVideoPrompts": "Batch Video Prompts",
+      "listTitle": "Shot List",
+      "listSub": "Check split descriptions and bound characters/scenes",
+      "select": "Select",
+      "selectAll": "Select All",
+      "onlyMissing": "Missing Only",
+      "clear": "Clear",
+      "videoGenerated": "Video generated",
+      "videoGeneratedTag": "Rendered",
+      "noDescription": "No shot description yet",
+      "zeroCharacters": "0 characters",
+      "videoNotGenerated": "Video not generated",
+      "videoFlagShort": "V",
+      "selectedCount": "{n} selected",
+      "cancel": "Cancel",
+      "generatingProgress": "Generating {completed}/{total}",
+      "generateVideoPrompts": "Generate Video Prompts ({n})",
+      "shotNumbered": "Shot #{n}",
+      "ofTotal": "/ of {n}",
+      "durationLabel": "Duration",
+      "descSectionTitle": "Shot Description",
+      "descFieldLabel": "Shot Description",
+      "descFieldHint": "(Describe sub-shots as 【Shot 1】【Shot 2】…; write dialogue as \"CharacterName says: \"Line\"\", narration as \"Narration: content\")",
+      "descPlaceholder": "Shot description",
+      "atmosphereLabel": "Atmosphere",
+      "atmospherePlaceholder": "Lighting, tone, mood, ambience",
+      "videoPromptTitle": "Video Prompt",
+      "regenerate": "Regenerate",
+      "aiGenerate": "AI Generate",
+      "videoPromptCopy": "Generated from the current shot's description (incl. dialogue/narration) and atmosphere",
+      "videoPromptPlaceholder": "Use \\@CharacterName / \\@SceneName / \\@PropName to reference assets; describe motion and camera in ~3-second segments per line; or click AI Generate for an auto-written prompt…",
+      "refTitle": "Reference Assets",
+      "refCopy": "Bind characters / scenes / props as video references",
+      "boundCount": "{bound}/{total} bound",
+      "unbindTitle": "Click to remove reference",
+      "bindTitle": "Click to add as reference",
+      "refReady": "Ready",
+      "refNotReady": "Not generated",
+      "refUnbound": "Unbound",
+      "goGenerate": "Go generate →",
+      "refEmpty": "This episode has no scenes, characters, or props yet. Extract assets in \"Assets\" first to bind them.",
+      "splitting": "Splitting storyboard...",
+      "splitEmptyTitle": "Start Splitting Storyboard",
+      "splitEmptyDesc": "Split shots based on the script, characters, and scenes to generate shot descriptions and bindings.",
+      "shotNumberedShort": "Shot #{n}",
+      "referenceCountUnit": "{n} reference assets",
+      "narrationKeyword": "narration",
+      "unboundScene": "No scene bound"
+    },
+    "videos": {
+      "shotCount": "{n} shots",
+      "generatedCount": "{ready}/{total} generated",
+      "batchVideo": "Batch Video",
+      "needShotsTitle": "Generate Storyboard First",
+      "needShotsDesc": "Video tasks come from the storyboard split. Generate shot descriptions and video prompts first, then batch-generate videos.",
+      "lockedModelBanner": "Video model for this episode: {model}",
+      "aiGenerateShots": "AI Generate Storyboard",
+      "taskListTitle": "Video Task List",
+      "taskListMeta": "By shot order · {n} tasks",
+      "generatingCount": "{n} generating",
+      "doneCount": "{n} done",
+      "failedCount": "{n} failed",
+      "referenceCount": "{n} refs",
+      "shotNumbered": "Shot {n}",
+      "setAsMain": "Set as Main Video",
+      "download": "Download",
+      "generatingEllipsis": "Generating video…",
+      "notGenerated": "No video generated yet",
+      "willPlayAfterGen": "You can preview it here once generation finishes",
+      "clickToGenerate": "Click the button below to generate a video for this shot",
+      "generateVideo": "Generate Video",
+      "historyTitle": "Video History",
+      "current": "Current",
+      "deleteRecord": "Delete this record",
+      "videoPromptLabel": "Video Prompt",
+      "regenerate": "Regenerate",
+      "aiGenerate": "AI Generate",
+      "videoPromptPlaceholder": "Use \\@CharacterName / \\@SceneName / \\@PropName to reference assets — auto-mapped to reference images at generation time; then describe motion and camera by time segment…",
+      "refAssetsLabel": "Reference Assets",
+      "refAssetsEmpty": "No reference assets bound to this shot",
+      "refMediaLabel": "Reference Image / Video / Audio",
+      "refImageChip": "Image {n}",
+      "refVideoChip": "Video {n}",
+      "refAudioChip": "Audio {n}",
+      "uploadRefImage": "Upload Reference Image ({used}/9)",
+      "uploadRefVideo": "Upload Reference Video ({used}/3)",
+      "uploadRefAudio": "Upload Reference Audio ({used}/3)",
+      "refAudioHint": "Reference audio needs at least 1 reference image or video",
+      "genParamsLabel": "Generation Parameters",
+      "genDurationLabel": "Duration",
+      "genDurationUnit": "s (4-15)",
+      "refAudioLabel": "Audio"
+    },
+    "export": {
+      "notReadyTitle": "Not Ready Yet",
+      "notReadyDesc": "Please finish the storyboard and production process first",
+      "goToScript": "Go to Script",
+      "mergeListTitle": "Final Cuts",
+      "countUnit": "{n}",
+      "refresh": "Refresh",
+      "mergeFailed": "Merge failed",
+      "merging": "Merging…",
+      "download": "Download",
+      "mergeEmpty": "No final cut yet. Select shots below and click \"Merge Selected\".",
+      "shotAssetsTitle": "Shot Assets",
+      "shotAssetsMeta": "{ready}/{total} generated · {selected} selected",
+      "clearSelection": "Clear Selection",
+      "selectAllGenerated": "Select All Generated",
+      "mergeSelected": "Merge Selected ({n})"
+    },
+    "taskDrawer": {
+      "ariaLabel": "Generation Task List",
+      "title": "Generation Task List",
+      "meta": "Newest first · {n} tasks",
+      "refresh": "Refresh",
+      "generatingCount": "{n} generating",
+      "doneCount": "{n} done",
+      "failedCount": "{n} failed",
+      "emptyTitle": "No generation tasks yet",
+      "emptyDesc": "Tasks appear here automatically after triggering image / video generation in the assets, storyboard, or video steps.",
+      "duration": "{duration} elapsed",
+      "general": "General",
+      "wholeEpisodeMerge": "Full Episode Merge",
+      "merge": "Merge"
+    },
+    "nav": {
+      "prevStep": "Previous",
+      "nextStep": "Next",
+      "enterExport": "Go to Export"
+    },
+    "assetDetail": {
+      "ariaLabelSuffix": " Details",
+      "viewLabel": "Visual Preview",
+      "ready": "Ready",
+      "pending": "Pending",
+      "typeLabel": "Type",
+      "characterImageType": "Character Image",
+      "propType": "Prop",
+      "sceneImageType": "Scene Image",
+      "positionOrTypeOrTime": "Role",
+      "propTypeLabel": "Prop Type",
+      "timeLabel": "Time",
+      "editInfoLabel": "Edit Info",
+      "hintCharacter": "Appearance and styling affect the character image",
+      "hintProp": "The item's look affects the prop image",
+      "hintScene": "Space and lighting affect the scene image",
+      "propDescLabel": "Appearance",
+      "propDescPlaceholder": "Material, color, shape, size, wear and tear, etc.",
+      "appearanceLabel": "Appearance",
+      "appearancePlaceholder": "Age, features, build, temperament, etc.",
+      "stylingLabel": "Styling",
+      "stylingPlaceholder": "Hairstyle, outfit, makeup, accessories, etc.",
+      "sceneDescLabel": "Scene Description",
+      "sceneDescPlaceholder": "Space, props, period feel, key visual elements, etc.",
+      "sceneLightingLabel": "Scene Lighting",
+      "sceneLightingPlaceholder": "Light source, tone, contrast, mood, etc.",
+      "finalPromptCharacter": "Final Prompt · Three Views",
+      "finalPromptScene": "Final Prompt · Fixed Angle",
+      "finalPromptProp": "Final Prompt · White Background",
+      "generatingEllipsis": "Generating",
+      "regenerate": "Regenerate",
+      "generatePrompt": "Generate Prompt",
+      "copy": "Copy",
+      "manualHintCharacter": "You can manually write the three-view final prompt, or click \"Generate Prompt\" to let the Agent generate it",
+      "manualHintScene": "You can manually write the fixed-angle final prompt, or click \"Generate Prompt\" to let the Agent generate it",
+      "manualHintProp": "You can manually write the white-background final prompt, or click \"Generate Prompt\" to let the Agent generate it",
+      "editableHintCharacter": "The prompt can be edited directly and takes effect after saving. If you edit and save the appearance or styling, the final prompt will be cleared and regenerated by the Agent next time the image is generated.",
+      "editableHintScene": "The prompt can be edited directly and takes effect after saving. If you edit and save the scene description or lighting, the final prompt will be cleared and regenerated by the Agent next time the scene image is generated.",
+      "editableHintProp": "The prompt can be edited directly and takes effect after saving. If you edit and save the item's appearance, the final prompt will be cleared and regenerated by the Agent next time the prop image is generated.",
+      "delete": "Delete",
+      "close": "Close",
+      "imagePreview": "Image Preview",
+      "mergePreview": "Final Cut Preview",
+      "downloadMerge": "Download Final Cut"
+    },
+    "addAssetDialog": {
+      "title": "New {label}",
+      "nameLabel": "Name",
+      "characterNamePlaceholder": "Character name",
+      "roleLabel": "Role",
+      "rolePlaceholder": "e.g. Protagonist / Antagonist / Supporting",
+      "appearancePlaceholder": "Appearance traits (can include personality)",
+      "stylingPlaceholder": "Outfit, makeup, accessories",
+      "locationLabel": "Location",
+      "locationPlaceholder": "Scene location",
+      "timePlaceholder": "e.g. Day / Night",
+      "sceneDescPlaceholder": "Environment, props, mood",
+      "lightingPlaceholder": "e.g. Warm dusk light, cold overhead light",
+      "propNamePlaceholder": "Prop name",
+      "propTypePlaceholder": "e.g. Weapon / Keepsake / Document",
+      "propDescPlaceholder": "Describe only the item's appearance, nothing else"
+    },
+    "deleteAssetDialog": {
+      "title": "Delete {label}",
+      "message": "Delete {label} \"{name}\"? It will be removed from all episodes of this drama."
+    },
+    "gen": {
+      "done": "Done",
+      "generating": "Generating",
+      "failed": "Failed",
+      "pending": "Pending",
+      "regenerate": "Regenerate",
+      "generate": "Generate"
+    },
+    "toast": {
+      "finalPromptGenFailed": "Failed to generate the final prompt, please retry",
+      "finalPromptRegenerated": "Final prompt regenerated",
+      "finalPromptGenerated": "Final prompt generated",
+      "finalPromptGenFailedShort": "Failed to generate final prompt",
+      "finalPromptCopied": "Final prompt copied",
+      "copyFailed": "Copy failed, please select and copy the text manually",
+      "noChangesToSave": "No changes to save",
+      "changesSaved": "Changes saved",
+      "saveFailed": "Save failed",
+      "videoGenFailed": "Video generation failed",
+      "fillRawContentFirst": "Please fill in the raw content first",
+      "rewriteSkipped": "Skipped AI rewrite — using the raw content directly",
+      "extractDone": "{label} extraction complete",
+      "extractFailed": "{label} extraction failed",
+      "splitStoryboardFirst": "Please split the storyboard first",
+      "selectedShotsNotFound": "Selected shots not found",
+      "allShotsHavePrompts": "All shots already have video prompts",
+      "startGeneratingPrompts": "Generating video prompts for {n} shots…",
+      "batchPromptsDoneWithFailures": "Batch video prompt generation complete, {n} failed",
+      "batchPromptsDone": "Batch video prompt generation complete",
+      "batchPromptsFailed": "Batch video prompt generation failed",
+      "shotPromptGenerated": "Shot #{n} video prompt generated",
+      "generatingFinalPrompt": "Generating final prompt…",
+      "characterImageGenerating": "Character image generating",
+      "allCharacterImagesGenerated": "All character images generated",
+      "characterImageBatchGenerating": "Batch-generating character images",
+      "sceneImageGenerating": "Scene image generating",
+      "propImageGenerating": "Prop image generating",
+      "allSceneImagesGenerated": "All scene images generated",
+      "sceneImageBatchGenerating": "Batch-generating scene images",
+      "allPropImagesGenerated": "All prop images generated",
+      "propImageBatchGenerating": "Batch-generating prop images",
+      "setAsMainVideo": "Set as main video",
+      "setFailed": "Failed to set",
+      "historyDeleted": "History record deleted",
+      "deleteFailed": "Delete failed",
+      "assetImageUploaded": "{label} uploaded",
+      "refImageLimitReached": "Reference image limit reached (including scene/character assets)",
+      "refImageUploaded": "Reference image uploaded",
+      "refMediaLimit": "Up to 3 reference {label} allowed",
+      "refMediaUploaded": "Reference {label} uploaded",
+      "needRefOrPrompt": "At least one reference asset or video prompt is required",
+      "videoGenerating": "Video generating",
+      "videoGenDone": "Video generation complete",
+      "videoGenTimeout": "Video generation timed out",
+      "allShotsVideosGenerated": "All shot videos have been generated",
+      "selectAtLeastOneVideo": "Please select at least one shot with a generated video",
+      "merging": "Merging...",
+      "mergeFailed": "Merge failed",
+      "mergeDone": "Merge complete"
+    },
+    "tabs": {
+      "script": "Script",
+      "assets": "Assets",
+      "storyboard": "Storyboard Split",
+      "storyboardShort": "Storyboard",
+      "videos": "Video Generation",
+      "videosShort": "Video",
+      "export": "Export",
+      "exportMerge": "Merge & Export",
+      "production": "Production",
+      "scriptDesc": "Rewrite and organize content",
+      "assetsDesc": "Characters / Scenes / Props",
+      "storyboardDesc": "Storyboard split and prompts",
+      "videosDesc": "Video tasks and generation",
+      "exportDesc": "Merge and export the final cut"
+    },
+    "workbenchFallback": "Workbench",
+    "stage": {
+      "scriptStage": "Script Stage",
+      "productionStage": "Production Stage",
+      "exportStageReady": "Export Stage · Final cut ready",
+      "exportStageWaiting": "Export Stage · Waiting to merge"
+    }
+  }
+}

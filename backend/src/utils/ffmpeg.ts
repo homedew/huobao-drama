@@ -17,10 +17,11 @@ import { createRequire } from 'module'
 const ffprobeStatic = createRequire(import.meta.url)('ffprobe-static') as { path: string }
 
 // ffmpeg-static 类型声明为 string,实际平台不支持时为 null
-const ffmpegPath = ffmpegPathImport as string | null
-const ffprobePath = (ffprobeStatic?.path as string | null) || null
+// FFMPEG_BIN/FFPROBE_BIN 显式指定时优先(如 ffprobe-static 缺 linux/arm64 构建,
+// 需指向系统 apt 装的二进制兜底),否则回退到内置静态二进制
+const ffmpegPath = process.env.FFMPEG_BIN || (ffmpegPathImport as string | null)
+const ffprobePath = process.env.FFPROBE_BIN || ((ffprobeStatic?.path as string | null) || null)
 
-// 系统未安装 ffmpeg 时使用项目内置二进制
 if (ffmpegPath) ffmpeg.setFfmpegPath(ffmpegPath)
 if (ffprobePath) ffmpeg.setFfprobePath(ffprobePath)
 

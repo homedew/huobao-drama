@@ -1,83 +1,83 @@
 ---
 name: storyboard-breaker
-description: 分镜拆解专业规范 — 将剧本拆分为可承载多个子镜头的分镜段落
+description: Quy chuẩn chuyên nghiệp về chia tách phân cảnh — chia kịch bản thành các đoạn phân cảnh có thể chứa nhiều cảnh con
 ---
 
-# 分镜拆解指南
+# Hướng dẫn chia tách phân cảnh
 
-## 核心定义：分镜段落
+## Định nghĩa cốt lõi: đoạn phân cảnh
 
-一个分镜 = 一个 **分镜段落**（segment）= 一个视频生成任务。
+Một phân cảnh = một **đoạn phân cảnh** (segment) = một tác vụ tạo video.
 
-- 每个段落时长 **8-15 秒**，内部承载 **2-4 个子镜头**
-- 子镜头之间**可以切镜**：换景别、换角度、换拍摄对象，用硬切衔接
-- 子镜头之间**不跨场景**：一个段落只发生在一个场景内（`scene_id` 是段落级绑定）
-- 每个子镜头 2-6 秒，聚焦一个画面单元（一个动作、一个反应、一个特写）
+- Mỗi đoạn dài **8-15 giây**, bên trong chứa **2-4 cảnh con**
+- Các cảnh con **có thể chuyển cảnh**: đổi cỡ cảnh, đổi góc quay, đổi đối tượng quay, chuyển cứng (hard cut)
+- Các cảnh con **không được đổi bối cảnh**: một đoạn chỉ diễn ra trong một bối cảnh duy nhất (`scene_id` được gắn ở cấp độ đoạn)
+- Mỗi cảnh con dài 2-6 giây, tập trung vào một đơn vị hình ảnh (một hành động, một phản ứng, một cảnh cận)
 
-## 拆分流程（四步）
+## Quy trình chia tách (bốn bước)
 
-1. 调用 `read_storyboard_context` 读取剧本、角色、场景、道具、已有分镜摘要
-2. **节拍识别**：先识别剧本的叙事节拍——剧本中的【开场】【触发】【高潮】【收尾】等标记，或叙事转折点（地点转移、规则揭示、情绪爆发、反转）。**节拍边界强制切段**，同一节拍内的子镜头优先归入同一段落，不把一条因果链（铺垫-发生-反应）切散到不同段落
-3. **总量锚定**：目标总时长 = 剧本字数 ÷ 500字/分钟；段落数 ≈ 目标总时长 ÷ 12秒，允许 ±20% 浮动。不要明显超出或不足
-4. **段落内拆子镜头**：按动作切换点、视角切换点、对象切换点切分子镜头，为每个段落补全完整字段后调用 `save_storyboards` 一次性保存
+1. Gọi `read_storyboard_context` để đọc kịch bản, nhân vật, bối cảnh, đạo cụ, tóm tắt phân cảnh đã có
+2. **Nhận diện nhịp truyện**: trước tiên nhận diện nhịp tự sự của kịch bản — các nhãn 【Mở đầu】【Khởi phát】【Cao trào】【Kết thúc】trong kịch bản, hoặc các bước ngoặt tự sự (chuyển địa điểm, hé lộ quy tắc, bùng nổ cảm xúc, twist). **Ranh giới nhịp bắt buộc phải cắt đoạn**, các cảnh con trong cùng một nhịp nên ưu tiên gộp vào cùng một đoạn, không cắt rời một chuỗi nhân quả (dẫn dắt - xảy ra - phản ứng) sang các đoạn khác nhau
+3. **Neo tổng lượng**: tổng thời lượng mục tiêu = số chữ kịch bản ÷ 500 chữ/phút; số đoạn ≈ tổng thời lượng mục tiêu ÷ 14 giây, cho phép dao động ±20%. Không được vượt quá hoặc thiếu hụt rõ rệt. Việc tạo video tính phí theo mỗi lần gọi API, mỗi lần tối đa 15 giây — nên ưu tiên để thời lượng đoạn áp sát mức trần này nhằm giảm số lần gọi và giảm chi phí, chỉ cắt ngắn hơn khi cốt truyện thực sự cần chuyển cảnh nhanh
+4. **Chia cảnh con trong đoạn**: cắt cảnh con theo điểm chuyển hành động, điểm chuyển góc nhìn, điểm chuyển đối tượng; điền đầy đủ các trường cho mỗi đoạn rồi gọi `save_storyboards` để lưu một lần
 
-## 节奏分层时长
+## Phân lớp thời lượng theo nhịp điệu
 
-按段落功能确定时长，不要一刀切：
+Xác định thời lượng theo chức năng của đoạn, không áp dụng một khuôn cho tất cả:
 
-| 段落类型 | 时长 | 说明 |
+| Loại đoạn | Thời lượng | Ghi chú |
 |---|---|---|
-| 过渡段 | 8-10 秒 | 赶路、空镜、环境建立、转场 |
-| 叙事段 | 10-15 秒 | 常规剧情推进、对话 |
-| 爆点段 | 12-15 秒 | 特写、规则揭示、情感爆发、反转；子镜头节奏放慢，单个子镜头可停留 4-6 秒 |
+| Đoạn chuyển tiếp | 10-12 giây | Di chuyển, cảnh trống, thiết lập môi trường, chuyển cảnh |
+| Đoạn tự sự | 12-15 giây | Đẩy tình tiết thông thường, hội thoại |
+| Đoạn cao trào | 13-15 giây | Cận cảnh, hé lộ quy tắc, bùng nổ cảm xúc, twist; nhịp cảnh con chậm lại, một cảnh con có thể kéo dài 4-6 giây |
 
-## 台词时长下限（硬规则）
+## Giới hạn dưới thời lượng cho lời thoại (quy tắc cứng)
 
-**段落时长 ≥ 段内台词与旁白总字数（写在 description 中的部分）÷ 4.5字/秒 + 2秒表演余量**
+**Thời lượng đoạn ≥ tổng số chữ lời thoại và lời dẫn trong đoạn (phần viết trong description) ÷ 4.5 chữ/giây + 2 giây dư diễn xuất**
 
-装不下的台词必须拆到下一个段落，不允许把演不完的台词塞进一个段落。
+Lời thoại không chứa hết bắt buộc phải tách sang đoạn kế tiếp, không được nhồi nhét lời thoại diễn không kịp vào một đoạn.
 
-## 镜头要素
+## Các yếu tố của cảnh quay
 
-1. **镜头标题**：3-5字概括段落核心内容（如"噩梦惊醒"）
-2. **时间**：具体时分 + 光线描述
-3. **地点**：场景完整描述 + 空间布局 + 环境细节
-4. **景别**：段落内主导景别；多景别段落写组合，如"中景+特写"
-5. **角度**：平视/仰视/俯视/侧面/背面
-6. **运镜**：固定/推镜/拉镜/摇镜/跟镜/移镜（段落内不同子镜头可不同）
-7. **画面描述** `description`：按 `【镜头1】…【镜头2】…` 逐子镜头描述观众实际看到和听到的内容——画面（谁 + 具体动作 + 肢体细节 + 表情）写在前；该子镜头有台词时以「角色名说：「台词」」写在对应 `【镜头N】` 内，旁白写「旁白：内容」
-8. **画面结果** `result`：段落结尾的即时后果 + 视觉细节
-9. **氛围** `atmosphere`：光线 + 色调 + 声音 + 整体氛围
-10. **时长** `duration`：段落总时长 8-15 秒，且满足台词时长下限
-11. **场景关联**：若能匹配已有场景，必须填写 `scene_id`
-12. **角色关联**：填写 `character_ids`，绑定当前段落涉及的 0 到多个角色
-13. **道具关联**：填写 `prop_ids`，绑定当前段落出现的关键道具（0 到多个）
+1. **Tiêu đề cảnh**: khái quát nội dung cốt lõi của đoạn trong 3-5 chữ (như "giật mình tỉnh mộng")
+2. **Thời gian**: giờ cụ thể + mô tả ánh sáng
+3. **Địa điểm**: mô tả đầy đủ bối cảnh + bố cục không gian + chi tiết môi trường
+4. **Cỡ cảnh**: cỡ cảnh chủ đạo trong đoạn; đoạn có nhiều cỡ cảnh thì viết tổ hợp, như "trung cảnh + cận cảnh"
+5. **Góc quay**: ngang tầm mắt/từ dưới lên/từ trên xuống/nghiêng/sau lưng
+6. **Chuyển động máy quay**: cố định/đẩy vào/kéo ra/lia/theo/di chuyển (các cảnh con khác nhau trong đoạn có thể khác nhau)
+7. **Mô tả hình ảnh** `description`: theo `【Cảnh 1】…【Cảnh 2】…` mô tả lần lượt từng cảnh con những gì khán giả thực sự nhìn thấy và nghe thấy — hình ảnh (ai + hành động cụ thể + chi tiết cử chỉ + biểu cảm) viết trước; cảnh con nào có lời thoại thì viết「Tên nhân vật nói: "lời thoại"」trong `【Cảnh N】` tương ứng, lời dẫn viết「Lời dẫn: nội dung」
+8. **Kết quả hình ảnh** `result`: hậu quả tức thời ở cuối đoạn + chi tiết thị giác
+9. **Không khí** `atmosphere`: ánh sáng + tông màu + âm thanh + không khí tổng thể
+10. **Thời lượng** `duration`: tổng thời lượng đoạn 8-15 giây, và phải thỏa mãn giới hạn dưới thời lượng lời thoại
+11. **Liên kết bối cảnh**: nếu khớp được với bối cảnh đã có, bắt buộc phải điền `scene_id`
+12. **Liên kết nhân vật**: điền `character_ids`, gắn 0 đến nhiều nhân vật xuất hiện trong đoạn hiện tại
+13. **Liên kết đạo cụ**: điền `prop_ids`, gắn các đạo cụ trọng yếu xuất hiện trong đoạn hiện tại (0 đến nhiều)
 
-## 场景关联规则
+## Quy tắc liên kết bối cảnh
 
-- 优先使用 `read_storyboard_context` 返回的 `scenes`
-- `location + time` 可明确匹配时，必须回填正确 `scene_id`
-- 不要凭空生成不存在的场景 ID
-- 如果剧本内容明显落在已有场景中，不要重复创造新场景描述
+- Ưu tiên dùng `scenes` mà `read_storyboard_context` trả về
+- Khi `location + time` khớp rõ ràng, bắt buộc phải điền đúng `scene_id`
+- Không được tự bịa ra ID bối cảnh không tồn tại
+- Nếu nội dung kịch bản rõ ràng thuộc bối cảnh đã có, không tạo lại mô tả bối cảnh mới
 
-## 角色绑定规则
+## Quy tắc gắn nhân vật
 
-- `character_ids` 必须从 `read_storyboard_context` 返回的角色列表中选择
-- 一个段落可以没有角色，也可以绑定多个角色
-- 只要段落里有明确出场、被看见、发生动作或说话的角色，都应绑定进去
-- 纯环境段落、空镜、物件特写可以传空数组
+- `character_ids` phải chọn từ danh sách nhân vật mà `read_storyboard_context` trả về
+- Một đoạn có thể không có nhân vật nào, cũng có thể gắn nhiều nhân vật
+- Chỉ cần trong đoạn có nhân vật xuất hiện rõ ràng, được nhìn thấy, có hành động hoặc nói chuyện thì đều phải gắn vào
+- Đoạn thuần môi trường, cảnh trống, cận cảnh vật thể có thể truyền mảng rỗng
 
-## 道具绑定规则
+## Quy tắc gắn đạo cụ
 
-- `prop_ids` 必须从 `read_storyboard_context` 返回的道具列表（`props`）中选择
-- 道具被角色使用、交接、特写，或在画面中明显可见且对叙事有意义时，必须绑定到该段落
-- 道具特写段落（无角色）也应绑定道具，`character_ids` 可为空
-- 与剧情无关的背景物品、场景陈设不要绑定；没有道具出现的段落传空数组
-- 绑定的道具会作为视频生成的参考图（白底单品图），保证道具外观跨段落一致
+- `prop_ids` phải chọn từ danh sách đạo cụ (`props`) mà `read_storyboard_context` trả về
+- Đạo cụ được nhân vật sử dụng, trao đổi, quay cận, hoặc xuất hiện rõ ràng trong khung hình và có ý nghĩa với mạch truyện thì bắt buộc phải gắn vào đoạn đó
+- Đoạn cận cảnh đạo cụ (không có nhân vật) cũng nên gắn đạo cụ, `character_ids` có thể để rỗng
+- Vật dụng nền và bài trí bối cảnh không liên quan đến cốt truyện thì không gắn; đoạn không có đạo cụ xuất hiện thì truyền mảng rỗng
+- Đạo cụ đã gắn sẽ được dùng làm ảnh tham chiếu khi tạo video (ảnh đơn vật nền trắng), đảm bảo ngoại hình đạo cụ nhất quán xuyên suốt các đoạn
 
-## 质量要求
+## Yêu cầu chất lượng
 
-- `description` 要适合人读，按子镜头详细描述观众实际看到和听到的内容；台词/旁白直接写在对应 `【镜头N】` 内
-- `image_prompt` 要突出单帧构图、角色外观、环境和光线（对应段落第一个子镜头）
-- `bgm_prompt` 和 `sound_effect` 用简洁短语即可，但不能空泛到只有“紧张”“悲伤”
-- 如需调整，调用 `update_storyboard` 修改具体段落
+- `description` phải phù hợp để con người đọc, mô tả chi tiết theo từng cảnh con những gì khán giả thực sự nhìn thấy và nghe thấy; lời thoại/lời dẫn viết trực tiếp trong `【Cảnh N】` tương ứng; lời thoại/lời dẫn phải giữ nguyên ngôn ngữ trong kịch bản gốc (kịch bản là tiếng Việt thì viết tiếng Việt), không dịch sang tiếng Trung hay ngôn ngữ khác; phần mô tả hình ảnh có thể dùng tiếng Trung
+- `image_prompt` phải làm nổi bật bố cục khung hình đơn, ngoại hình nhân vật, môi trường và ánh sáng (tương ứng với cảnh con đầu tiên của đoạn)
+- `bgm_prompt` và `sound_effect` dùng cụm từ ngắn gọn là được, nhưng không được mơ hồ chỉ có "căng thẳng", "buồn bã"
+- Nếu cần điều chỉnh, gọi `update_storyboard` để sửa đoạn cụ thể
